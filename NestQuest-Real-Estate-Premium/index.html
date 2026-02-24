@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>NestQuest Real Estate - Premium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1a1a1a",
+                        secondary: "#c9a87c",
+                        accent: "#e8d5b5",
+                        "background-light": "#fafafa",
+                        "background-dark": "#0a0a0a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#141414",
+                        "text-light": "#1a1a1a",
+                        "text-dark": "#f5f5f5",
+                        "text-muted-light": "#6b7280",
+                        "text-muted-dark": "#9ca3af",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #fafafa;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        /* Particle Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c9a87c;
+            border-radius: 4px;
+        }
+        
+        /* Magnetic Button Effect */
+        .magnetic-btn {
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass {
+            background: rgba(20, 20, 20, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Text Reveal Animation */
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        
+        .reveal-text span {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        
+        /* Image Hover Effect */
+        .img-container {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .img-container img {
+            transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .img-container:hover img {
+            transform: scale(1.1);
+        }
+        
+        .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .img-container:hover .img-overlay {
+            opacity: 1;
+        }
+        
+        /* Card 3D Tilt */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+        }
+        
+        .tilt-content {
+            transform: translateZ(50px);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Shimmer Effect */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #c9a87c 0%, #e8d5b5 50%, #c9a87c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: gradient-shift 5s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+        
+        /* Cursor Follower */
+        .cursor-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #c9a87c;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-follower.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(201, 168, 124, 0.1);
+        }
+        
+        /* Navigation */
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+        
+        .nav-visible {
+            transform: translateY(0);
+        }
+        
+        /* Smooth Section Transition */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Input Focus Animation */
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #c9a87c;
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+        
+        .input-group:focus-within::after {
+            width: 100%;
+        }
+        
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        /* Parallax Container */
+        .parallax-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Stats Counter */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Testimonial Card */
+        .testimonial-card {
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Service Card Stack */
+        .service-card {
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        /* Footer Reveal */
+        footer {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .dark .theme-toggle {
+            background: #374151;
+        }
+        
+        .theme-toggle-ball {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .dark .theme-toggle-ball {
+            transform: translateX(30px);
+            background: #c9a87c;
+        }
+        
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Selection Color */
+        ::selection {
+            background: #c9a87c;
+            color: white;
+        }
+        
+        /* Link Hover Effect */
+        .link-hover {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .link-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Button Ripple */
+        .ripple-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-animation 0.6s ease-out;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Hide scrollbar for horizontal scroll */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark antialiased">
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+    
+    <!-- Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-follower hidden md:block" id="cursor"></div>
+    
+    <!-- Navigation -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-500 nav-hidden">
+        <div class="glass mx-4 mt-4 rounded-2xl px-6 py-4 max-w-6xl mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="font-display font-bold text-xl tracking-tight uppercase gradient-text">NestQuest</div>
+                <div class="flex items-center gap-6">
+                    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                        <a href="#hero" class="link-hover hover:text-secondary transition-colors">Accueil</a>
+                        <a href="#about" class="link-hover hover:text-secondary transition-colors">À propos</a>
+                        <a href="#services" class="link-hover hover:text-secondary transition-colors">Services</a>
+                        <a href="#testimonials" class="link-hover hover:text-secondary transition-colors">Témoignages</a>
+                        <a href="#contact" class="link-hover hover:text-secondary transition-colors">Contact</a>
+                    </nav>
+                    
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode">
+                        <div class="theme-toggle-ball"></div>
+                    </div>
+                    
+                    <button class="magnetic-btn bg-primary dark:bg-white text-white dark:text-primary px-6 py-2 rounded-full text-sm font-semibold hover:shadow-lg transition-all duration-300 ripple-btn">
+                        Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-primary/5"></div>
+            </div>
+            
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <p class="text-secondary font-medium tracking-widest uppercase text-sm reveal-text" id="hero-subtitle">
+                            Immobilier de Prestige
+                        </p>
+                        <h1 class="font-display text-5xl md:text-7xl font-bold leading-tight" id="hero-title">
+                            <span class="block overflow-hidden">
+                                <span class="inline-block">Nous</span>
+                            </span>
+                            <span class="block overflow-hidden">
+                                <span class="inline-block gradient-text italic">Construisons</span>
+                            </span>
+                            <span class="block overflow-hidden">
+                                <span class="inline-block">Votre Avenir</span>
+                            </span>
+                        </h1>
+                    </div>
+                    
+                    <p class="text-text-muted-light dark:text-text-muted-dark text-lg max-w-md leading-relaxed opacity-0" id="hero-desc">
+                        Découvrez un monde où le luxe rencontre le style de vie. Nos propriétés sélectionnées avec soin offrent bien plus qu'un simple lieu de vie.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 opacity-0" id="hero-cta">
+                        <button class="magnetic-btn bg-primary dark:bg-white text-white dark:text-primary px-8 py-4 rounded-full font-semibold hover:shadow-2xl transition-all duration-300 flex items-center gap-2 group ripple-btn">
+                            Explorer
+                            <span class="material-icons-outlined transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </button>
+                        <button class="magnetic-btn border-2 border-primary dark:border-white px-8 py-4 rounded-full font-semibold hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition-all duration-300">
+                            En savoir plus
+                        </button>
+                    </div>
+                    
+                    <!-- Stats Preview -->
+                    <div class="flex gap-8 pt-8 border-t border-gray-200 dark:border-gray-800 opacity-0" id="hero-stats">
+                        <div>
+                            <span class="block text-3xl font-bold text-primary dark:text-white stat-number" data-target="18000">0</span>
+                            <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Clients satisfaits</span>
+                        </div>
+                        <div>
+                            <span class="block text-3xl font-bold text-primary dark:text-white stat-number" data-target="14000">0</span>
+                            <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Propriétés</span>
+                        </div>
+                        <div>
+                            <span class="block text-3xl font-bold text-primary dark:text-white stat-number" data-target="13">0</span>
+                            <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Années d'exp.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl floating" id="hero-image">
+                        <img 
+                            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" 
+                            alt="Luxury Home" 
+                            class="w-full h-[600px] object-cover"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        
+                        <!-- Floating Card -->
+                        <div class="absolute bottom-8 left-8 right-8 glass rounded-2xl p-6 transform translate-y-4 opacity-0" id="floating-card">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-white text-sm font-medium mb-1">Villa Moderne</p>
+                                    <p class="text-white/80 text-xs">Beverly Hills, CA</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-secondary font-bold text-lg">$4.2M</p>
+                                    <div class="flex items-center gap-1 text-white/80 text-xs">
+                                        <span class="material-icons-outlined text-[14px]">star</span>
+                                        <span>4.9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Elements -->
+                    <div class="absolute -z-10 top-10 -right-10 w-72 h-72 bg-secondary/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -z-10 -bottom-10 -left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-0" id="scroll-indicator">
+                <span class="text-xs text-text-muted-light dark:text-text-muted-dark uppercase tracking-widest">Scroll</span>
+                <div class="w-6 h-10 border-2 border-secondary rounded-full flex justify-center pt-2">
+                    <div class="w-1 h-2 bg-secondary rounded-full animate-bounce"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-32 px-4 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <p class="text-secondary font-medium tracking-widest uppercase text-sm">À Propos de Nous</p>
+                            <h2 class="font-display text-4xl md:text-5xl font-bold leading-tight">
+                                Vos Conseillers <br/>
+                                <span class="italic text-gray-400">Immobiliers de Confiance</span>
+                            </h2>
+                        </div>
+                        
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed text-lg">
+                            Découvrez l'incarnation du luxe dans cette propriété offrant des vues panoramiques sur l'océan depuis chaque pièce. Notre expertise unique nous permet de vous guider vers les meilleures opportunités d'investissement.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="p-6 rounded-2xl bg-white dark:bg-surface-dark shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow duration-300">
+                                <span class="block text-4xl font-bold text-primary dark:text-white mb-2 stat-number" data-target="18">0</span>
+                                <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Milliers de clients</span>
+                            </div>
+                            <div class="p-6 rounded-2xl bg-primary text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <span class="block text-4xl font-bold mb-2 stat-number" data-target="17">0</span>
+                                <span class="text-sm opacity-80">Milliers de partenaires</span>
+                            </div>
+                            <div class="p-6 rounded-2xl bg-white dark:bg-surface-dark shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow duration-300">
+                                <span class="block text-4xl font-bold text-primary dark:text-white mb-2 stat-number" data-target="13">0</span>
+                                <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Années d'expérience</span>
+                            </div>
+                            <div class="p-6 rounded-2xl bg-white dark:bg-surface-dark shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow duration-300">
+                                <span class="block text-4xl font-bold text-primary dark:text-white mb-2 stat-number" data-target="14">0</span>
+                                <span class="text-sm text-text-muted-light dark:text-text-muted-dark">Milliers de biens</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="img-container rounded-3xl overflow-hidden shadow-2xl">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" 
+                                alt="Modern Interior" 
+                                class="w-full h-[700px] object-cover"
+                            />
+                            <div class="img-overlay"></div>
+                        </div>
+                        
+                        <!-- Experience Badge -->
+                        <div class="absolute -bottom-6 -left-6 bg-secondary text-white p-6 rounded-2xl shadow-xl">
+                            <span class="block text-5xl font-bold">13+</span>
+                            <span class="text-sm opacity-90">Années d'excellence</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="py-20 px-4 bg-gray-50 dark:bg-white/5">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="font-display text-3xl text-primary dark:text-white mb-4">
+                        Partenaires de Confiance
+                    </h2>
+                    <p class="text-text-muted-light dark:text-text-muted-dark max-w-2xl mx-auto">
+                        Collaborer avec les meilleurs pour vous offrir un service d'excellence
+                    </p>
+                </div>
+                
+                <div class="flex justify-center items-center gap-12 opacity-60 grayscale dark:invert hover:grayscale-0 transition-all duration-500">
+                    <div class="text-2xl font-bold font-display">Forbes</div>
+                    <div class="text-2xl font-bold font-display">Architectural Digest</div>
+                    <div class="text-2xl font-bold font-display">Vogue Living</div>
+                    <div class="text-2xl font-bold font-display">Elle Decor</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                    <div class="space-y-4 max-w-xl">
+                        <p class="text-secondary font-medium tracking-widest uppercase text-sm">Nos Services</p>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold leading-tight">
+                            Services Experts pour <br/>
+                            <span class="italic text-gray-400">Acheteurs & Vendeurs</span>
+                        </h2>
+                    </div>
+                    
+                    <div class="flex gap-2 mt-6 md:mt-0">
+                        <button class="w-12 h-12 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition-all duration-300 magnetic-btn" id="prevBtn">
+                            <span class="material-icons-outlined">west</span>
+                        </button>
+                        <button class="w-12 h-12 rounded-full bg-primary text-white dark:bg-white dark:text-primary flex items-center justify-center hover:shadow-lg transition-all duration-300 magnetic-btn" id="nextBtn">
+                            <span class="material-icons-outlined">east</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex gap-8 overflow-x-auto hide-scroll pb-8 -mx-4 px-4" id="services-slider">
+                    <!-- Service Card 1 -->
+                    <div class="min-w-[380px] tilt-card bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-xl group cursor-pointer">
+                        <div class="h-64 relative overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" 
+                                alt="Buy Home" 
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute top-4 left-4 bg-white text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                                Acheter
+                            </span>
+                        </div>
+                        <div class="p-8 tilt-content">
+                            <h3 class="font-display text-2xl font-bold text-primary dark:text-white mb-3">Acheter une propriété</h3>
+                            <p class="text-text-muted-light dark:text-text-muted-dark mb-6 line-clamp-2">
+                                Trouvez votre chez-vous avec une expérience photo immersive et les meilleures annonces du marché.
+                            </p>
+                            <button class="text-sm font-bold border-b-2 border-secondary pb-1 text-secondary flex items-center gap-2 group/btn">
+                                Voir les détails 
+                                <span class="material-icons-outlined text-sm transform group-hover/btn:translate-x-1 transition-transform">arrow_outward</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Service Card 2 -->
+                    <div class="min-w-[380px] tilt-card bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-xl group cursor-pointer">
+                        <div class="h-64 relative overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80" 
+                                alt="Sell Home" 
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute top-4 left-4 bg-white text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                                Vendre
+                            </span>
+                        </div>
+                        <div class="p-8 tilt-content">
+                            <h3 class="font-display text-2xl font-bold text-primary dark:text-white mb-3">Vendre votre bien</h3>
+                            <p class="text-text-muted-light dark:text-text-muted-dark mb-6 line-clamp-2">
+                                Peu importe votre approche pour vendre, nous vous aidons à réussir votre transaction en toute sérénité.
+                            </p>
+                            <button class="text-sm font-bold border-b-2 border-secondary pb-1 text-secondary flex items-center gap-2 group/btn">
+                                Voir les détails 
+                                <span class="material-icons-outlined text-sm transform group-hover/btn:translate-x-1 transition-transform">arrow_outward</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Service Card 3 -->
+                    <div class="min-w-[380px] tilt-card bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-xl group cursor-pointer">
+                        <div class="h-64 relative overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&q=80" 
+                                alt="Rent Home" 
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute top-4 left-4 bg-white text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                                Louer
+                            </span>
+                        </div>
+                        <div class="p-8 tilt-content">
+                            <h3 class="font-display text-2xl font-bold text-primary dark:text-white mb-3">Louer une propriété</h3>
+                            <p class="text-text-muted-light dark:text-text-muted-dark mb-6 line-clamp-2">
+                                Nous créons une expérience en ligne fluide sur le plus grand réseau de locations premium.
+                            </p>
+                            <button class="text-sm font-bold border-b-2 border-secondary pb-1 text-secondary flex items-center gap-2 group/btn">
+                                Voir les détails 
+                                <span class="material-icons-outlined text-sm transform group-hover/btn:translate-x-1 transition-transform">arrow_outward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loans Section -->
+        <section class="py-32 px-4 bg-white dark:bg-surface-dark relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent"></div>
+            
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="font-display text-4xl md:text-5xl text-primary dark:text-white mb-4">
+                        Pourquoi choisir <br/>
+                        <span class="gradient-text italic">NestQuest Finance ?</span>
+                    </h2>
+                    <p class="text-text-muted-light dark:text-text-muted-dark max-w-2xl mx-auto text-lg">
+                        Acheter un bien immobilier est un voyage. Nos conseillers sont là pour vous aider à respecter votre budget et vos délais.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-background-dark hover:bg-white dark:hover:bg-surface-dark hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-gray-100 dark:hover:border-gray-800">
+                        <div class="w-16 h-16 rounded-2xl bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-icons-outlined text-3xl">handshake</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary dark:text-white mb-3">Conseillers experts</h3>
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed">
+                            Avec une note moyenne de 4.9 étoiles, nos conseillers vous accompagnent à chaque étape avec professionnalisme.
+                        </p>
+                    </div>
+                    
+                    <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-background-dark hover:bg-white dark:hover:bg-surface-dark hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-gray-100 dark:hover:border-gray-800">
+                        <div class="w-16 h-16 rounded-2xl bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-icons-outlined text-3xl">percent</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary dark:text-white mb-3">Taux compétitifs</h3>
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed">
+                            Des relations solides signifient pas de frais cachés et une transparence totale pour vous tenir informé.
+                            </p>
+                    </div>
+                    
+                    <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-background-dark hover:bg-white dark:hover:bg-surface-dark hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-gray-100 dark:hover:border-gray-800">
+                        <div class="w-16 h-16 rounded-2xl bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-icons-outlined text-3xl">savings</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary dark:text-white mb-3">Faible apport</h3>
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed">
+                            Nous proposons diverses options de prêt pour répondre à vos besoins et rendre l'accession plus facile.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <button class="magnetic-btn border-2 border-primary dark:border-white rounded-full px-8 py-4 font-semibold hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition-all duration-300 inline-flex items-center gap-2 group">
+                        Voir toutes nos offres 
+                        <span class="material-icons-outlined transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <p class="text-secondary font-medium tracking-widest uppercase text-sm mb-4">Témoignages</p>
+                    <h2 class="font-display text-4xl md:text-5xl text-primary dark:text-white mb-4">
+                        Ce que nos clients <br/>
+                        <span class="italic text-gray-400">disent de nous</span>
+                    </h2>
+                    <p class="text-text-muted-light dark:text-text-muted-dark">
+                        Plus de <span class="font-bold text-secondary">700 millions</span> de personnes ont fait confiance à notre application.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="testimonial-card bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800">
+                        <div class="flex items-start gap-4 mb-6">
+                            <img 
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" 
+                                alt="John D." 
+                                class="w-16 h-16 rounded-full object-cover ring-4 ring-secondary/20"
+                            />
+                            <div>
+                                <h4 class="text-lg font-bold text-primary dark:text-white">John D.</h4>
+                                <p class="text-sm text-text-muted-light dark:text-text-muted-dark">UI/UX Designer</p>
+                            </div>
+                            <div class="ml-auto flex items-center gap-1 text-yellow-500">
+                                <span class="material-icons-outlined">star</span>
+                                <span class="font-bold text-primary dark:text-white">4.5</span>
+                            </div>
+                        </div>
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed text-lg italic">
+                            "Grâce à NestQuest, j'ai trouvé la maison de mes rêves en un temps record. Je recommande vivement ce service à tous ceux qui recherchent une expérience sans stress."
+                        </p>
+                    </div>
+                    
+                    <div class="testimonial-card bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800">
+                        <div class="flex items-start gap-4 mb-6">
+                            <img 
+                                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" 
+                                alt="Sarah L." 
+                                class="w-16 h-16 rounded-full object-cover ring-4 ring-secondary/20"
+                            />
+                            <div>
+                                <h4 class="text-lg font-bold text-primary dark:text-white">Sarah L.</h4>
+                                <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Marketing Lead</p>
+                            </div>
+                            <div class="ml-auto flex items-center gap-1 text-yellow-500">
+                                <span class="material-icons-outlined">star</span>
+                                <span class="font-bold text-primary dark:text-white">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-text-muted-light dark:text-text-muted-dark leading-relaxed text-lg italic">
+                            "Le meilleur aspect de ce site est le service complet qu'il offre. De la recherche de propriété à l'obtention du prêt, tout a été géré avec efficacité et professionnalisme."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-32 px-4 bg-gray-50 dark:bg-white/5">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <p class="text-secondary font-medium tracking-widest uppercase text-sm">Contact</p>
+                            <h2 class="font-display text-4xl md:text-5xl font-bold leading-tight">
+                                Parlons de votre <br/>
+                                <span class="italic text-gray-400">projet immobilier</span>
+                            </h2>
+                        </div>
+                        
+                        <p class="text-text-muted-light dark:text-text-muted-dark text-lg leading-relaxed">
+                            Prêt à trouver la maison de vos rêves, faire un investissement intelligent ou besoin de conseils immobiliers ? Notre équipe est là pour vous accompagner.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center text-secondary">
+                                    <span class="material-icons-outlined">location_on</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-primary dark:text-white">Adresse</p>
+                                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">123 Avenue des Champs-Élysées, Paris</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center text-secondary">
+                                    <span class="material-icons-outlined">email</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-primary dark:text-white">Email</p>
+                                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">contact@nestquest.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center text-secondary">
+                                    <span class="material-icons-outlined">phone</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-primary dark:text-white">Téléphone</p>
+                                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">+33 1 23 45 67 89</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-surface-dark p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800">
+                        <form class="space-y-6" id="contactForm">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="input-group">
+                                    <label class="block text-sm font-semibold text-primary dark:text-white mb-2">Prénom</label>
+                                    <input 
+                                        type="text" 
+                                        class="w-full bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-secondary transition-colors"
+                                        placeholder="Jean"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-semibold text-primary dark:text-white mb-2">Nom</label>
+                                    <input 
+                                        type="text" 
+                                        class="w-full bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-secondary transition-colors"
+                                        placeholder="Dupont"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="input-group">
+                                    <label class="block text-sm font-semibold text-primary dark:text-white mb-2">Email</label>
+                                    <input 
+                                        type="email" 
+                                        class="w-full bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-secondary transition-colors"
+                                        placeholder="jean@example.com"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label class="block text-sm font-semibold text-primary dark:text-white mb-2">Téléphone</label>
+                                    <input 
+                                        type="tel" 
+                                        class="w-full bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-secondary transition-colors"
+                                        placeholder="+33 6 12 34 56 78"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="block text-sm font-semibold text-primary dark:text-white mb-2">Message</label>
+                                <textarea 
+                                    rows="4" 
+                                    class="w-full bg-gray-50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-secondary transition-colors resize-none"
+                                    placeholder="Décrivez votre projet..."
+                                ></textarea>
+                            </div>
+                            
+                            <button 
+                                type="submit" 
+                                class="w-full bg-primary dark:bg-white text-white dark:text-primary py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ripple-btn"
+                            >
+                                Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-20 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="space-y-4">
+                    <h3 class="font-display text-2xl font-bold gradient-text">NestQuest</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Votre partenaire de confiance pour trouver la propriété de vos rêves. Excellence et professionnalisme depuis 2010.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Achat</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Vente</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Location</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Financement</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Entreprise</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">À propos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Carrières</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Presse</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors link-hover">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Recevez nos dernières actualités</p>
+                    <div class="flex gap-2">
+                        <input 
+                            type="email" 
+                            placeholder="Votre email" 
+                            class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-sm flex-1 focus:outline-none focus:border-secondary"
+                        />
+                        <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors">
+                            <span class="material-icons-outlined text-sm">send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">© 2024 NestQuest Real Estate. Tous droits réservés.</p>
+                <div class="flex gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Confidentialité</a>
+                    <a href="#" class="hover:text-white transition-colors">Conditions</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Particle System
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particle-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: null, y: null };
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.x;
+                    this.mouse.y = e.y;
+                });
+                
+                this.createParticles();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = window.innerWidth < 768 ? 25 : 50;
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5,
+                        opacity: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    // Update position
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Mouse interaction
+                    if (this.mouse.x != null) {
+                        const dx = this.mouse.x - particle.x;
+                        const dy = this.mouse.y - particle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            const forceDirectionX = dx / distance;
+                            const forceDirectionY = dy / distance;
+                            const force = (100 - distance) / 100;
+                            particle.x -= forceDirectionX * force * 2;
+                            particle.y -= forceDirectionY * force * 2;
+                        }
+                    }
+                    
+                    // Wrap around screen
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
+                    // Draw particle
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = document.body.classList.contains('dark') 
+                        ? `rgba(201, 168, 124, ${particle.opacity})` 
+                        : `rgba(26, 26, 26, ${particle.opacity})`;
+                    this.ctx.fill();
+                });
+                
+                // Draw connections
+                this.particles.forEach((a, index) => {
+                    this.particles.slice(index + 1).forEach(b => {
+                        const dx = a.x - b.x;
+                        const dy = a.y - b.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 150) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(a.x, a.y);
+                            this.ctx.lineTo(b.x, b.y);
+                            this.ctx.strokeStyle = document.body.classList.contains('dark')
+                                ? `rgba(201, 168, 124, ${0.1 * (1 - distance / 150)})`
+                                : `rgba(26, 26, 26, ${0.1 * (1 - distance / 150)})`;
+                            this.ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize Particle System
+        new ParticleSystem();
+        
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        let cursorX = 0, cursorY = 0;
+        let currentX = 0, currentY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+        });
+        
+        function animateCursor() {
+            currentX += (cursorX - currentX) * 0.1;
+            currentY += (cursorY - currentY) * 0.1;
+            cursor.style.left = currentX + 'px';
+            cursor.style.top = currentY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        
+        // Cursor hover effect
+        document.querySelectorAll('a, button, .tilt-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+        
+        // Navigation show/hide on scroll
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.remove('nav-hidden');
+                navbar.classList.add('nav-visible');
+            } else {
+                navbar.classList.add('nav-hidden');
+                navbar.classList.remove('nav-visible');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check saved theme
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        // GSAP Animations
+        // Hero animations
+        gsap.to('#hero-title span span', {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power4.out',
+            delay: 0.5
+        });
+        
+        gsap.to('#hero-subtitle', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 0.3
+        });
+        
+        gsap.to('#hero-desc', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 1.2
+        });
+        
+        gsap.to('#hero-cta', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 1.4
+        });
+        
+        gsap.to('#hero-stats', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 1.6
+        });
+        
+        gsap.to('#hero-image', {
+            opacity: 1,
+            scale: 1,
+            duration: 1.2,
+            delay: 0.8,
+            ease: 'power3.out'
+        });
+        
+        gsap.to('#floating-card', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 1.8
+        });
+        
+        gsap.to('#scroll-indicator', {
+            opacity: 1,
+            duration: 0.8,
+            delay: 2
+        });
+        
+        // Counter animation
+        const counters = document.querySelectorAll('.stat-number');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            
+            ScrollTrigger.create({
+                trigger: counter,
+                start: 'top 80%',
+                onEnter: () => {
+                    gsap.to(counter, {
+                        innerHTML: target,
+                        duration: 2,
+                        snap: { innerHTML: 1 },
+                        ease: 'power2.out'
+                    });
+                },
+                once: true
+            });
+        });
+        
+        // Scroll animations for sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section.querySelectorAll('h2, p, .grid > div'), {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out'
+            });
+        });
+        
+        // 3D Tilt effect for cards
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        });
+        
+        // Magnetic button effect
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+        
+        // Ripple effect
+        document.querySelectorAll('.ripple-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Slider navigation
+        const slider = document.getElementById('services-slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        nextBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: 400, behavior: 'smooth' });
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: -400, behavior: 'smooth' });
+        });
+        
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'Envoyé !';
+            btn.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                e.target.reset();
+            }, 3000);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating');
+            
+            parallaxElements.forEach(el => {
+                const speed = 0.5;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

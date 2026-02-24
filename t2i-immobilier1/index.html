@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prestige Immobilier — L'Excellence à Votre Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F8F4EF;
+      --cream-dark: #EDE7DE;
+      --gold: #B8966A;
+      --gold-light: #D4B896;
+      --gold-dark: #8C6D48;
+      --noir: #1A1614;
+      --noir-soft: #2D2926;
+      --stone: #7A7269;
+      --stone-light: #B5AFA8;
+      --white: #FDFBF9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--noir);
+      overflow-x: hidden;
+      font-weight: 300;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 5%;
+      background: rgba(248, 244, 239, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184, 150, 106, 0.15);
+      transition: all 0.4s ease;
+    }
+    nav.scrolled {
+      padding: 1rem 5%;
+      box-shadow: 0 4px 30px rgba(26,22,20,0.08);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--noir);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--stone);
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 400;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--noir);
+      color: var(--cream) !important;
+      padding: 0.65rem 1.6rem;
+      border-radius: 0;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--white) !important; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5% 5rem 8%;
+      position: relative;
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(184,150,106,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--noir);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--stone);
+      line-height: 1.8;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+    }
+    .btn-primary:hover { background: var(--gold-dark); transform: translateY(-2px); }
+    .btn-outline {
+      color: var(--noir);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--noir);
+      padding-bottom: 2px;
+      transition: all 0.3s;
+      font-weight: 400;
+    }
+    .btn-outline:hover { color: var(--gold); border-color: var(--gold); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.3s forwards;
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    .hero-right img.loaded { transform: scale(1); }
+    .hero-right::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--cream) 0%, transparent 20%);
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem; left: -2rem;
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      padding: 1.5rem 2rem;
+      box-shadow: 0 20px 60px rgba(26,22,20,0.12);
+      z-index: 2;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+    .hero-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .hero-badge-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── SECTIONS COMMUNES ─── */
+    section { padding: 7rem 8%; }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--noir);
+      margin-bottom: 1rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ─── À PROPOS ─── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      background: var(--white);
+    }
+    .about-images {
+      position: relative;
+      height: 560px;
+    }
+    .about-img-main {
+      position: absolute;
+      top: 0; left: 0;
+      width: 75%; height: 80%;
+      object-fit: cover;
+    }
+    .about-img-secondary {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 55%; height: 55%;
+      object-fit: cover;
+      border: 6px solid var(--white);
+    }
+    .about-gold-line {
+      position: absolute;
+      bottom: 2rem; left: -1rem;
+      width: 4px; height: 120px;
+      background: var(--gold);
+    }
+    .about-text p {
+      color: var(--stone);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .about-signature {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--gold-dark);
+      margin-top: 2rem;
+    }
+    .about-signature small {
+      display: block;
+      font-style: normal;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── SERVICES ─── */
+    .services { background: var(--cream); }
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--cream-dark);
+    }
+    .service-card {
+      background: var(--white);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+    .service-card:hover::before { width: 100%; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(26,22,20,0.1); }
+    .service-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 600;
+      color: var(--cream-dark);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      transition: color 0.4s;
+    }
+    .service-card:hover .service-number { color: var(--gold-light); }
+    .service-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.8rem;
+      color: var(--noir);
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--stone);
+      line-height: 1.7;
+    }
+
+    /* ─── CHIFFRES CLÉS ─── */
+    .stats {
+      background: var(--noir);
+      padding: 6rem 8%;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(184,150,106,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stats-inner {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .stats-left .section-label { color: var(--gold-light); }
+    .stats-left .section-label::before { background: var(--gold-light); }
+    .stats-left .section-title { color: var(--white); }
+    .stats-left p { color: var(--stone-light); line-height: 1.8; font-size: 0.9rem; margin-top: 1rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .stat-item { position: relative; padding-left: 1.5rem; }
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.5rem;
+      width: 2px; height: calc(100% - 1rem);
+      background: var(--gold);
+    }
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-number span { color: var(--gold); }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone-light);
+      margin-top: 0.5rem;
+    }
+    .stat-desc {
+      font-size: 0.83rem;
+      color: rgba(181,175,168,0.6);
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    /* ─── LOGOS / CONFIANCE ─── */
+    .trust {
+      background: var(--cream-dark);
+      padding: 5rem 8%;
+      text-align: center;
+    }
+    .trust-header { margin-bottom: 3.5rem; }
+    .trust-header .section-label { justify-content: center; }
+    .trust-header .section-label::before { display: none; }
+    .trust-header .section-title { font-size: 2rem; }
+    .logos-track-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+    .logos-track-wrapper::before,
+    .logos-track-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .logos-track-wrapper::before { left: 0; background: linear-gradient(to right, var(--cream-dark), transparent); }
+    .logos-track-wrapper::after  { right: 0; background: linear-gradient(to left,  var(--cream-dark), transparent); }
+    .logos-track {
+      display: flex;
+      gap: 4rem;
+      animation: scroll 25s linear infinite;
+      width: max-content;
+    }
+    .logos-track:hover { animation-play-state: paused; }
+    .logo-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 160px;
+      height: 70px;
+      background: var(--white);
+      border: 1px solid rgba(184,150,106,0.15);
+      padding: 1rem 2rem;
+      filter: grayscale(1) opacity(0.5);
+      transition: all 0.3s;
+    }
+    .logo-item:hover { filter: none; box-shadow: 0 8px 30px rgba(26,22,20,0.08); }
+    .logo-item span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--noir-soft);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    /* ─── RÉALISATIONS ─── */
+    .portfolio { background: var(--white); }
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 280px 280px;
+      gap: 1.5px;
+      background: var(--cream-dark);
+    }
+    .prop-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .prop-card:first-child { grid-row: 1 / 3; }
+    .prop-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .prop-card:hover img { transform: scale(1.06); }
+    .prop-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,22,20,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .prop-card:hover .prop-overlay { opacity: 1; }
+    .prop-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: all 0.4s;
+    }
+    .prop-card:hover .prop-info { transform: translateY(0); opacity: 1; }
+    .prop-type {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 0.4rem;
+    }
+    .prop-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .prop-price {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ─── TÉMOIGNAGES ─── */
+    .testimonials { background: var(--cream); }
+    .testimonials-header { margin-bottom: 3.5rem; }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .testi-card {
+      background: var(--white);
+      padding: 2.5rem;
+      position: relative;
+      border-top: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .testi-card:hover { border-color: var(--gold); }
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      color: var(--gold-light);
+      line-height: 0.5;
+      margin-bottom: 1.5rem;
+    }
+    .testi-text {
+      font-size: 0.92rem;
+      color: var(--stone);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .testi-stars { color: var(--gold); margin-bottom: 1rem; font-size: 0.8rem; letter-spacing: 0.2em; }
+    .testi-author { display: flex; align-items: center; gap: 1rem; }
+    .testi-avatar {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--cream-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+    .testi-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--noir);
+    }
+    .testi-role {
+      font-size: 0.75rem;
+      color: var(--stone-light);
+      margin-top: 0.15rem;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact {
+      background: var(--white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+    .contact-left {
+      padding: 7rem 5% 7rem 8%;
+      background: var(--noir);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-left::before {
+      content: '';
+      position: absolute;
+      bottom: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(184,150,106,0.12) 0%, transparent 70%);
+    }
+    .contact-left .section-label { color: var(--gold-light); }
+    .contact-left .section-label::before { background: var(--gold-light); }
+    .contact-left .section-title { color: var(--white); }
+    .contact-info { margin-top: 3rem; }
+    .contact-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .contact-info-icon {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(184,150,106,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .contact-info-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone-light);
+      margin-bottom: 0.3rem;
+    }
+    .contact-info-value {
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+    .contact-right { padding: 7rem 8% 7rem 5%; }
+    .form-group { margin-bottom: 1.8rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 0.6rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--cream-dark);
+      padding: 0.8rem 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: var(--noir);
+      outline: none;
+      transition: border-color 0.3s;
+      font-weight: 300;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--gold); }
+    .form-group textarea { resize: none; height: 100px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--noir-soft);
+      color: var(--stone-light);
+      padding: 3rem 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer .nav-logo { color: var(--white); }
+    footer p { font-size: 0.78rem; letter-spacing: 0.05em; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 50vw; }
+      .hero-right::after { background: linear-gradient(to top, var(--cream), transparent 30%); }
+      .hero-badge { left: 1rem; }
+      .about { grid-template-columns: 1fr; }
+      .about-images { height: 350px; }
+      .stats-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .portfolio-grid .prop-card:first-child { grid-column: 1 / 3; grid-row: 1; height: 300px; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .contact { grid-template-columns: 1fr; }
+      nav { padding: 1rem 5%; }
+      .nav-links { display: none; }
+      section { padding: 5rem 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Prestige<span>.</span>Immo</a>
+  <ul class="nav-links">
+    <li><a href="#about">À Propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Réalisations</a></li>
+    <li><a href="#testimonials">Témoignages</a></li>
+    <li><a href="#contact" class="nav-cta">Nous Contacter</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Agence Immobilière de Prestige</div>
+    <h1 class="hero-title">
+      L'excellence<br>
+      au service de<br>
+      <em>votre patrimoine</em>
+    </h1>
+    <p class="hero-sub">
+      Nous accompagnons les acquéreurs et vendeurs les plus exigeants dans la réalisation de leurs projets immobiliers d'exception.
+    </p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-primary">Découvrir nos biens</a>
+      <a href="#contact" class="btn-outline">Estimer mon bien</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80" alt="Propriété de prestige" id="hero-img" />
+    <div class="hero-badge">
+      <div class="hero-badge-num">500+</div>
+      <div class="hero-badge-label">Transactions réalisées</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── À PROPOS ─── -->
+<section class="about" id="about">
+  <div class="about-images reveal">
+    <img class="about-img-main" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80" alt="Propriété principale" />
+    <img class="about-img-secondary" src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500&q=80" alt="Intérieur luxueux" />
+    <div class="about-gold-line"></div>
+  </div>
+  <div class="about-text reveal">
+    <div class="section-label">Notre histoire</div>
+    <h2 class="section-title">Vingt ans d'expertise au cœur de <em>l'immobilier haut de gamme</em></h2>
+    <p>Fondée en 2004, Prestige Immo s'est imposée comme la référence incontournable de l'immobilier de luxe. Notre équipe de consultants passionnés met son savoir-faire unique au service de chaque client, avec discrétion et exigence.</p>
+    <p>Nous sélectionnons avec soin chaque bien que nous représentons, garantissant à nos clients un portefeuille d'exceptions — villas, appartements haussmanniens, demeures de caractère et propriétés d'investissement.</p>
+    <div class="about-signature">
+      Marie-Élise Fontaine
+      <small>Fondatrice & Directrice Générale</small>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section class="services" id="services">
+  <div class="services-header">
+    <div>
+      <div class="section-label">Ce que nous faisons</div>
+      <h2 class="section-title">Nos <em>prestations</em></h2>
+    </div>
+    <a href="#contact" class="btn-outline">Prendre rendez-vous</a>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-number">01</div>
+      <div class="service-icon">🏡</div>
+      <h3 class="service-name">Vente & Acquisition</h3>
+      <p class="service-desc">Accompagnement complet dans vos transactions, de l'estimation à la signature notariée. Une approche sur-mesure et personnalisée.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-number">02</div>
+      <div class="service-icon">📋</div>
+      <h3 class="service-name">Gestion Locative</h3>
+      <p class="service-desc">Nous gérons votre bien avec rigueur et transparence. Sélection des locataires, suivi technique et administratif complet.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-number">03</div>
+      <div class="service-icon">📊</div>
+      <h3 class="service-name">Expertise & Estimation</h3>
+      <p class="service-desc">Évaluation précise et argumentée de votre patrimoine par nos experts certifiés, pour une prise de décision éclairée.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-number">04</div>
+      <div class="service-icon">🌍</div>
+      <h3 class="service-name">Investissement International</h3>
+      <p class="service-desc">Accès à un réseau mondial de partenaires pour vos projets à l'étranger. Conseil fiscal et juridique intégré.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-number">05</div>
+      <div class="service-icon">🔑</div>
+      <h3 class="service-name">Location Saisonnière</h3>
+      <p class="service-desc">Valorisation optimale de vos résidences de prestige en location courte durée, avec une conciergerie haut de gamme.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-number">06</div>
+      <div class="service-icon">🏗️</div>
+      <h3 class="service-name">Promotion & Neuf</h3>
+      <p class="service-desc">Sélection exclusive de programmes neufs dans les quartiers les plus prisés. Conseil en défiscalisation et financement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CHIFFRES CLÉS ─── -->
+<section class="stats" id="stats">
+  <div class="stats-inner">
+    <div class="stats-left reveal">
+      <div class="section-label">En chiffres</div>
+      <h2 class="section-title" style="color:var(--white);">Des résultats qui <em>parlent d'eux-mêmes</em></h2>
+      <p>Depuis notre création, nous avons bâti une réputation d'excellence fondée sur la performance, la confiance et l'engagement envers nos clients.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number">500<span>+</span></div>
+        <div class="stat-label">Transactions réalisées</div>
+        <div class="stat-desc">En vente et en gestion locative depuis 2004</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">20<span>ans</span></div>
+        <div class="stat-label">D'expérience</div>
+        <div class="stat-desc">Au service de l'immobilier haut de gamme</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">98<span>%</span></div>
+        <div class="stat-label">Taux de satisfaction</div>
+        <div class="stat-desc">Clients satisfaits par nos prestations</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">12<span>M€</span></div>
+        <div class="stat-label">Bien le plus vendu</div>
+        <div class="stat-desc">Villa d'exception — Côte d'Azur, 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ILS NOUS FONT CONFIANCE ─── -->
+<section class="trust" id="trust">
+  <div class="trust-header reveal">
+    <div class="section-label">Partenaires & Références</div>
+    <h2 class="section-title">Ils nous font <em>confiance</em></h2>
+  </div>
+  <div class="logos-track-wrapper">
+    <div class="logos-track" id="logoTrack">
+      <!-- First set -->
+      <div class="logo-item"><span>BNP Paribas</span></div>
+      <div class="logo-item"><span>Crédit Agricole</span></div>
+      <div class="logo-item"><span>Notaires Paris</span></div>
+      <div class="logo-item"><span>Société Générale</span></div>
+      <div class="logo-item"><span>Caisse d'Épargne</span></div>
+      <div class="logo-item"><span>AXA Immobilier</span></div>
+      <div class="logo-item"><span>Nexity</span></div>
+      <div class="logo-item"><span>Bouygues Immo</span></div>
+      <div class="logo-item"><span>Vinci Immobilier</span></div>
+      <!-- Duplicate for seamless scroll -->
+      <div class="logo-item"><span>BNP Paribas</span></div>
+      <div class="logo-item"><span>Crédit Agricole</span></div>
+      <div class="logo-item"><span>Notaires Paris</span></div>
+      <div class="logo-item"><span>Société Générale</span></div>
+      <div class="logo-item"><span>Caisse d'Épargne</span></div>
+      <div class="logo-item"><span>AXA Immobilier</span></div>
+      <div class="logo-item"><span>Nexity</span></div>
+      <div class="logo-item"><span>Bouygues Immo</span></div>
+      <div class="logo-item"><span>Vinci Immobilier</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PORTFOLIO ─── -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header reveal">
+    <div>
+      <div class="section-label">Nos biens</div>
+      <h2 class="section-title">Sélection <em>exclusive</em></h2>
+    </div>
+    <a href="#contact" class="btn-outline">Voir tout le catalogue</a>
+  </div>
+  <div class="portfolio-grid">
+    <div class="prop-card">
+      <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800&q=80" alt="Villa d'exception" />
+      <div class="prop-overlay"></div>
+      <div class="prop-info">
+        <div class="prop-type">Villa — Côte d'Azur</div>
+        <div class="prop-name">Villa Les Oliviers</div>
+        <div class="prop-price">4 200 000 €</div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <img src="https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=600&q=80" alt="Appartement haussmannien" />
+      <div class="prop-overlay"></div>
+      <div class="prop-info">
+        <div class="prop-type">Appartement — Paris 7e</div>
+        <div class="prop-name">Haussmannien Varenne</div>
+        <div class="prop-price">2 850 000 €</div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=80" alt="Demeure de caractère" />
+      <div class="prop-overlay"></div>
+      <div class="prop-info">
+        <div class="prop-type">Maison — Bordeaux</div>
+        <div class="prop-name">Demeure du Vignoble</div>
+        <div class="prop-price">1 490 000 €</div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <img src="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=600&q=80" alt="Penthouse" />
+      <div class="prop-overlay"></div>
+      <div class="prop-info">
+        <div class="prop-type">Penthouse — Lyon 6e</div>
+        <div class="prop-name">Penthouse Bellecour</div>
+        <div class="prop-price">1 950 000 €</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TÉMOIGNAGES ─── -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header reveal">
+    <div class="section-label">Témoignages</div>
+    <h2 class="section-title">Ce que disent <em>nos clients</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">Une équipe d'une professionnalisme exemplaire. Notre villa a été vendue en trois semaines, au prix demandé. Un service discret et efficace, tout simplement remarquable.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">PD</div>
+        <div>
+          <div class="testi-name">Philippe Deschamps</div>
+          <div class="testi-role">Vendeur — Côte d'Azur</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">Prestige Immo a su comprendre nos critères très précis. Ils nous ont présenté le bien idéal dès la deuxième visite. Un accompagnement humain et expert du début à la fin.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">SL</div>
+        <div>
+          <div class="testi-name">Sophie & Laurent Martin</div>
+          <div class="testi-role">Acquéreurs — Paris 16e</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">La gestion locative de mon appartement est irréprochable. Transparence totale, réactivité exemplaire. Je recommande sans hésitation à tous les investisseurs.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AC</div>
+        <div>
+          <div class="testi-name">Antoine Chevalier</div>
+          <div class="testi-role">Investisseur — Lyon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">Parlons de <em>votre projet</em></h2>
+    <div class="contact-info">
+      <div class="contact-info-item">
+        <div class="contact-info-icon">📍</div>
+        <div>
+          <div class="contact-info-label">Adresse</div>
+          <div class="contact-info-value">12 Avenue Montaigne, 75008 Paris</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">📞</div>
+        <div>
+          <div class="contact-info-label">Téléphone</div>
+          <div class="contact-info-value">+33 (0)1 42 56 78 90</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">✉️</div>
+        <div>
+          <div class="contact-info-label">E-mail</div>
+          <div class="contact-info-value">contact@prestige-immo.fr</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">🕐</div>
+        <div>
+          <div class="contact-info-label">Horaires</div>
+          <div class="contact-info-value">Lun – Sam, 9h00 – 19h00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-right">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" placeholder="Jean" />
+      </div>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" placeholder="Dupont" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" placeholder="jean.dupont@email.fr" />
+    </div>
+    <div class="form-group">
+      <label>Téléphone</label>
+      <input type="tel" placeholder="+33 6 00 00 00 00" />
+    </div>
+    <div class="form-group">
+      <label>Votre projet</label>
+      <select>
+        <option value="">Sélectionnez une option</option>
+        <option>Acheter un bien</option>
+        <option>Vendre un bien</option>
+        <option>Estimation gratuite</option>
+        <option>Gestion locative</option>
+        <option>Investissement</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea placeholder="Décrivez votre projet en quelques mots…"></textarea>
+    </div>
+    <button class="btn-primary" style="width:100%; padding:1.1rem; font-size:0.8rem;">
+      Envoyer ma demande
+    </button>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <a href="#" class="nav-logo">Prestige<span style="color:var(--gold)">.</span>Immo</a>
+  <p>© 2024 Prestige Immo — Tous droits réservés — Mentions légales</p>
+</footer>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Hero image animation
+  const heroImg = document.getElementById('hero-img');
+  heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth counter animation
+  function animateCount(el, target, suffix = '') {
+    let current = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current) + suffix;
+    }, 20);
+  }
+</script>
+</body>
+</html>

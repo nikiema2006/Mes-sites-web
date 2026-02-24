@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Général Immo SARL | L'Excellence Immobilière au Burkina Faso</title>
+    <meta name="description" content="Général Immo SARL - Promotion immobilière et aménagement foncier premium au Burkina Faso. Notre vocation, l'immobilier d'exception.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js for WebGL background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'luxury': {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        },
+                        'emerald': {
+                            light: '#34d399',
+                            DEFAULT: '#059669',
+                            dark: '#064e3b',
+                            deep: '#022c22',
+                        },
+                        'gold': {
+                            light: '#fbbf24',
+                            DEFAULT: '#d97706',
+                            dark: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        'serif': ['Cormorant Garamond', 'serif'],
+                        'sans': ['Montserrat', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #022c22;
+            color: #ecfdf5;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #34d399;
+        }
+        
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(52, 211, 153, 0.3);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        .cursor-outline.hover {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(52, 211, 153, 0.1);
+            border-color: rgba(52, 211, 153, 0.8);
+        }
+        
+        /* WebGL Canvas */
+        #webgl-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        /* Text Reveal Animation */
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        
+        .char {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        
+        /* Magnetic Button */
+        .magnetic-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        /* SVG Mask Styles */
+        .svg-mask {
+            position: absolute;
+            pointer-events: none;
+            filter: drop-shadow(0 0 30px rgba(52, 211, 153, 0.3));
+        }
+        
+        .mask-02 { fill: rgba(5, 150, 105, 0.15); }
+        .mask-05 { fill: rgba(16, 185, 129, 0.1); }
+        .mask-06 { fill: rgba(52, 211, 153, 0.08); }
+        .mask-07 { fill: rgba(6, 78, 59, 0.2); }
+        .mask-08 { fill: rgba(4, 120, 87, 0.12); }
+        .mask-20 { fill: rgba(52, 211, 153, 0.06); }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(-2deg); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(52, 211, 153, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(52, 211, 153, 0.6)); }
+        }
+        
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-reverse { animation: float-reverse 8s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+        
+        /* Glass Morphism */
+        .glass-card {
+            background: rgba(6, 78, 59, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #34d399 0%, #059669 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #022c22;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #059669, #d97706);
+            border-radius: 4px;
+        }
+        
+        /* Image Mask */
+        .masked-image {
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+        }
+        
+        /* Line Animation */
+        .line-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+        
+        /* Parallax Container */
+        .parallax-container {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* Hover Card Effect */
+        .luxury-card {
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .luxury-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+        
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #34d399, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .nav-link:hover::after {
+            transform: translateX(100%);
+        }
+        
+        /* Section Transitions */
+        section {
+            position: relative;
+        }
+        
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: #022c22;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .loader-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #34d399;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(52, 211, 153, 0.2);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loader-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #059669, #d97706);
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-text">GÉNÉRAL IMMO</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+    
+    <!-- Grain Overlay -->
+    <div class="grain-overlay"></div>
+    
+    <!-- WebGL Background -->
+    <canvas id="webgl-bg"></canvas>
+    
+    <!-- Floating SVG Masks -->
+    <svg class="svg-mask mask-02 w-64 h-64 top-20 -left-20 animate-float opacity-60" viewBox="0 0 241 311">
+        <path d="M36.0949653,302.023314 C83.053361,329.185868 159.032999,285.415579 205.800238,204.259638 C252.567476,123.103697 252.412512,35.2942073 205.454116,8.13165396 C158.49572,-19.0308993 82.516082,24.7393897 35.7488439,105.895331 C-11.0183942,187.051272 -10.8634304,274.860761 36.0949653,302.023314 Z"/>
+    </svg>
+    
+    <svg class="svg-mask mask-05 w-96 h-96 top-1/3 -right-20 animate-float-reverse opacity-40" viewBox="0 0 285 310">
+        <path d="M240,220 C264.852814,220 285,240.147186 285,265 C285,289.852814 264.852814,310 240,310 C215.147186,310 195,289.852814 195,265 C195,240.147186 215.147186,220 240,220 Z M117.5,0 C182.393458,0 235,52.6065419 235,117.5 C235,182.393458 182.393458,235 117.5,235 C52.6065419,235 0,182.393458 0,117.5 C0,52.6065419 52.6065419,0 117.5,0 Z"/>
+    </svg>
+    
+    <svg class="svg-mask mask-06 w-80 h-80 bottom-1/4 left-10 animate-float opacity-50" viewBox="0 0 273 326">
+        <path d="M222.814496,14.0856078 C270.550148,41.6483599 286.905591,102.693372 259.345399,150.433459 L186.987294,275.773017 C159.427103,323.513104 98.3877609,339.870066 50.6521087,312.307314 C2.91645646,284.744562 -13.4389859,223.699549 14.1212058,175.959462 L86.4793107,50.6199045 C114.039502,2.87981751 175.078844,-13.4771443 222.814496,14.0856078 Z"/>
+    </svg>
+    
+    <svg class="svg-mask mask-07 w-72 h-72 top-1/2 right-1/4 animate-float opacity-30" viewBox="0 0 305 301">
+        <path d="M300.096461,115.364808 L260.037427,45.8988556 C255.847429,38.5328155 249.231675,32.8463944 241.316825,29.8078722 L165.911585,2.33546152 C157.462246,-0.778487173 148.178344,-0.778487173 139.729005,2.33546152 L64.8478223,29.6772556 C56.691808,32.6575216 49.837344,38.3966799 45.4730694,45.8988556 L4.89059289,115.757271 C0.582774017,123.281523 -0.945826667,132.078214 0.570501029,140.613058 L14.4469552,219.105659 C16.0884674,227.705505 20.7264296,235.446225 27.5379381,240.952971 L89.0667236,292.496242 C95.7242061,298.017706 104.110339,301.027407 112.761568,301 L192.879636,301 C201.354134,300.766174 209.489898,297.625243 215.92033,292.103779 L277.449116,240.560508 C284.243442,235.039044 288.877722,227.305683 290.540098,218.713196 L304.416553,140.220595 C305.956199,131.685751 304.425757,122.881701 300.096461,115.364808 Z"/>
+    </svg>
+    
+    <svg class="svg-mask mask-20 w-96 h-96 -bottom-20 right-1/3 animate-pulse-glow opacity-20" viewBox="0 0 305 300">
+        <path d="M275.48485,223.261434 L277.223438,222.417166 C290.734214,215.885502 300.524184,203.538911 303.80784,188.890327 C307.091496,174.241744 303.509354,158.894845 294.08063,147.216236 L292.494549,145.242886 C283.095966,133.60497 279.503721,118.319599 282.734052,103.710977 L284.248963,96.8652821 C287.443113,82.3061041 283.867945,67.0831521 274.527258,55.4705649 C265.18657,43.8579778 251.087518,37.1078767 236.188683,37.1154834 L228.603963,37.1154834 C213.739963,37.1131005 199.675199,30.3822094 190.344849,18.8060456 L189.927994,18.2872782 C180.55559,6.67740039 166.422784,-0.0491710542 151.50623,0 C136.589677,0.0497123712 122.50173,6.86982301 113.206422,18.5415759 C103.883927,30.2724676 89.72378,37.1105451 74.7439644,37.1154834 L69.09101,37.1154834 C54.196646,37.1235805 40.108784,43.8858861 30.7821946,55.5040729 C21.4556053,67.1222598 17.8957289,82.3438454 21.1019005,96.8957978 L22.4948047,103.232898 C25.6971023,117.728446 22.1891142,132.89568 12.9478187,144.510508 L10.6805367,147.358643 C1.38873899,159.052311 -2.08830681,174.336696 1.22990763,188.901683 C4.54812207,203.466671 14.3020265,215.733961 27.7410718,222.244243 L29.8660133,223.261434 C43.4224431,229.816154 53.2306311,242.222645 56.4837016,256.930456 L57.50042,261.42644 C60.7457876,276.11435 70.5300735,288.509326 84.0592886,295.071874 C97.5885037,301.634422 113.375362,301.643112 126.911787,295.095462 L131.273509,292.979705 C144.794915,286.449306 160.555948,286.449306 174.077354,292.979705 L178.439076,295.095462 C191.975501,301.643112 207.762359,301.634422 221.291574,295.071874 C234.82079,288.509326 244.605075,276.11435 247.850443,261.42644 L248.867161,256.930456 C252.116033,242.22065 261.925512,229.812526 275.48485,223.261434 L275.48485,223.261434 Z"/>
+    </svg>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-700 py-6 px-6 lg:px-12 mix-blend-difference">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-4 group magnetic-btn">
+                <div class="w-14 h-14 relative">
+                    <svg viewBox="0 0 100 100" class="w-full h-full animate-spin-slow">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#34d399" stroke-width="1" opacity="0.3"/>
+                        <circle cx="50" cy="50" r="35" fill="none" stroke="#059669" stroke-width="2"/>
+                        <text x="50" y="55" text-anchor="middle" fill="#34d399" font-family="Cormorant Garamond" font-size="24" font-weight="600">G</text>
+                    </svg>
+                </div>
+                <div class="text-white">
+                    <h1 class="font-serif text-2xl font-bold tracking-widest group-hover:text-emerald-light transition-colors">GÉNÉRAL IMMO</h1>
+                    <p class="text-xs text-emerald-light tracking-[0.3em] uppercase opacity-80">SARL</p>
+                </div>
+            </a>
+            
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="#accueil" class="nav-link text-white hover:text-emerald-light transition-colors text-xs tracking-[0.2em] uppercase font-light magnetic-btn">Accueil</a>
+                <a href="#apropos" class="nav-link text-white hover:text-emerald-light transition-colors text-xs tracking-[0.2em] uppercase font-light magnetic-btn">À Propos</a>
+                <a href="#services" class="nav-link text-white hover:text-emerald-light transition-colors text-xs tracking-[0.2em] uppercase font-light magnetic-btn">Services</a>
+                <a href="#projets" class="nav-link text-white hover:text-emerald-light transition-colors text-xs tracking-[0.2em] uppercase font-light magnetic-btn">Projets</a>
+                <a href="#contact" class="magnetic-btn px-8 py-4 border border-emerald-light/30 text-emerald-light hover:bg-emerald-light hover:text-emerald-deep transition-all duration-500 text-xs tracking-[0.2em] uppercase font-medium backdrop-blur-sm">
+                    Contact
+                </a>
+            </div>
+            
+            <button id="mobile-menu-btn" class="lg:hidden text-white magnetic-btn">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-emerald-deep/98 backdrop-blur-2xl z-40 hidden flex-col items-center justify-center gap-8 opacity-0 transition-opacity duration-500">
+        <a href="#accueil" class="text-3xl font-serif text-white hover:text-emerald-light transition-colors mobile-link">Accueil</a>
+        <a href="#apropos" class="text-3xl font-serif text-white hover:text-emerald-light transition-colors mobile-link">À Propos</a>
+        <a href="#services" class="text-3xl font-serif text-white hover:text-emerald-light transition-colors mobile-link">Services</a>
+        <a href="#projets" class="text-3xl font-serif text-white hover:text-emerald-light transition-colors mobile-link">Projets</a>
+        <a href="#contact" class="text-3xl font-serif text-emerald-light mobile-link">Contact</a>
+        <button id="close-menu" class="absolute top-8 right-8 text-white">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-emerald-deep/80 via-emerald-deep/60 to-emerald-deep"></div>
+            <img src="https://images.adsttc.com/media/images/68ca/9756/d84f/6b73/24ae/3a60/newsletter/emerald-sound-house-luigi-rosselli-architects_1.jpg?1758107499" 
+                 alt="Architecture luxueuse" 
+                 class="w-full h-full object-cover opacity-40 scale-110"
+                 id="hero-bg">
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center">
+            <div class="mb-8 overflow-hidden">
+                <p class="text-emerald-light text-sm tracking-[0.5em] uppercase font-light reveal-text" id="hero-subtitle">
+                    Promotion Immobilière & Aménagement Foncier
+                </p>
+            </div>
+            
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-light text-white mb-8 leading-none" id="hero-title">
+                <span class="block overflow-hidden">
+                    <span class="inline-block hero-char">Notre</span>
+                </span>
+                <span class="block overflow-hidden">
+                    <span class="inline-block hero-char gradient-text font-medium">vocation,</span>
+                </span>
+                <span class="block overflow-hidden">
+                    <span class="inline-block hero-char">l'immobilier</span>
+                </span>
+            </h1>
+            
+            <p class="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed opacity-0" id="hero-text">
+                Général Immo SARL façonne l'avenir du paysage urbain burkinabè avec une vision d'excellence et d'innovation durable.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center opacity-0" id="hero-cta">
+                <a href="#projets" class="magnetic-btn group px-10 py-5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-full hover:shadow-[0_0_40px_rgba(52,211,153,0.4)] transition-all duration-500 text-sm tracking-[0.2em] uppercase font-medium flex items-center gap-3">
+                    Explorer nos projets
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                </a>
+                <a href="#contact" class="magnetic-btn px-10 py-5 border border-white/30 text-white rounded-full hover:bg-white hover:text-emerald-deep transition-all duration-500 text-sm tracking-[0.2em] uppercase font-medium backdrop-blur-sm">
+                    Prendre rendez-vous
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-0" id="scroll-indicator">
+            <span class="text-white/50 text-xs tracking-widest uppercase">Scroll</span>
+            <div class="w-px h-16 bg-gradient-to-b from-emerald-light to-transparent"></div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-emerald-deep to-transparent"></div>
+    </section>
+
+    <!-- About Section with Mask -->
+    <section id="apropos" class="py-32 lg:py-40 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="relative z-10 parallax-container" id="about-image-container">
+                        <div class="relative overflow-hidden rounded-3xl">
+                            <img src="https://media.architecturaldigest.com/photos/66c7428a0963ac6cf92e9c0b/16:9/w_2560%2Cc_limit/044.jpg" 
+                                 alt="Architecture moderne" 
+                                 class="w-full h-[600px] object-cover transform hover:scale-110 transition-transform duration-1000"
+                                 id="about-img">
+                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-deep/60 to-transparent"></div>
+                        </div>
+                        
+                        <!-- Floating Stats Card -->
+                        <div class="absolute -bottom-10 -right-10 glass-card p-8 rounded-2xl max-w-xs hidden lg:block transform hover:scale-105 transition-transform duration-500">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-serif text-2xl font-bold shadow-lg shadow-emerald-500/30">
+                                    10k+
+                                </div>
+                                <div>
+                                    <p class="text-white font-serif text-xl">Abonnés</p>
+                                    <p class="text-emerald-light/80 text-sm">Nous suivent</p>
+                                </div>
+                            </div>
+                            <div class="h-px bg-emerald-light/20 my-4"></div>
+                            <div class="flex items-center gap-2 text-emerald-light">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <span class="text-sm">100% recommandé (5 avis)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SVG Mask Decoration -->
+                    <svg class="absolute -top-10 -left-10 w-40 h-40 text-emerald-500/20 animate-spin-slow" viewBox="0 0 300 300">
+                        <path d="M150,0 C232.842712,0 300,67.1572875 300,150 C300,232.842712 232.842712,300 150,300 C67.1572875,300 0,232.842712 0,150 C0,67.1572875 67.1572875,0 150,0 Z M151,85 C115.101491,85 86,114.101491 86,150 C86,185.898509 115.101491,215 151,215 C186.898509,215 216,185.898509 216,150 C216,114.101491 186.898509,85 151,85 Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-px w-12 bg-emerald-light"></div>
+                        <span class="text-emerald-light text-sm tracking-[0.3em] uppercase">À Propos</span>
+                    </div>
+                    
+                    <h2 class="font-serif text-5xl lg:text-6xl text-white font-light mb-8 leading-tight">
+                        L'excellence immobilière au cœur de <span class="gradient-text font-medium">Ouagadougou</span>
+                    </h2>
+                    
+                    <p class="text-white/70 text-lg leading-relaxed mb-6 font-light">
+                        Située Rue Kanti Zoobre, Général Immo SARL est votre partenaire privilégié pour la promotion immobilière et l'aménagement foncier au Burkina Faso. Notre approche combine savoir-faire technique et vision innovante.
+                    </p>
+                    
+                    <p class="text-white/60 leading-relaxed mb-10 font-light">
+                        Chaque projet que nous entreprenons est guidé par une exigence de qualité absolue et un respect profond de nos engagements. De la conception à la livraison, nous façonnons des espaces de vie exceptionnels.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="group cursor-pointer">
+                            <div class="text-4xl font-serif text-emerald-light mb-2 group-hover:scale-110 transition-transform inline-block">SARL</div>
+                            <p class="text-white/50 text-sm uppercase tracking-wider">Statut juridique</p>
+                        </div>
+                        <div class="group cursor-pointer">
+                            <div class="text-4xl font-serif text-emerald-light mb-2 group-hover:scale-110 transition-transform inline-block">Ouaga</div>
+                            <p class="text-white/50 text-sm uppercase tracking-wider">Siège social</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section with Interactive Cards -->
+    <section id="services" class="py-32 lg:py-40 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-emerald-900/20 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="text-center mb-20">
+                <span class="text-emerald-light text-sm tracking-[0.3em] uppercase block mb-4">Nos Expertises</span>
+                <h2 class="font-serif text-5xl lg:text-6xl text-white font-light">
+                    Services <span class="italic text-emerald-light">Premium</span>
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 perspective-1000">
+                <!-- Service 1 -->
+                <div class="luxury-card glass-card rounded-3xl p-10 lg:p-12 group cursor-pointer relative overflow-hidden" data-tilt>
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 border border-emerald-400/30">
+                            <i data-lucide="building-2" class="w-10 h-10 text-emerald-light"></i>
+                        </div>
+                        
+                        <h3 class="font-serif text-3xl text-white mb-4 group-hover:text-emerald-light transition-colors">Promotion Immobilière</h3>
+                        <p class="text-white/60 leading-relaxed mb-8 font-light">
+                            Conception et réalisation de programmes immobiliers haut de gamme. Villas contemporaines, appartements de standing et résidences sécurisées qui redéfinissent le confort à Ouagadougou.
+                        </p>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Construction neuve sur mesure</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Rénovation de prestige</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Conception architecturale</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-10 flex items-center gap-2 text-emerald-light opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0">
+                            <span class="text-sm uppercase tracking-wider">Découvrir</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="luxury-card glass-card rounded-3xl p-10 lg:p-12 group cursor-pointer relative overflow-hidden" data-tilt>
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 border border-emerald-400/30">
+                            <i data-lucide="map" class="w-10 h-10 text-emerald-light"></i>
+                        </div>
+                        
+                        <h3 class="font-serif text-3xl text-white mb-4 group-hover:text-emerald-light transition-colors">Aménagement Foncier</h3>
+                        <p class="text-white/60 leading-relaxed mb-8 font-light">
+                            Viabilisation et commercialisation de terrains dans les zones stratégiques de la capitale. Lots sécurisés, titrés et prêts à bâtir pour votre projet de construction.
+                        </p>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Terrains titrés et sécurisés</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Viabilisation complète</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-white/80 group/item hover:translate-x-2 transition-transform">
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-light"></i>
+                                <span>Conseil en investissement</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-10 flex items-center gap-2 text-emerald-light opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0">
+                            <span class="text-sm uppercase tracking-wider">Découvrir</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Gallery with Mask Shapes -->
+    <section id="projets" class="py-32 lg:py-40 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex flex-col lg:flex-row justify-between items-end mb-20">
+                <div>
+                    <span class="text-emerald-light text-sm tracking-[0.3em] uppercase block mb-4">Portfolio</span>
+                    <h2 class="font-serif text-5xl lg:text-6xl text-white font-light">
+                        Nos <span class="italic gradient-text">Réalisations</span>
+                    </h2>
+                </div>
+                <a href="#" class="mt-6 lg:mt-0 group flex items-center gap-3 text-white/70 hover:text-emerald-light transition-colors magnetic-btn">
+                    <span class="text-sm uppercase tracking-wider">Voir tout</span>
+                    <div class="w-10 h-10 rounded-full border border-white/20 group-hover:border-emerald-light flex items-center justify-center transition-colors">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:rotate-45 transition-transform"></i>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Project 1 with Mask -->
+                <div class="group relative h-[500px] cursor-pointer overflow-hidden rounded-3xl" id="project-1">
+                    <div class="absolute inset-0 bg-emerald-900/20 group-hover:bg-emerald-900/40 transition-colors z-10"></div>
+                    <img src="https://hoffmanlandscapes.com/wp-content/uploads/DSC_2234-650x433.jpg" 
+                         alt="Projet paysager luxueux" 
+                         class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                        <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                            <span class="text-emerald-light text-xs tracking-[0.2em] uppercase mb-2 block">Résidentiel</span>
+                            <h3 class="font-serif text-2xl text-white mb-2">Villa Les Collines</h3>
+                            <p class="text-white/70 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Ouaga 2000 • 450m² • Piscine & Jardin</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Hover Reveal Circle -->
+                    <div class="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <div class="w-24 h-24 rounded-full bg-emerald-light flex items-center justify-center text-emerald-deep font-medium text-sm tracking-wider uppercase transform scale-0 group-hover:scale-100 transition-transform duration-500">
+                            Voir
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="group relative h-[500px] cursor-pointer overflow-hidden rounded-3xl mt-0 md:mt-12" id="project-2">
+                    <div class="absolute inset-0 bg-emerald-900/20 group-hover:bg-emerald-900/40 transition-colors z-10"></div>
+                    <img src="https://static.vecteezy.com/system/resources/previews/065/342/172/large_2x/modern-green-house-showing-sustainable-architecture-and-luxurious-living-photo.jpg" 
+                         alt="Maison verte moderne" 
+                         class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                        <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                            <span class="text-emerald-light text-xs tracking-[0.2em] uppercase mb-2 block">Écologique</span>
+                            <h3 class="font-serif text-2xl text-white mb-2">Résidence Verte</h3>
+                            <p class="text-white/70 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Koulouba • Architecture durable</p>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <div class="w-24 h-24 rounded-full bg-emerald-light flex items-center justify-center text-emerald-deep font-medium text-sm tracking-wider uppercase transform scale-0 group-hover:scale-100 transition-transform duration-500">
+                            Voir
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="group relative h-[500px] cursor-pointer overflow-hidden rounded-3xl mt-0 md:mt-24" id="project-3">
+                    <div class="absolute inset-0 bg-emerald-900/20 group-hover:bg-emerald-900/40 transition-colors z-10"></div>
+                    <img src="https://www.moodymonday.co.uk/wp-content/uploads/blog3_emerald-green-interiors.jpg" 
+                         alt="Intérieur luxueux" 
+                         class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                        <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                            <span class="text-emerald-light text-xs tracking-[0.2em] uppercase mb-2 block">Intérieur</span>
+                            <h3 class="font-serif text-2xl text-white mb-2">Appartement Premium</h3>
+                            <p class="text-white/70 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Zone résidentielle • Design contemporain</p>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <div class="w-24 h-24 rounded-full bg-emerald-light flex items-center justify-center text-emerald-deep font-medium text-sm tracking-wider uppercase transform scale-0 group-hover:scale-100 transition-transform duration-500">
+                            Voir
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 lg:py-40 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-20">
+                <div>
+                    <span class="text-emerald-light text-sm tracking-[0.3em] uppercase block mb-4">Contact</span>
+                    <h2 class="font-serif text-5xl lg:text-6xl text-white font-light mb-8">
+                        Commençons votre <span class="gradient-text italic">projet</span>
+                    </h2>
+                    <p class="text-white/60 text-lg leading-relaxed mb-12 font-light">
+                        Visitez-nous au cœur d'Ouagadougou ou contactez-nous pour discuter de votre projet immobilier.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-emerald-light"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-medium mb-1">Adresse</h4>
+                                <p class="text-white/60 font-light">Rue Kanti Zoobre, Ouagadougou<br>Burkina Faso</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
+                                <i data-lucide="phone" class="w-6 h-6 text-emerald-light"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-medium mb-1">Téléphone</h4>
+                                <p class="text-white/60 font-light">+226 25 36 29 74</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
+                                <i data-lucide="mail" class="w-6 h-6 text-emerald-light"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-medium mb-1">Email</h4>
+                                <p class="text-white/60 font-light">immosarlgeneral@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 flex gap-4">
+                        <a href="https://www.facebook.com/generalimmosarl" target="_blank" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-emerald-light hover:text-emerald-deep hover:border-emerald-light transition-all magnetic-btn">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-emerald-light hover:text-emerald-deep hover:border-emerald-light transition-all magnetic-btn">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-emerald-light hover:text-emerald-deep hover:border-emerald-light transition-all magnetic-btn">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-3xl p-8 lg:p-12">
+                    <form class="space-y-6" onsubmit="event.preventDefault(); showNotification('Message envoyé avec succès !');">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="relative">
+                                <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-white/30 focus:border-emerald-light focus:outline-none transition-colors peer" placeholder=" ">
+                                <label class="absolute left-6 top-4 text-white/30 text-sm transition-all peer-focus:-top-6 peer-focus:text-emerald-light peer-focus:text-xs peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-xs">Prénom</label>
+                            </div>
+                            <div class="relative">
+                                <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-white/30 focus:border-emerald-light focus:outline-none transition-colors peer" placeholder=" ">
+                                <label class="absolute left-6 top-4 text-white/30 text-sm transition-all peer-focus:-top-6 peer-focus:text-emerald-light peer-focus:text-xs peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-xs">Nom</label>
+                            </div>
+                        </div>
+                        
+                        <div class="relative">
+                            <input type="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-white/30 focus:border-emerald-light focus:outline-none transition-colors peer" placeholder=" ">
+                            <label class="absolute left-6 top-4 text-white/30 text-sm transition-all peer-focus:-top-6 peer-focus:text-emerald-light peer-focus:text-xs peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-xs">Email</label>
+                        </div>
+                        
+                        <div class="relative">
+                            <select class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-emerald-light focus:outline-none transition-colors appearance-none cursor-pointer">
+                                <option value="" class="bg-emerald-deep">Type de projet</option>
+                                <option value="achat" class="bg-emerald-deep">Achat immobilier</option>
+                                <option value="terrain" class="bg-emerald-deep">Achat terrain</option>
+                                <option value="construction" class="bg-emerald-deep">Construction</option>
+                                <option value="investissement" class="bg-emerald-deep">Investissement</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-white/30 absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                        
+                        <div class="relative">
+                            <textarea rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-white/30 focus:border-emerald-light focus:outline-none transition-colors resize-none peer" placeholder=" "></textarea>
+                            <label class="absolute left-6 top-4 text-white/30 text-sm transition-all peer-focus:-top-6 peer-focus:text-emerald-light peer-focus:text-xs peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-xs">Votre message</label>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-medium hover:shadow-[0_0_30px_rgba(52,211,153,0.3)] transition-all duration-300 flex items-center justify-center gap-3 group magnetic-btn">
+                            <span>Envoyer le message</span>
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full border border-emerald-light/30 flex items-center justify-center text-emerald-light font-serif font-bold">G</div>
+                    <div>
+                        <h4 class="text-white font-serif text-lg">GÉNÉRAL IMMO</h4>
+                        <p class="text-white/40 text-xs">SARL • Rue Kanti Zoobre, Ouagadougou</p>
+                    </div>
+                </div>
+                
+                <p class="text-white/40 text-sm">© 2024 Tous droits réservés</p>
+                
+                <div class="flex gap-6 text-white/40 text-sm">
+                    <a href="#" class="hover:text-emerald-light transition-colors">Mentions légales</a>
+                    <a href="#" class="hover:text-emerald-light transition-colors">Confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="fixed bottom-8 right-8 glass-card px-8 py-4 rounded-xl transform translate-y-20 opacity-0 transition-all duration-500 z-50 flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-light"></i>
+        <span class="text-white" id="notification-text">Message envoyé !</span>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Register GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Loading Animation
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            const progress = document.getElementById('loader-progress');
+            const loaderText = document.querySelector('.loader-text');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 30;
+                if (width > 100) width = 100;
+                progress.style.width = width + '%';
+                
+                if (width === 100) {
+                    clearInterval(interval);
+                    gsap.to(loaderText, { opacity: 1, y: 0, duration: 0.5 });
+                    setTimeout(() => {
+                        gsap.to(loader, { opacity: 0, duration: 0.8, onComplete: () => {
+                            loader.style.display = 'none';
+                            initAnimations();
+                        }});
+                    }, 500);
+                }
+            }, 200);
+        });
+        
+        function initAnimations() {
+            // Hero Animations
+            gsap.from('.hero-char', {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: 'power4.out'
+            });
+            
+            gsap.to('#hero-text', { opacity: 1, y: 0, duration: 1, delay: 0.8 });
+            gsap.to('#hero-cta', { opacity: 1, y: 0, duration: 1, delay: 1 });
+            gsap.to('#scroll-indicator', { opacity: 1, duration: 1, delay: 1.2 });
+            
+            // Parallax Hero Background
+            gsap.to('#hero-bg', {
+                scrollTrigger: {
+                    trigger: '#accueil',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                },
+                y: 200,
+                scale: 1.2
+            });
+            
+            // Scroll Reveals
+            gsap.utils.toArray('section').forEach((section, i) => {
+                if (i === 0) return;
+                
+                gsap.from(section.querySelectorAll('h2, p, .glass-card, .luxury-card'), {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out'
+                });
+            });
+            
+            // Projects Parallax
+            gsap.to('#project-2', {
+                scrollTrigger: {
+                    trigger: '#projets',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                },
+                y: -50
+            });
+            
+            gsap.to('#project-3', {
+                scrollTrigger: {
+                    trigger: '#projets',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                },
+                y: -100
+            });
+        }
+        
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: 'forwards' });
+        });
+        
+        // Magnetic Buttons
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                cursorOutline.classList.add('hover');
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+                cursorOutline.classList.remove('hover');
+            });
+        });
+        
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => mobileMenu.classList.remove('opacity-0'), 10);
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeMenu.addEventListener('click', closeMobileMenu);
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+        
+        function closeMobileMenu() {
+            mobileMenu.classList.add('opacity-0');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 500);
+        }
+        
+        // Navigation Background on Scroll
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-emerald-deep/90', 'backdrop-blur-xl', 'shadow-2xl');
+                navbar.classList.remove('mix-blend-difference');
+            } else {
+                navbar.classList.remove('bg-emerald-deep/90', 'backdrop-blur-xl', 'shadow-2xl');
+                navbar.classList.add('mix-blend-difference');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // WebGL Background
+        const canvas = document.getElementById('webgl-bg');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+        
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 100;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.5,
+            color: 0x34d399,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Animation loop
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            particlesMesh.rotation.x += 0.001;
+            particlesMesh.rotation.y += 0.001;
+            
+            particlesMesh.rotation.x += mouseY * 0.001;
+            particlesMesh.rotation.y += mouseX * 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Notification
+        function showNotification(text) {
+            const notif = document.getElementById('notification');
+            const notifText = document.getElementById('notification-text');
+            notifText.textContent = text;
+            notif.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                notif.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+        
+        // 3D Tilt Effect for Cards
+        document.querySelectorAll('[data-tilt]').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

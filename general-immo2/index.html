@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Général Immo SARL | Promotion Immobilière & Aménagement Foncier</title>
+    <meta name="description" content="Général Immo SARL - Notre vocation, l'immobilier. Promotion immobilière et aménagement foncier au Burkina Faso.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'immo-gold': '#D4AF37',
+                        'immo-gold-light': '#F4E8C1',
+                        'immo-dark': '#1A1A1A',
+                        'immo-charcoal': '#2D2D2D',
+                        'immo-cream': '#FAF9F6',
+                        'immo-sand': '#E8E0D5',
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'hero-pattern': "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7))",
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Styles */
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .gold-underline {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .gold-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #D4AF37;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+        
+        .gold-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    </style>
+</head>
+<body class="font-sans text-immo-charcoal bg-immo-cream overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-immo-gold rounded-lg flex items-center justify-center text-white font-serif text-2xl font-bold shadow-lg">
+                    G
+                </div>
+                <div class="text-white">
+                    <h1 class="font-serif text-xl font-bold tracking-wide">GÉNÉRAL IMMO</h1>
+                    <p class="text-xs text-immo-gold-light tracking-widest uppercase">SARL</p>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="#accueil" class="text-white hover:text-immo-gold transition-colors text-sm tracking-wider uppercase font-medium gold-underline">Accueil</a>
+                <a href="#apropos" class="text-white hover:text-immo-gold transition-colors text-sm tracking-wider uppercase font-medium gold-underline">À Propos</a>
+                <a href="#services" class="text-white hover:text-immo-gold transition-colors text-sm tracking-wider uppercase font-medium gold-underline">Services</a>
+                <a href="#projets" class="text-white hover:text-immo-gold transition-colors text-sm tracking-wider uppercase font-medium gold-underline">Projets</a>
+                <a href="#contact" class="px-6 py-3 bg-immo-gold text-white rounded-full hover:bg-white hover:text-immo-dark transition-all duration-300 text-sm font-semibold tracking-wider uppercase shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Contact
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden text-white">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-immo-dark/95 backdrop-blur-lg py-6 px-6">
+            <div class="flex flex-col gap-4">
+                <a href="#accueil" class="text-white hover:text-immo-gold transition-colors text-lg py-2 border-b border-white/10">Accueil</a>
+                <a href="#apropos" class="text-white hover:text-immo-gold transition-colors text-lg py-2 border-b border-white/10">À Propos</a>
+                <a href="#services" class="text-white hover:text-immo-gold transition-colors text-lg py-2 border-b border-white/10">Services</a>
+                <a href="#projets" class="text-white hover:text-immo-gold transition-colors text-lg py-2 border-b border-white/10">Projets</a>
+                <a href="#contact" class="text-immo-gold font-semibold text-lg py-2">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="relative h-screen w-full overflow-hidden">
+        <!-- Background Image with Parallax -->
+        <div class="absolute inset-0 w-full h-full">
+            <img src="https://images.squarespace-cdn.com/content/v1/65a8583b3f2bb32732bff587/1706130441121-BOLB56GF0OOWUEFYH9M7/Luxury-Modern-Custom-Home-Frisco.jpg" 
+                 alt="Luxury Modern Architecture" 
+                 class="w-full h-full object-cover scale-110"
+                 id="hero-image">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-6">
+            <div class="max-w-5xl mx-auto">
+                <p class="text-immo-gold text-sm md:text-base tracking-[0.3em] uppercase mb-6 reveal" id="hero-subtitle">
+                    Promotion Immobilière & Aménagement Foncier
+                </p>
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white font-bold mb-6 leading-tight reveal" id="hero-title">
+                    Notre vocation,<br>
+                    <span class="text-immo-gold italic">l'immobilier</span>
+                </h1>
+                <p class="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light reveal" id="hero-text">
+                    Général Immo SARL façonne l'avenir du logement au Burkina Faso avec excellence et vision depuis Ouagadougou.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center reveal" id="hero-cta">
+                    <a href="#projets" class="px-8 py-4 bg-immo-gold text-white rounded-full hover:bg-white hover:text-immo-dark transition-all duration-300 font-semibold tracking-wider uppercase shadow-lg hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2">
+                        Découvrir nos projets
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#contact" class="px-8 py-4 border-2 border-white/30 text-white rounded-full hover:bg-white hover:text-immo-dark transition-all duration-300 font-semibold tracking-wider uppercase backdrop-blur-sm flex items-center justify-center gap-2">
+                        Nous contacter
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-8 h-8 text-white/50"></i>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent py-8">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <p class="text-3xl md:text-4xl font-serif text-immo-gold font-bold">10k+</p>
+                    <p class="text-white/70 text-sm uppercase tracking-wider mt-1">Abonnés</p>
+                </div>
+                <div class="reveal">
+                    <p class="text-3xl md:text-4xl font-serif text-immo-gold font-bold">100%</p>
+                    <p class="text-white/70 text-sm uppercase tracking-wider mt-1">Recommandé</p>
+                </div>
+                <div class="reveal">
+                    <p class="text-3xl md:text-4xl font-serif text-immo-gold font-bold">SARL</p>
+                    <p class="text-white/70 text-sm uppercase tracking-wider mt-1">Entreprise</p>
+                </div>
+                <div class="reveal">
+                    <p class="text-3xl md:text-4xl font-serif text-immo-gold font-bold">Ouaga</p>
+                    <p class="text-white/70 text-sm uppercase tracking-wider mt-1">Siège Social</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="apropos" class="py-24 lg:py-32 bg-immo-cream relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-immo-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-immo-gold/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Image Side -->
+                <div class="relative reveal">
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
+                        <img src="https://c8.alamy.com/comp/E1669G/modern-architecture-in-avenue-kwame-nkruma-ouagadougou-burkina-faso-E1669G.jpg" 
+                             alt="Architecture moderne Ouagadougou" 
+                             class="w-full h-[600px] object-cover hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <!-- Floating Card -->
+                    <div class="absolute -bottom-8 -right-8 bg-white p-8 rounded-2xl shadow-xl z-20 max-w-xs hidden md:block">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-immo-gold/10 rounded-full flex items-center justify-center">
+                                <i data-lucide="award" class="w-6 h-6 text-immo-gold"></i>
+                            </div>
+                            <div>
+                                <p class="font-serif text-2xl font-bold text-immo-dark">Excellence</p>
+                                <p class="text-sm text-gray-500">Reconnue au Burkina</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Plus de 10 000 personnes nous font confiance pour leurs projets immobiliers.
+                        </p>
+                    </div>
+                    <!-- Decorative Frame -->
+                    <div class="absolute -top-4 -left-4 w-full h-full border-2 border-immo-gold/30 rounded-2xl -z-0"></div>
+                </div>
+                
+                <!-- Content Side -->
+                <div class="reveal">
+                    <p class="text-immo-gold font-semibold tracking-widest uppercase mb-4">À Propos de Nous</p>
+                    <h2 class="font-serif text-4xl lg:text-5xl text-immo-dark font-bold mb-6 leading-tight">
+                        Votre partenaire immobilier de confiance au <span class="text-immo-gold">Burkina Faso</span>
+                    </h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                        Général Immo SARL est une société à responsabilité limitée basée à Ouagadougou, spécialisée dans la promotion immobilière et l'aménagement foncier. Notre mission est de transformer le paysage urbain burkinabè avec des solutions innovantes et durables.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mb-8">
+                        Située au cœur de la capitale, Rue Kanti Zoobre, notre entreprise combine expertise technique et connaissance approfondie du marché local pour offrir des biens d'exception et des terrains viabilisés répondant aux normes les plus élevées.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-immo-gold flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-immo-dark mb-1">Expertise Locale</h4>
+                                <p class="text-sm text-gray-500">Connaissance profonde du marché immobilier ouagalais</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-immo-gold flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-immo-dark mb-1">Qualité Garantie</h4>
+                                <p class="text-sm text-gray-500">Standards internationaux de construction</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-immo-gold flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-immo-dark mb-1">Accompagnement</h4>
+                                <p class="text-sm text-gray-500">Suivi personnalisé de A à Z</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-immo-gold flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-immo-dark mb-1">Transparence</h4>
+                                <p class="text-sm text-gray-500">Processus clairs et documents sécurisés</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="inline-flex items-center gap-2 text-immo-gold font-semibold hover:gap-4 transition-all duration-300 group">
+                        En savoir plus sur notre approche
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 lg:py-32 bg-immo-dark relative">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <p class="text-immo-gold font-semibold tracking-widest uppercase mb-4">Nos Expertises</p>
+                <h2 class="font-serif text-4xl lg:text-5xl text-white font-bold mb-6">
+                    Services <span class="text-immo-gold italic">Premium</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    Des solutions complètes pour concrétiser vos projets immobiliers avec excellence et professionnalisme.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Service 1 -->
+                <div class="group relative bg-immo-charcoal rounded-2xl overflow-hidden hover-lift reveal">
+                    <div class="absolute inset-0 bg-gradient-to-br from-immo-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="p-10 relative z-10">
+                        <div class="w-16 h-16 bg-immo-gold/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-immo-gold/20 transition-colors">
+                            <i data-lucide="building-2" class="w-8 h-8 text-immo-gold"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-white font-bold mb-4">Promotion Immobilière</h3>
+                        <p class="text-gray-400 leading-relaxed mb-6">
+                            Conception et construction de logements haut standing, appartements modernes et villas d'exception. Nous réalisons des projets résidentiels innovants qui redéfinissent le confort et l'élégance à Ouagadougou.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Construction neuve et rénovation</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Vente de biens résidentiels</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Conception architecturale</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="group relative bg-immo-charcoal rounded-2xl overflow-hidden hover-lift reveal">
+                    <div class="absolute inset-0 bg-gradient-to-br from-immo-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="p-10 relative z-10">
+                        <div class="w-16 h-16 bg-immo-gold/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-immo-gold/20 transition-colors">
+                            <i data-lucide="map" class="w-8 h-8 text-immo-gold"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-white font-bold mb-4">Aménagement Foncier</h3>
+                        <p class="text-gray-400 leading-relaxed mb-6">
+                            Gestion, viabilisation et commercialisation de terrains au Burkina Faso. Nous sécurisons vos investissements fonciers avec des lots viabilisés dans les meilleures zones d'Ouagadougou et environs.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Vente de terrains titrés</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Viabilisation (eau, électricité, voirie)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-immo-gold"></i>
+                                <span>Conseil en investissement foncier</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projets" class="py-24 lg:py-32 bg-immo-cream">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex flex-col lg:flex-row justify-between items-end mb-16 reveal">
+                <div class="max-w-2xl">
+                    <p class="text-immo-gold font-semibold tracking-widest uppercase mb-4">Portfolio</p>
+                    <h2 class="font-serif text-4xl lg:text-5xl text-immo-dark font-bold mb-6">
+                        Nos Réalisations <span class="italic text-immo-gold">Récentes</span>
+                    </h2>
+                    <p class="text-gray-600 text-lg">
+                        Découvrez nos projets immobiliers qui marquent le paysage urbain de Ouagadougou.
+                    </p>
+                </div>
+                <a href="#" class="hidden lg:flex items-center gap-2 text-immo-dark font-semibold hover:text-immo-gold transition-colors mt-6 lg:mt-0 group">
+                    Voir tous les projets
+                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover-lift reveal">
+                    <div class="aspect-[4/5] overflow-hidden">
+                        <img src="https://res.cloudinary.com/dw4e01qx8/f_auto,q_auto/images/crdx0arfe9pja9aivsyy" 
+                             alt="Projet Immobilier" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-immo-gold text-sm font-semibold uppercase tracking-wider">Résidentiel</span>
+                        <h3 class="text-white font-serif text-xl font-bold mt-2">Villa Moderne Ouaga 2000</h3>
+                        <p class="text-white/80 text-sm mt-2">Construction contemporaine avec piscine et jardin paysager</p>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover-lift reveal">
+                    <div class="aspect-[4/5] overflow-hidden">
+                        <img src="https://images.squarespace-cdn.com/content/v1/5e30b4c769dcbf426b421101/56c7c8f8-e3e2-4f2d-bfa4-843831dd76bc/01-Hutton-Drive-2641-Beverly-Hills-luxury-modern-home-exterior-design.jpg" 
+                             alt="Projet Immobilier" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-immo-gold text-sm font-semibold uppercase tracking-wider">Appartements</span>
+                        <h3 class="text-white font-serif text-xl font-bold mt-2">Résidence Kanti</h3>
+                        <p class="text-white/80 text-sm mt-2">Complexe résidentiel de standing avec services inclus</p>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg hover-lift reveal">
+                    <div class="aspect-[4/5] overflow-hidden">
+                        <img src="https://media.architecturaldigest.com/photos/6967dbeeffdb40213ccbb512/master/w_1600%2Cc_limit/Luxury%2520Outlook%2520Multigenerational%2520Living%2520California.jpg" 
+                             alt="Projet Immobilier" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-immo-gold text-sm font-semibold uppercase tracking-wider">Foncier</span>
+                        <h3 class="text-white font-serif text-xl font-bold mt-2">Lotissement Zoobre</h3>
+                        <p class="text-white/80 text-sm mt-2">Terrains viabilisés de 500 à 1000 m² avec accès sécurisé</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center lg:hidden">
+                <a href="#" class="inline-flex items-center gap-2 text-immo-dark font-semibold hover:text-immo-gold transition-colors">
+                    Voir tous les projets
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-immo-sand/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <p class="text-immo-gold font-semibold tracking-widest uppercase mb-4">Témoignages</p>
+                <h2 class="font-serif text-4xl text-immo-dark font-bold">Ils nous font <span class="text-immo-gold italic">confiance</span></h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg reveal">
+                    <div class="flex gap-1 mb-4">
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">"Service impeccable et professionnel. Général Immo a rendu notre projet de construction fluide et sans stress. Je recommande vivement."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-immo-gold/20 rounded-full flex items-center justify-center text-immo-gold font-bold">AK</div>
+                        <div>
+                            <p class="font-semibold text-immo-dark">Amadou K.</p>
+                            <p class="text-sm text-gray-500">Propriétaire à Ouaga 2000</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg reveal">
+                    <div class="flex gap-1 mb-4">
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">"J'ai acheté un terrain viabilisé via Général Immo. Les démarches administratives ont été facilitées et le suivi était parfait."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-immo-gold/20 rounded-full flex items-center justify-center text-immo-gold font-bold">SM</div>
+                        <div>
+                            <p class="font-semibold text-immo-dark">Sarah M.</p>
+                            <p class="text-sm text-gray-500">Investisseuse</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg reveal">
+                    <div class="flex gap-1 mb-4">
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-immo-gold fill-immo-gold"></i>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">"Équipe sérieuse et à l'écoute. Notre appartement dépasse nos attentes en termes de finition et d'emplacement."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-immo-gold/20 rounded-full flex items-center justify-center text-immo-gold font-bold">JO</div>
+                        <div>
+                            <p class="font-semibold text-immo-dark">Jean O.</p>
+                            <p class="text-sm text-gray-500">Cadre supérieur</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 lg:py-32 bg-immo-dark relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 50px 50px;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Contact Info -->
+                <div class="reveal">
+                    <p class="text-immo-gold font-semibold tracking-widest uppercase mb-4">Contactez-nous</p>
+                    <h2 class="font-serif text-4xl lg:text-5xl text-white font-bold mb-6">
+                        Commençons votre <span class="text-immo-gold italic">projet</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg mb-10">
+                        Prêt à concrétiser votre projet immobilier ? Notre équipe d'experts est à votre disposition pour vous accompagner.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-immo-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-immo-gold"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Adresse</h4>
+                                <p class="text-gray-400">Rue Kanti Zoobre, Ouagadougou, Burkina Faso</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-immo-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="phone" class="w-6 h-6 text-immo-gold"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Téléphone</h4>
+                                <p class="text-gray-400">+226 25 36 29 74</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-immo-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6 text-immo-gold"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Email</h4>
+                                <p class="text-gray-400">immosarlgeneral@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-immo-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="globe" class="w-6 h-6 text-immo-gold"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold mb-1">Site Web</h4>
+                                <p class="text-gray-400">generalimmobf.net</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="mt-10">
+                        <h4 class="text-white font-semibold mb-4">Suivez-nous</h4>
+                        <div class="flex gap-4">
+                            <a href="https://www.facebook.com/generalimmosarl" target="_blank" class="w-12 h-12 bg-immo-charcoal rounded-full flex items-center justify-center text-white hover:bg-immo-gold transition-colors">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-immo-charcoal rounded-full flex items-center justify-center text-white hover:bg-immo-gold transition-colors">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-immo-charcoal rounded-full flex items-center justify-center text-white hover:bg-immo-gold transition-colors">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-immo-charcoal rounded-full flex items-center justify-center text-white hover:bg-immo-gold transition-colors">
+                                <i data-lucide="twitter" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="bg-white rounded-2xl p-8 lg:p-10 shadow-2xl reveal">
+                    <h3 class="font-serif text-2xl text-immo-dark font-bold mb-6">Envoyez-nous un message</h3>
+                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message envoyé avec succès !');">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all" placeholder="Votre prénom">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all" placeholder="Votre nom">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all" placeholder="votre@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                            <input type="tel" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all" placeholder="+226 XX XX XX XX">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type de projet</label>
+                            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all">
+                                <option>Sélectionnez...</option>
+                                <option>Achat de bien immobilier</option>
+                                <option>Achat de terrain</option>
+                                <option>Construction</option>
+                                <option>Investissement</option>
+                                <option>Autre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-immo-gold focus:ring-2 focus:ring-immo-gold/20 outline-none transition-all resize-none" placeholder="Décrivez votre projet..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-immo-gold text-white rounded-lg font-semibold hover:bg-immo-dark transition-colors duration-300 flex items-center justify-center gap-2 group">
+                            Envoyer le message
+                            <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-immo-charcoal text-white py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-immo-gold rounded-lg flex items-center justify-center text-white font-serif text-xl font-bold">
+                            G
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-lg font-bold">GÉNÉRAL IMMO</h3>
+                            <p class="text-xs text-immo-gold">SARL</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        Votre partenaire de confiance pour la promotion immobilière et l'aménagement foncier au Burkina Faso. Notre vocation, l'immobilier.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-immo-gold">Liens Rapides</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#accueil" class="hover:text-white transition-colors">Accueil</a></li>
+                        <li><a href="#apropos" class="hover:text-white transition-colors">À Propos</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#projets" class="hover:text-white transition-colors">Projets</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-immo-gold">Légal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Mentions légales</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">
+                    © 2024 Général Immo SARL. Tous droits réservés.
+                </p>
+                <p class="text-gray-500 text-sm">
+                    Conçu avec excellence à Ouagadougou
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Animations and Interactions -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Register GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-immo-dark/95', 'backdrop-blur-lg', 'shadow-lg', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('bg-immo-dark/95', 'backdrop-blur-lg', 'shadow-lg', 'py-4');
+                navbar.classList.add('py-6');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Hero animations
+        gsap.to('#hero-image', {
+            scale: 1,
+            duration: 2,
+            ease: 'power2.out'
+        });
+        
+        gsap.to('#hero-subtitle', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+        
+        gsap.to('#hero-title', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.7,
+            ease: 'power3.out'
+        });
+        
+        gsap.to('#hero-text', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.9,
+            ease: 'power3.out'
+        });
+        
+        gsap.to('#hero-cta', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 1.1,
+            ease: 'power3.out'
+        });
+        
+        // Scroll reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        revealElements.forEach((element, index) => {
+            gsap.to(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: index * 0.1,
+                ease: 'power3.out'
+            });
+        });
+        
+        // Parallax effect for hero image
+        gsap.to('#hero-image', {
+            scrollTrigger: {
+                trigger: '#accueil',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            y: 200,
+            ease: 'none'
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

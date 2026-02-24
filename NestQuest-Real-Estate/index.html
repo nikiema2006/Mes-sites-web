@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NestQuest Real Estate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2D2D2D", // Dark charcoal/black from the design
+                        secondary: "#8B5E3C", // Brown accent color seen in buttons/icons
+                        "background-light": "#F9FAFB",
+                        "background-dark": "#121212",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E1E1E",
+                        "text-light": "#1F2937",
+                        "text-dark": "#E5E7EB",
+                        "text-muted-light": "#6B7280",
+                        "text-muted-dark": "#9CA3AF",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                    },
+                },
+            },
+        };
+    </script>
+<style>.hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body antialiased transition-colors duration-300">
+<header class="fixed w-full top-0 z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-md mx-auto px-6 py-4 flex justify-between items-center">
+<div class="font-display font-bold text-xl tracking-tight text-primary dark:text-white uppercase">NestQuest</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-xs font-medium hover:text-secondary transition-colors">Buy</button>
+<button class="bg-primary text-white text-xs px-4 py-2 rounded-full hover:opacity-90 transition-opacity">Contact Us</button>
+<button class="sm:hidden text-primary dark:text-white">
+<span class="material-icons-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-16 pb-20 max-w-md mx-auto overflow-hidden">
+<section class="relative px-4 pt-6 pb-12">
+<div class="relative rounded-3xl overflow-hidden h-[500px] shadow-xl">
+<img alt="Luxury modern home exterior with driveway" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZBzjk5-mRJb4olVWrfRSulvUiaUTK7l_KoaetrwiXeqwIuDvfU1bTgUjOP5fnEDyo5j4NXf0VGL1L0NrJ0WywkcU3NqNgBy4aknTgimH6bYR8Pkf1BKflGhaTLA4ULR7Z82Uz4X0-t7UDfV5bSvhwS4y_hpH1Krs5J4QQrIY4qA2Hk7s1txtJc8xL_ivknSwuv628WiV0km6s0oEGanZ0QRpRWJtgJjI6hcNd3gU0JT0kY4soVQtaezNvtghvgCFY_eaRgxSvoZs"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-between">
+<div>
+<h1 class="text-4xl md:text-5xl font-display text-white font-medium leading-tight mb-3">We Build <br/><span class="italic">Community</span></h1>
+<p class="text-gray-200 text-sm font-light max-w-xs leading-relaxed">
+                            Welcome to a world where luxury meets lifestyle. Our handpicked properties offer more than just a place to live.
+                        </p>
+</div>
+<div class="bg-surface-light/20 dark:bg-black/30 backdrop-blur-md border border-white/20 p-4 rounded-2xl mb-8">
+<p class="text-white text-xs mb-3 font-medium">Search for the price you're looking for</p>
+<div class="grid grid-cols-3 gap-2 mb-3">
+<div class="relative">
+<select class="w-full bg-white/10 text-white text-[10px] border border-white/20 rounded-lg px-2 py-2 appearance-none focus:outline-none focus:ring-1 focus:ring-white">
+<option>Location</option>
+<option>New York</option>
+<option>LA</option>
+</select>
+<span class="material-icons-outlined absolute right-1 top-2 text-white text-[14px] pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="w-full bg-white/10 text-white text-[10px] border border-white/20 rounded-lg px-2 py-2 appearance-none focus:outline-none focus:ring-1 focus:ring-white">
+<option>Price</option>
+<option>$500k+</option>
+<option>$1M+</option>
+</select>
+<span class="material-icons-outlined absolute right-1 top-2 text-white text-[14px] pointer-events-none">expand_more</span>
+</div>
+<button class="bg-white text-primary text-[10px] font-bold rounded-lg px-2 py-2 hover:bg-gray-100 transition-colors">
+                                Search
+                            </button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 right-6">
+<button class="bg-white/20 backdrop-blur-md text-white text-xs px-4 py-2 rounded-full border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-colors">
+                        Explore Now
+                        <span class="material-icons-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 mt-4 px-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-text-muted-light dark:text-text-muted-dark border border-gray-200 dark:border-gray-700 px-3 py-1 rounded-full">Architecture</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-text-muted-light dark:text-text-muted-dark border border-gray-200 dark:border-gray-700 px-3 py-1 rounded-full">House</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-text-muted-light dark:text-text-muted-dark border border-gray-200 dark:border-gray-700 px-3 py-1 rounded-full">Commercial</span>
+</div>
+</section>
+<section class="px-6 py-10">
+<div class="mb-8">
+<h2 class="font-display text-3xl text-primary dark:text-white leading-tight mb-4">Your Trusted Real <br/><span class="italic text-gray-500 dark:text-gray-400">Estate Advisors</span></h2>
+<div class="flex flex-col gap-4">
+<div class="rounded-2xl overflow-hidden h-48 w-full">
+<img alt="Modern interior living room with pool view" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK_Ol9I4IM0dLizNX-EHHdAK7BNcdztwMnWXREE5dM9a-SaG2XXqN_wZCYugK_g3rcY8LEGQt5s-KrtDQyvAQ2FbqDP6i5JK3MXUuHiBdXwlGNjxZzFIvRMv6JfAAL5NbypVdkKDOo9NoR7ezKvuTo4cAxPRU2rmRmVFScxsx8ZDmmVHJAlMJw7UR6sey8TRFL3kpFlyb93Ofp0Zvl1qqoZtJfRb7b53dy-TlGk9LP79NvftN-vOYwjvuPrBACwIXs7QD58H_6lZk"/>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark leading-relaxed">
+                            Discover the epitome of luxury living in this offering sweeping panoramic ocean views from every room.
+                        </p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 p-4 rounded-2xl text-center shadow-sm">
+<span class="block text-2xl font-bold text-primary dark:text-white">18k+</span>
+<span class="text-[10px] uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark">Satisfied Customers</span>
+</div>
+<div class="bg-primary text-white p-4 rounded-2xl text-center shadow-lg">
+<span class="block text-2xl font-bold">17k+</span>
+<span class="text-[10px] uppercase tracking-wide opacity-80">Total Partner</span>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 p-4 rounded-2xl text-center shadow-sm">
+<span class="block text-2xl font-bold text-primary dark:text-white">13+</span>
+<span class="text-[10px] uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark">Years of Experience</span>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 p-4 rounded-2xl text-center shadow-sm">
+<span class="block text-2xl font-bold text-primary dark:text-white">14k+</span>
+<span class="text-[10px] uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark">Property Available</span>
+</div>
+</div>
+</section>
+<section class="px-6 py-8 bg-gray-50 dark:bg-white/5 rounded-3xl mx-4 mb-10">
+<h2 class="font-display text-2xl text-primary dark:text-white mb-4">Trusted Partner in <br/><span class="italic">Exceptional</span></h2>
+<div class="pl-4 border-l-2 border-secondary mb-6">
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark font-medium leading-relaxed">
+                    Your Trusted Ally in Property Investment: With extensive expertise and deep market insights, we guide you in making informed real estate decisions that perfectly align with your investment goals.
+                </p>
+</div>
+<div class="flex justify-between items-center opacity-60 grayscale dark:invert">
+<img alt="Partner Logo" class="h-4 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbXNOvb8-u0wMaeWRx0Srpf2q0DJs-BriYWlipaCvh2L68Q9suM0lMwFqODmhiPRPLcYDHXP3RQQuJ818k4T1uGQYjbIOHTplxD99yRKGUBxvneEcD2aDA0cliLPLP62Ztmh7KC5CIPwmTWD-jSi23byf_CQI_tZ2E9REQiWiDNDIfJIB0jDmFNbQYMML-99AZxZIU24ZJyaiW8XDkC7rVPMjXnURM-S6OQO4-_EcYzblmkBuHvVX518ZhhwEbvJcx5WpLKjb27HM"/>
+<img alt="Partner Logo" class="h-4 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIIub9Z7qLzI_QjKpdKhz62b3JmS9qd0MNh-4LGjRJ2NqQtZvKbVhGXLUNpE4P7uUBbgQBNvtXWt0xeTRMGm1vI8B9W-1SJ_53RCOcDK8-hf6nA1CUuNKGZTicBAY3HVu7QFRnzIhjOuP_As4-JGygeumepq1eomf-YreNRQz7fA3uwPTZX1nXmmC7UAQi_M0jl2rDtIXxJB2gEg5H2k7-QXHEGMPZofQESPKp4Oh1832ghmRvqsNhLFSVm1BbBbXzNtXnUovFI3Q"/>
+<img alt="Partner Logo" class="h-4 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtIvOdLWpWq1iYABxmXUHgpP5msxWoWgHHp-CR8R-VfJXIv0RbdfPPitoD8PC46D0dLXYoVHL7Qj59uKClSOqIUW4CGPKB3wrpfS__anw6FE6zrGfGg5H_5B_IuKlFCPsYIU7DMVIiv3e04VCp5UajRTbeREVHY3KEIPJwBozKo6ACXNXYoxIUPdwxbsms4ROK6uhrqjxuPT0qp1aIDZNdSaXMRlI5a6mq-lv3fkCrBkd6tOsWK1zv_5TTpI90sEat5lqsFiF2x9Y"/>
+</div>
+</section>
+<section class="px-6 py-8">
+<div class="flex justify-between items-end mb-6">
+<h2 class="font-display text-2xl text-primary dark:text-white leading-tight">Expert Services for <br/>Buyers, Sellers,<br/> and Investors</h2>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-icons-outlined text-sm text-primary dark:text-white">west</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
+<span class="material-icons-outlined text-sm">east</span>
+</button>
+</div>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scroll pb-4 -mx-6 px-6">
+<div class="min-w-[280px] bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-md">
+<div class="h-40 relative">
+<img alt="Modern house facade" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwRkf40B2_8UkYFxgI6Ym7Z9Q6oo6Vy2tppHkI4TtjNU_v50dqkCgBqj0CjFRSO9r2G88423ukf0iDoMoIk5FR9ayY-BxfrEsh7J88Uqh7m2QwU3Xf4Q6TtcEN6GNrkwQWm4q4nvAC3_1dYS104g4YNpC_G708nrCc2Zv2H9yALe31Fd2uh5xievNi6cqqbj_9IZFk0af8LHUfwAzYkP_4p5SSp1aij8Np86gEvyrWQVfv5saOcRFb7j3znzvJMpv9Tu2haxr3vsQ"/>
+<span class="absolute top-3 left-3 bg-white text-primary text-[10px] font-bold px-2 py-1 rounded">Buy a home</span>
+</div>
+<div class="p-5">
+<h3 class="font-display text-lg font-bold text-primary dark:text-white mb-2">Buy a home</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-4 line-clamp-2">Find your place with an immersive photo experience and the most listings, including things you won't find anywhere else.</p>
+<button class="text-xs font-bold border-b border-primary dark:border-white pb-0.5 text-primary dark:text-white flex items-center gap-1 w-fit">
+                            View Details <span class="material-icons-outlined text-[10px]">arrow_outward</span>
+</button>
+</div>
+</div>
+<div class="min-w-[280px] bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-md">
+<div class="h-40 relative">
+<img alt="House with pool" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuBmAy4aVIr0HWJOq-4SGUElVuPE-qvRYE--k8lbjiTJTGhBMf8_QVNuzDOe_ZE0faUsQU4shjg1Cumed4v8SQ3_gyQ2u6PQq-SSeGEbeIr96pVt445fXfHci2005TlJioK0QVozS9KOeD93cwxtHlzs80PtvFcAidIPLIT7bVWiqqI-7YFeaQMDaFHtfOx5vg7MCPSiieCMcWNyk_LmLPZEGPMoXAfBspF0g31mjUU3bcsVlJuPDleE5f_VfJlDuHvDcnnPG_-pU"/>
+<span class="absolute top-3 left-3 bg-white text-primary text-[10px] font-bold px-2 py-1 rounded">Sell a home</span>
+</div>
+<div class="p-5">
+<h3 class="font-display text-lg font-bold text-primary dark:text-white mb-2">Selling a home</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-4 line-clamp-2">No matter what path you take to sell your home, we can help you navigate a successful sale.</p>
+<button class="text-xs font-bold border-b border-primary dark:border-white pb-0.5 text-primary dark:text-white flex items-center gap-1 w-fit">
+                            View Details <span class="material-icons-outlined text-[10px]">arrow_outward</span>
+</button>
+</div>
+</div>
+<div class="min-w-[280px] bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-md">
+<div class="h-40 relative">
+<img alt="Interior living space" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApTKdSkzCPiuPEhfvbnqAO5D2PKLSfQilrNZ-ralPHj_rPxpOIFqE08LmUCxusgLE08dSDL8t4m_a4qdNrKb73yg4ylYqRezEUvLiCfx6sz3geLUslc6hPzYTER5sP--51-5nUM0Cut9W5N8uvy9RbrnlcoIWHd2cl2o9On1FdEiD7hcsDbTQW49JX5JEdikDDAkFoBst5d_Sch3mmJkHN4libNV-sKqrNhTd7EcTXrNAcSfMUY2ozlFdRciG-GolJSAzKO_vCeR0"/>
+<span class="absolute top-3 left-3 bg-white text-primary text-[10px] font-bold px-2 py-1 rounded">Rent a home</span>
+</div>
+<div class="p-5">
+<h3 class="font-display text-lg font-bold text-primary dark:text-white mb-2">Rent a home</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-4 line-clamp-2">We're creating a seamless online experience - from shopping on the largest rental network.</p>
+<button class="text-xs font-bold border-b border-primary dark:border-white pb-0.5 text-primary dark:text-white flex items-center gap-1 w-fit">
+                            View Details <span class="material-icons-outlined text-[10px]">arrow_outward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 py-10 bg-white dark:bg-surface-dark">
+<div class="text-center mb-10">
+<h2 class="font-display text-2xl text-primary dark:text-white mb-2">Why NestQuest <br/><span class="italic font-serif">Home Loans?</span></h2>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark max-w-xs mx-auto">Getting home is a journey. Our loan officers are here to help you stay on budget and on schedule.</p>
+</div>
+<div class="flex flex-col gap-8 relative">
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-3 text-secondary">
+<span class="material-icons-outlined">handshake</span>
+</div>
+<h3 class="text-sm font-bold text-primary dark:text-white mb-1">Top-rated loan officers help</h3>
+<p class="text-[10px] text-text-muted-light dark:text-text-muted-dark max-w-[200px]">With a 4.9 star average rating, our loan officers provide step-by-step guidance.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-3 text-secondary">
+<span class="material-icons-outlined">percent</span>
+</div>
+<h3 class="text-sm font-bold text-primary dark:text-white mb-1">Competitive rates</h3>
+<p class="text-[10px] text-text-muted-light dark:text-text-muted-dark max-w-[200px]">Strong relationships mean no hidden fees and transparency to keep you informed.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center mb-3 text-secondary">
+<span class="material-icons-outlined">savings</span>
+</div>
+<h3 class="text-sm font-bold text-primary dark:text-white mb-1">Low down payment options</h3>
+<p class="text-[10px] text-text-muted-light dark:text-text-muted-dark max-w-[200px]">We offer a variety of loan options to meet your needs and help make home ownership more accessible.</p>
+</div>
+</div>
+<div class="text-center mt-8">
+<button class="text-xs font-bold border border-gray-300 dark:border-gray-700 rounded-full px-6 py-3 text-primary dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors inline-flex items-center gap-2">
+                    See all loan offering <span class="material-icons-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</section>
+<section class="px-6 py-12 bg-gray-50 dark:bg-black/20">
+<h2 class="font-display text-2xl text-center text-primary dark:text-white mb-2">See what our customers <br/><span class="italic">are saying</span></h2>
+<p class="text-center text-xs text-text-muted-light dark:text-text-muted-dark mb-8">More than <span class="font-bold text-secondary">700 million</span> people have tried the application and given their opinion.</p>
+<div class="space-y-4">
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex gap-4">
+<img alt="User avatar" class="w-12 h-12 rounded-full object-cover shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmMx_FI_mYGkhJCA_Muq6mk5Ev-nrY0H8AO0C2hpVAIZTRJfKyqaloqb-kLvaKwEFTiRjlT6OqP8Xg1YcnNnPbmlMihJdxYB0cflEoszR8CIqBgOUerOCRx7DzLE_11A9z8qWJp6-gFI-F2vVgJbsrkgbFaqAoi0xQaaBgRt9IQY5UFdkCg347G4TT-SWDHmXZ7ZXdUMnYUgytubvJofT09lFVkF00thNaDM7FFrSQjTI-7v-ic7RsT5aZUwbb_f728c2e68IyGpQ"/>
+<div>
+<p class="text-[11px] text-text-muted-light dark:text-text-muted-dark italic mb-3">
+                            "Thanks to [NestQuest], I found my dream home in no time. I highly recommend this website to anyone looking for a seamless and stress-free home."
+                        </p>
+<div class="flex justify-between items-center">
+<div>
+<h4 class="text-sm font-bold text-primary dark:text-white">John D.</h4>
+<p class="text-[10px] text-text-muted-light dark:text-text-muted-dark">UI/UX Designer</p>
+</div>
+<div class="flex text-yellow-500 text-[10px]">
+<span class="material-icons-outlined text-sm">star</span>
+<span class="font-bold text-primary dark:text-white ml-1 text-sm">4.5</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex gap-4">
+<img alt="User avatar" class="w-12 h-12 rounded-full object-cover shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjjKSkDJrWwPQ9joVJnUb5msUldhFBHdcRbZYcpiZIwXM3pvehjAKfXYQEbSnC-X-QoGurYfB27AkVIdtRJKPTqJ4EjhVwx6a6irJ9xGr1rCpz1l0BWx3thaJ30xVsqgEH5TxskutGJE2PUWFtXsWkCUeJclMNoOq__I_CJpAl9V1UYJg18S3Hg2agIVGckxzq-QwbZjqOSz1Mq511e8mU9o_6_yRxX6M4QLJmAfUKbOqe3hVHJeflYuM0KqJrSHChIN2liNM-V4o"/>
+<div>
+<p class="text-[11px] text-text-muted-light dark:text-text-muted-dark italic mb-3">
+                            "The best part about this site is the comprehensive service it offers. From finding a property to securing a loan, everything was handled efficiently."
+                        </p>
+<div class="flex justify-between items-center">
+<div>
+<h4 class="text-sm font-bold text-primary dark:text-white">Sarah L.</h4>
+<p class="text-[10px] text-text-muted-light dark:text-text-muted-dark">Marketing Lead</p>
+</div>
+<div class="flex text-yellow-500 text-[10px]">
+<span class="material-icons-outlined text-sm">star</span>
+<span class="font-bold text-primary dark:text-white ml-1 text-sm">4.9</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-6 py-12">
+<h2 class="font-display text-3xl text-primary dark:text-white mb-2">Let's Get In Touch</h2>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-6">Ready to find your dream home, make a smart investment or need real estate advice? We're here to assist you.</p>
+<div class="flex flex-col gap-6">
+<form class="space-y-3">
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-[10px] font-bold text-primary dark:text-white mb-1">First Name</label>
+<input class="w-full bg-gray-50 dark:bg-surface-dark border-gray-200 dark:border-gray-700 rounded-lg text-xs py-2 px-3 focus:ring-secondary focus:border-secondary placeholder-gray-400" placeholder="Enter name" type="text"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-primary dark:text-white mb-1">Last Name</label>
+<input class="w-full bg-gray-50 dark:bg-surface-dark border-gray-200 dark:border-gray-700 rounded-lg text-xs py-2 px-3 focus:ring-secondary focus:border-secondary placeholder-gray-400" placeholder="Enter name" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-[10px] font-bold text-primary dark:text-white mb-1">Email</label>
+<input class="w-full bg-gray-50 dark:bg-surface-dark border-gray-200 dark:border-gray-700 rounded-lg text-xs py-2 px-3 focus:ring-secondary focus:border-secondary placeholder-gray-400" placeholder="Enter email" type="email"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-primary dark:text-white mb-1">Phone</label>
+<input class="w-full bg-gray-50 dark:bg-surface-dark border-gray-200 dark:border-gray-700 rounded-lg text-xs py-2 px-3 focus:ring-secondary focus:border-secondary placeholder-gray-400" placeholder="Enter phone" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-primary dark:text-white mb-1">Message</label>
+<textarea class="w-full bg-gray-50 dark:bg-surface-dark border-gray-200 dark:border-gray-700 rounded-lg text-xs py-2 px-3 focus:ring-secondary focus:border-secondary placeholder-gray-400 resize-none" placeholder="Enter your message" rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-white py-3 rounded-lg text-xs font-bold hover:opacity-90 transition-opacity" type="button">Submit Form</button>
+</form>
+<div class="rounded-2xl overflow-hidden h-48 relative shadow-md">
+<img alt="Map graphic" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6yS902MWVdYoRjQgm87IdQMu40NEgtttseM7xqE9qaynnGi-vrXtz7WYm1xMeUgExFsMP6bftPSXstnI68-T6VzLtgyYDWhRZ1QH2ngJbv3LvMUWswr9qgNn3VJ9T6fjuVqoZsMrbYCVjJ4AKqrQF-HrQP0A5WMOUoboIKkbXsG1VcrlQIgr4fEl7mGY3k-c5o4kCyAFw39LF70nQfoKOQjjkep8JHpzbaqiKBDsJBYaOa_iy44XsWhKARErkaOpQ3R753Yjkw7o"/>
+<div class="absolute inset-0 bg-gray-200/20 dark:bg-black/40"></div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<div class="bg-white p-2 rounded-lg shadow-lg max-w-[120px]">
+<img alt="Property thumbnail" class="w-full h-10 object-cover rounded mb-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiDhk5qXSDfxFMOleGlZA1QKcieAd7pqVHeqZzGkipoVjms-SolGzfPUMV6DVtvXfr90KpHjAOv5QaEjLAqYJ4rTY8Yj3nmMG3kOvd9agOig-hleyQF1ChlCZ-U0KVTjxz6GNDZAN9bkghkKBTIp53TMke34QCEwJ_HLPyDFB2z4LBONv9WKj9XayUGgdf5xAugYU2Q2b9cJX48U0tmK-1rKoozXbyISxfrb4tKu3UbrVQfxD64YCc19oV2R2_Hg6in542tlnzqKQ"/>
+<p class="text-[8px] font-bold text-primary">Tranquil Vista Residences</p>
+<p class="text-[6px] text-gray-500">454 Post Ave, NY</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-black text-white py-12 px-6">
+<div class="max-w-md mx-auto">
+<div class="flex justify-between items-start mb-10">
+<a class="text-sm font-light text-gray-400 hover:text-white transition-colors flex items-center gap-2" href="#">
+                    nestquest.realestate7@com <span class="material-icons-outlined text-[10px]">arrow_outward</span>
+</a>
+<div class="grid grid-cols-2 gap-x-8 gap-y-2 text-[10px] text-gray-400">
+<a class="hover:text-white" href="#">Service</a>
+<a class="hover:text-white" href="#">Help</a>
+<a class="hover:text-white" href="#">About</a>
+<a class="hover:text-white" href="#">Contact</a>
+<a class="hover:text-white" href="#">Saving Accounts</a>
+<a class="hover:text-white" href="#">Customer Help</a>
+<a class="hover:text-white" href="#">Career</a>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-8 text-center">
+<h2 class="font-display text-4xl font-bold tracking-widest uppercase text-white mb-4">NestQuest</h2>
+<p class="text-[10px] text-gray-600">© 2023 NestQuest Real Estate. All rights reserved.</p>
+</div>
+</div>
+</footer>
+
+</body></html>

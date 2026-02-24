@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Développeur Web Freelance | Création de Sites Modernes & Applications</title>
+    <meta name="description" content="Développeur web freelance spécialisé dans la création de sites vitrines, applications web et solutions full-stack. Technologies modernes, code propre, livraison rapide.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        },
+                        accent: {
+                            cyan: '#06b6d4',
+                            violet: '#8b5cf6',
+                            purple: '#a855f7',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'gradient-x': {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #fafafa;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #06b6d4, #8b5cf6, #3b82f6, #06b6d4);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-strong {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-window {
+            background: #1e1e2e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .code-header {
+            background: #313244;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(6, 182, 212, 0.3);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .whatsapp-pulse {
+            animation: whatsapp-pulse 2s infinite;
+        }
+        
+        @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        .grid-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        
+        .noise {
+            position: relative;
+        }
+        
+        .noise::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            color: white;
+        }
+        
+        .project-card {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+        }
+        
+        .project-card.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #06b6d4, transparent);
+            transform: translateY(-50%);
+        }
+        
+        @media (max-width: 768px) {
+            .step-connector {
+                display: none;
+            }
+        }
+        
+        .price-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .price-card:hover::before {
+            left: 100%;
+        }
+        
+        .price-popular {
+            border: 2px solid #8b5cf6;
+            position: relative;
+        }
+        
+        .price-popular::after {
+            content: 'POPULAIRE';
+            position: absolute;
+            top: 12px;
+            right: -28px;
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 24px;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="glass-strong border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                        <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
+                            <i data-lucide="code-2" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="font-bold text-xl tracking-tight">Dev<span class="gradient-text">Folio</span></span>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#services" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Services</a>
+                        <a href="#portfolio" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Portfolio</a>
+                        <a href="#process" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Processus</a>
+                        <a href="#pricing" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tarifs</a>
+                        <a href="#contact" class="px-6 py-2.5 rounded-full gradient-bg text-white font-medium text-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all transform hover:scale-105">
+                            Me contacter
+                        </a>
+                    </div>
+                    
+                    <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-strong border-b border-white/10">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#services" class="block px-3 py-2 text-gray-300 hover:text-white">Services</a>
+                <a href="#portfolio" class="block px-3 py-2 text-gray-300 hover:text-white">Portfolio</a>
+                <a href="#process" class="block px-3 py-2 text-gray-300 hover:text-white">Processus</a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-300 hover:text-white">Tarifs</a>
+                <a href="#contact" class="block px-3 py-2 text-cyan-400 font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden noise">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-blob"></div>
+            <div class="absolute top-40 right-10 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-32 left-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+        </div>
+        
+        <div class="grid-pattern absolute inset-0 opacity-30"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Content -->
+                <div class="space-y-8 text-center lg:text-left reveal active">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-cyan-500/30 text-cyan-400 text-sm font-medium">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                        </span>
+                        Disponible pour de nouveaux projets
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-7xl font-bold leading-tight">
+                        Transformez votre <br>
+                        <span class="gradient-text">présence digitale</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Développeur web freelance spécialisé dans la création de solutions sur mesure. 
+                        Du site vitrine élégant à l'application complexe, je donne vie à vos projets 
+                        avec les technologies les plus modernes.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="https://wa.me/22668832363?text=Bonjour,%20je%20souhaite%20discuter%20de%20mon%20projet%20web" 
+                           target="_blank"
+                           class="group relative px-8 py-4 rounded-full gradient-bg text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/25 transition-all transform hover:scale-105 flex items-center justify-center gap-3">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            Discuter de mon projet
+                            <span class="absolute inset-0 rounded-full bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                        </a>
+                        <a href="#portfolio" class="px-8 py-4 rounded-full glass border border-white/20 text-white font-semibold text-lg hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                            Voir mes réalisations
+                            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 text-sm text-gray-500 justify-center lg:justify-start">
+                        <i data-lucide="clock" class="w-4 h-4 text-cyan-400"></i>
+                        Réponse sous 2h sur WhatsApp
+                    </div>
+                    
+                    <!-- Trust Badges -->
+                    <div class="pt-8 grid grid-cols-3 gap-6 border-t border-white/10">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold gradient-text mb-1 counter" data-target="50">0</div>
+                            <div class="text-sm text-gray-400">Projets livrés</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold gradient-text mb-1 counter" data-target="100">0</div>
+                            <div class="text-sm text-gray-400">% Satisfaction</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold gradient-text mb-1">24/7</div>
+                            <div class="text-sm text-gray-400">Support</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visual/Code Window -->
+                <div class="relative lg:pl-12 reveal active" style="transition-delay: 200ms;">
+                    <div class="code-window transform hover:scale-[1.02] transition-transform duration-500">
+                        <div class="code-header">
+                            <div class="code-dot bg-red-500"></div>
+                            <div class="code-dot bg-yellow-500"></div>
+                            <div class="code-dot bg-green-500"></div>
+                            <span class="ml-4 text-sm text-gray-400 font-mono">project.js</span>
+                        </div>
+                        <div class="p-6 font-mono text-sm leading-relaxed overflow-hidden">
+                            <div class="text-gray-400 mb-2">// Votre projet web sur mesure</div>
+                            <div class="text-purple-400">const <span class="text-blue-400">project</span> = {</div>
+                            <div class="pl-4 text-cyan-300">name: <span class="text-green-400">'Votre Succès Digital'</span>,</div>
+                            <div class="pl-4 text-cyan-300">type: <span class="text-green-400">'Full-Stack'</span>,</div>
+                            <div class="pl-4 text-cyan-300">technologies: [<span class="text-green-400">'React'</span>, <span class="text-green-400">'Node.js'</span>, <span class="text-green-400">'PostgreSQL'</span>],</div>
+                            <div class="pl-4 text-cyan-300">features: {</div>
+                            <div class="pl-8 text-orange-300">responsive: <span class="text-yellow-400">true</span>,</div>
+                            <div class="pl-8 text-orange-300">seo: <span class="text-yellow-400">true</span>,</div>
+                            <div class="pl-8 text-orange-300">performance: <span class="text-green-400">'100/100'</span></div>
+                            <div class="pl-4 text-cyan-300">},</div>
+                            <div class="pl-4 text-cyan-300">status: <span class="typing-effect text-green-400">'En développement...'</span></div>
+                            <div class="text-purple-400">};</div>
+                            
+                            <div class="mt-4 text-gray-500">// Prêt à démarrer ?</div>
+                            <div class="text-blue-400">initProject(<span class="text-yellow-400">yourIdea</span>);</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Elements -->
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl rotate-12 opacity-80 animate-float shadow-2xl flex items-center justify-center">
+                        <i data-lucide="rocket" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full opacity-80 animate-float shadow-2xl flex items-center justify-center" style="animation-delay: 1s;">
+                        <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500"></i>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Solutions adaptées à vos <span class="gradient-text">besoins</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">De la simple vitrine à l'application complexe, chaque projet mérite une solution technique optimale.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="glass rounded-2xl p-8 card-hover reveal group">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layout" class="w-7 h-7 text-cyan-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Site Vitrine</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Présentation élégante de votre activité avec un design moderne et responsive. Parfait pour établir votre présence en ligne.</p>
+                    
+                    <ul class="space-y-3 mb-6 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                            Design sur mesure & responsive
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                            Optimisation SEO de base
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                            Formulaire de contact
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-cyan-400"></i>
+                            1 à 3 pages incluses
+                        </li>
+                    </ul>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">HTML5</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">CSS3</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="glass rounded-2xl p-8 card-hover reveal group" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="server" class="w-7 h-7 text-violet-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Site avec Backend</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Application dynamique avec gestion de contenu, authentification utilisateurs et tableau de bord administrateur.</p>
+                    
+                    <ul class="space-y-3 mb-6 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-violet-400"></i>
+                            Système d'authentification sécurisé
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-violet-400"></i>
+                            Dashboard administrateur
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-violet-400"></i>
+                            Base de données intégrée
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-violet-400"></i>
+                            API RESTful
+                        </li>
+                    </ul>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">Node.js</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">Python</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">MongoDB</span>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="glass rounded-2xl p-8 card-hover reveal group" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layers" class="w-7 h-7 text-orange-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Application Complète</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Solution full-stack sur mesure avec architecture scalable, intégrations tierces et fonctionnalités avancées.</p>
+                    
+                    <ul class="space-y-3 mb-6 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-orange-400"></i>
+                            Architecture microservices
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-orange-400"></i>
+                            Intégrations API tierces
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-orange-400"></i>
+                            Base de données relationnelle
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-orange-400"></i>
+                            Déploiement & CI/CD
+                        </li>
+                    </ul>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">React/Vue</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">PostgreSQL</span>
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/5 text-gray-300 border border-white/10">AWS/Vercel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 relative bg-black/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Réalisations <span class="gradient-text">récentes</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Une sélection de projets représentatifs de mon expertise technique.</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+                <button class="filter-btn active px-6 py-2 rounded-full glass border border-white/10 text-sm font-medium transition-all hover:bg-white/10" onclick="filterProjects('all')">Tous</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass border border-white/10 text-sm font-medium transition-all hover:bg-white/10" onclick="filterProjects('vitrine')">Vitrine</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass border border-white/10 text-sm font-medium transition-all hover:bg-white/10" onclick="filterProjects('backend')">Backend</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass border border-white/10 text-sm font-medium transition-all hover:bg-white/10" onclick="filterProjects('fullstack')">Full-Stack</button>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="vitrine">
+                    <div class="aspect-video bg-gradient-to-br from-cyan-900/50 to-blue-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="image" class="w-16 h-16 text-cyan-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">Site vitrine élégant pour cabinet d'architecture</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">HTML/CSS</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">JavaScript</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">ArchiDesign Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Site vitrine responsive avec galerie de projets et formulaire de contact.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-cyan-400 font-medium">Vitrine</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="backend">
+                    <div class="aspect-video bg-gradient-to-br from-violet-900/50 to-purple-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="shopping-cart" class="w-16 h-16 text-violet-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">E-commerce avec panier et paiement sécurisé</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Node.js</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">MongoDB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-violet-400 transition-colors">ShopExpress</h3>
+                        <p class="text-gray-400 text-sm mb-4">Plateforme e-commerce complète avec gestion de stock et dashboard admin.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-violet-400 font-medium">Backend</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="fullstack">
+                    <div class="aspect-video bg-gradient-to-br from-orange-900/50 to-red-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="bar-chart-3" class="w-16 h-16 text-orange-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">Dashboard analytics temps réel</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">React</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">PostgreSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-orange-400 transition-colors">DataVision Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Application de visualisation de données avec graphiques interactifs et exports.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-orange-400 font-medium">Full-Stack</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="vitrine">
+                    <div class="aspect-video bg-gradient-to-br from-emerald-900/50 to-teal-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="utensils" class="w-16 h-16 text-emerald-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">Site restaurant avec menu interactif</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Vue.js</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Tailwind</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Le Gourmet</h3>
+                        <p class="text-gray-400 text-sm mb-4">Site vitrine pour restaurant avec réservation en ligne et menu digital.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-emerald-400 font-medium">Vitrine</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 5 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="backend">
+                    <div class="aspect-video bg-gradient-to-br from-pink-900/50 to-rose-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="users" class="w-16 h-16 text-pink-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">Réseau social interne d'entreprise</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Django</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">PostgreSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-pink-400 transition-colors">ConnectPro</h3>
+                        <p class="text-gray-400 text-sm mb-4">Plateforme de collaboration avec messagerie, partage de fichiers et calendrier.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-pink-400 font-medium">Backend</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 6 -->
+                <div class="project-card group relative overflow-hidden rounded-2xl glass border border-white/10" data-category="fullstack">
+                    <div class="aspect-video bg-gradient-to-br from-indigo-900/50 to-blue-900/50 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="calendar" class="w-16 h-16 text-indigo-400/30"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <p class="text-sm text-gray-300 mb-2">Système de réservation complexe</p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Next.js</span>
+                                    <span class="px-2 py-1 rounded bg-white/10 text-xs">Prisma</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-indigo-400 transition-colors">BookMaster</h3>
+                        <p class="text-gray-400 text-sm mb-4">Application de réservation avec paiement, notifications et gestion des disponibilités.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                                <i data-lucide="github" class="w-5 h-5 text-gray-500 hover:text-white cursor-pointer transition-colors"></i>
+                            </div>
+                            <span class="text-xs text-indigo-400 font-medium">Full-Stack</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Comment se déroule un <span class="gradient-text">projet</span> ?</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Un processus éprouvé pour garantir la qualité et votre satisfaction à chaque étape.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8 relative">
+                <!-- Step 1 -->
+                <div class="relative reveal">
+                    <div class="glass rounded-2xl p-8 text-center h-full border border-cyan-500/20 hover:border-cyan-500/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mx-auto mb-6 text-2xl font-bold">1</div>
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="message-square" class="w-6 h-6 text-cyan-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Consultation</h3>
+                        <p class="text-gray-400 text-sm">Discussion de vos besoins sur WhatsApp ou visio. Analyse de votre projet et conseils personnalisés.</p>
+                    </div>
+                    <div class="hidden md:block step-connector"></div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="relative reveal" style="transition-delay: 100ms;">
+                    <div class="glass rounded-2xl p-8 text-center h-full border border-violet-500/20 hover:border-violet-500/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mx-auto mb-6 text-2xl font-bold">2</div>
+                        <div class="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="file-text" class="w-6 h-6 text-violet-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Conception & Devis</h3>
+                        <p class="text-gray-400 text-sm">Proposition détaillée avec wireframes, choix technologiques et estimation transparente des coûts.</p>
+                    </div>
+                    <div class="hidden md:block step-connector"></div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="relative reveal" style="transition-delay: 200ms;">
+                    <div class="glass rounded-2xl p-8 text-center h-full border border-orange-500/20 hover:border-orange-500/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mx-auto mb-6 text-2xl font-bold">3</div>
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="code" class="w-6 h-6 text-orange-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Développement</h3>
+                        <p class="text-gray-400 text-sm">Codage itératif avec points d'étape réguliers. Vous suivez l'avancement en temps réel.</p>
+                    </div>
+                    <div class="hidden md:block step-connector"></div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="relative reveal" style="transition-delay: 300ms;">
+                    <div class="glass rounded-2xl p-8 text-center h-full border border-green-500/20 hover:border-green-500/50 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mx-auto mb-6 text-2xl font-bold">4</div>
+                        <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="rocket" class="w-6 h-6 text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Livraison</h3>
+                        <p class="text-gray-400 text-sm">Mise en ligne, formation si nécessaire et support post-lancement pour assurer votre autonomie.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 relative bg-black/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Tarifs <span class="gradient-text">transparents</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Des solutions adaptées à chaque budget, sans frais cachés.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Essential -->
+                <div class="price-card glass rounded-2xl p-8 reveal hover:border-cyan-500/30 transition-all">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Essentiel</h3>
+                        <p class="text-gray-400 text-sm mb-6">Site vitrine professionnel</p>
+                        <div class="text-4xl font-bold mb-2">À partir de <span class="gradient-text">200€</span></div>
+                        <p class="text-xs text-gray-500">Paiement échelonné possible</p>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">1 à 3 pages responsive</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Design sur mesure</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Optimisation SEO de base</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Formulaire de contact</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Livraison 3-5 jours</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">1 mois de support</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="https://wa.me/22668832363?text=Bonjour,%20je%20suis%20intéressé%20par%20le%20pack%20Essentiel" 
+                       target="_blank"
+                       class="block w-full py-3 rounded-xl border border-cyan-500/50 text-cyan-400 font-semibold text-center hover:bg-cyan-500/10 transition-all">
+                        Choisir ce pack
+                    </a>
+                </div>
+                
+                <!-- Business -->
+                <div class="price-card price-popular glass rounded-2xl p-8 reveal transform md:-translate-y-4 hover:border-violet-500/30 transition-all" style="transition-delay: 100ms;">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Business</h3>
+                        <p class="text-gray-400 text-sm mb-6">Site dynamique avec backend</p>
+                        <div class="text-4xl font-bold mb-2">À partir de <span class="gradient-text">600€</span></div>
+                        <p class="text-xs text-gray-500">Paiement échelonné possible</p>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Site illimité + Dashboard</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Authentification utilisateurs</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Base de données incluse</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">API RESTful</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Livraison 1-2 semaines</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">3 mois de support</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="https://wa.me/22668832363?text=Bonjour,%20je%20suis%20intéressé%20par%20le%20pack%20Business" 
+                       target="_blank"
+                       class="block w-full py-3 rounded-xl gradient-bg text-white font-semibold text-center hover:shadow-lg hover:shadow-violet-500/25 transition-all">
+                        Choisir ce pack
+                    </a>
+                </div>
+                
+                <!-- Premium -->
+                <div class="price-card glass rounded-2xl p-8 reveal hover:border-orange-500/30 transition-all" style="transition-delay: 200ms;">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                        <p class="text-gray-400 text-sm mb-6">Application sur mesure</p>
+                        <div class="text-4xl font-bold mb-2"><span class="gradient-text">Sur devis</span></div>
+                        <p class="text-xs text-gray-500">À partir de 1500€</p>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Architecture sur mesure</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Intégrations API tierces</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Base de données relationnelle</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Tests & Déploiement CI/CD</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">Délai selon complexité</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-gray-300">6 mois de support premium</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="https://wa.me/22668832363?text=Bonjour,%20je%20souhaite%20un%20devis%20pour%20le%20pack%20Premium" 
+                       target="_blank"
+                       class="block w-full py-3 rounded-xl border border-orange-500/50 text-orange-400 font-semibold text-center hover:bg-orange-500/10 transition-all">
+                        Demander un devis
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center reveal">
+                <p class="text-gray-400 text-sm">
+                    <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                    Tous les projets incluent : code propre documenté, responsive design, SEO-friendly, et hébergement conseillé.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials / Trust Section -->
+    <section class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Ils m'ont fait <span class="gradient-text">confiance</span></h2>
+                    <p class="text-gray-400 text-lg mb-8">La qualité de mon travail reflétée dans la satisfaction de mes clients et les résultats concrets de leurs projets.</p>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold gradient-text mb-2 counter" data-target="50">0</div>
+                            <div class="text-sm text-gray-400">Projets livrés</div>
+                        </div>
+                        <div class="glass rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold gradient-text mb-2 counter" data-target="45">0</div>
+                            <div class="text-sm text-gray-400">Clients satisfaits</div>
+                        </div>
+                        <div class="glass rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold gradient-text mb-2 counter" data-target="3">0</div>
+                            <div class="text-sm text-gray-400">Années d'expérience</div>
+                        </div>
+                        <div class="glass rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold gradient-text mb-2">100%</div>
+                            <div class="text-sm text-gray-400">Projets livrés à temps</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6 reveal">
+                    <div class="glass rounded-2xl p-6 border-l-4 border-cyan-500">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                        </div>
+                        <p class="text-gray-300 mb-4 italic">"Un développeur exceptionnel ! Mon site vitrine a dépassé mes attentes. Réactif, professionnel et à l'écoute. Je recommande vivement."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold">M</div>
+                            <div>
+                                <div class="font-semibold">Marie D.</div>
+                                <div class="text-sm text-gray-500">Architecte d'intérieur</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass rounded-2xl p-6 border-l-4 border-violet-500">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+                        </div>
+                        <p class="text-gray-300 mb-4 italic">"Notre plateforme e-commerce fonctionne parfaitement. Le backend est robuste, le design moderne. Un vrai professionnel du web."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold">K</div>
+                            <div>
+                                <div class="font-semibold">Karim B.</div>
+                                <div class="text-sm text-gray-500">CEO TechStore</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Guarantees -->
+            <div class="mt-16 grid md:grid-cols-4 gap-6 reveal">
+                <div class="flex items-center gap-4 glass rounded-xl p-4">
+                    <div class="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-green-400"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">Code Propre</div>
+                        <div class="text-xs text-gray-500">Documenté & maintenable</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 glass rounded-xl p-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="smartphone" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">100% Responsive</div>
+                        <div class="text-xs text-gray-500">Tous écrans compatibles</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 glass rounded-xl p-4">
+                    <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="search" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">SEO Optimisé</div>
+                        <div class="text-xs text-gray-500">Référencement naturel</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 glass rounded-xl p-4">
+                    <div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="headphones" class="w-6 h-6 text-orange-400"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">Support Inclus</div>
+                        <div class="text-xs text-gray-500">Post-livraison garanti</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative bg-black/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Démarrons votre <span class="gradient-text">projet</span></h2>
+                <p class="text-gray-400 text-lg">Discutons de vos besoins et obtenez une estimation gratuite sous 24h.</p>
+            </div>
+            
+            <div class="glass rounded-2xl p-8 md:p-12 reveal">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6">Contact direct</h3>
+                        <p class="text-gray-400 mb-8">Le moyen le plus rapide d'obtenir une réponse. Je réponds généralement sous 2 heures.</p>
+                        
+                        <a href="https://wa.me/22668832363?text=Bonjour,%20je%20souhaite%20discuter%20de%20mon%20projet%20web" 
+                           target="_blank"
+                           class="group flex items-center gap-4 p-6 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 hover:bg-[#25D366]/20 transition-all mb-6">
+                            <div class="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0 whatsapp-pulse">
+                                <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-lg group-hover:text-[#25D366] transition-colors">WhatsApp</div>
+                                <div class="text-gray-400 text-sm">+226 68 83 23 63</div>
+                                <div class="text-xs text-[#25D366] mt-1">● En ligne maintenant</div>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 ml-auto text-gray-500 group-hover:text-[#25D366] transition-colors"></i>
+                        </a>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-gray-400">
+                                <i data-lucide="clock" class="w-5 h-5 text-cyan-400"></i>
+                                <span>Réponse garantie sous 2h</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-gray-400">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-cyan-400"></i>
+                                <span>Devis gratuit sans engagement</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-gray-400">
+                                <i data-lucide="lock" class="w-5 h-5 text-cyan-400"></i>
+                                <span>Confidentialité garantie</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6">Envoyez un message</h3>
+                        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Formulaire de démonstration. Utilisez le bouton WhatsApp pour un vrai contact.');">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Nom</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors" placeholder="Votre nom">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors" placeholder="votre@email.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Type de projet</label>
+                                <select class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-cyan-500/50 transition-colors">
+                                    <option value="" class="bg-gray-900">Sélectionnez...</option>
+                                    <option value="vitrine" class="bg-gray-900">Site Vitrine</option>
+                                    <option value="backend" class="bg-gray-900">Site avec Backend</option>
+                                    <option value="fullstack" class="bg-gray-900">Application Complète</option>
+                                    <option value="other" class="bg-gray-900">Autre</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                                <textarea rows="4" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none" placeholder="Décrivez votre projet..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3 rounded-lg gradient-bg text-white font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all">
+                                Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
+                            <i data-lucide="code-2" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="font-bold text-lg">Dev<span class="gradient-text">Folio</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm max-w-sm">Développeur web freelance passionné par la création d'expériences digitales exceptionnelles. Votre vision, mon expertise technique.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Liens rapides</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#portfolio" class="hover:text-white transition-colors">Portfolio</a></li>
+                        <li><a href="#pricing" class="hover:text-white transition-colors">Tarifs</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Légal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Mentions légales</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">CGV</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-gray-500">© 2024 DevFolio. Tous droits réservés.</div>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/22668832363?text=Bonjour,%20je%20souhaite%20discuter%20de%20mon%20projet%20web" 
+       target="_blank"
+       class="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 whatsapp-pulse hover:scale-110 transition-transform group"
+       aria-label="Contact WhatsApp">
+        <i data-lucide="message-circle" class="w-8 h-8 text-white"></i>
+        <span class="absolute right-full mr-4 px-4 py-2 rounded-lg bg-white text-gray-900 text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+            Discuter sur WhatsApp
+        </span>
+    </a>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Animate counters if present
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        const target = parseInt(counter.getAttribute('data-target'));
+                        animateCounter(counter, target);
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+        
+        // Counter Animation
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + (target === 100 ? '%' : '+');
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current) + (target === 100 ? '%' : '+');
+                }
+            }, 30);
+        }
+        
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Portfolio Filter
+        function filterProjects(category) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter projects
+            const projects = document.querySelectorAll('.project-card');
+            projects.forEach(project => {
+                if (category === 'all' || project.dataset.category === category) {
+                    project.classList.add('show');
+                    project.style.display = 'block';
+                    setTimeout(() => {
+                        project.style.opacity = '1';
+                        project.style.transform = 'scale(1)';
+                    }, 50);
+                } else {
+                    project.style.opacity = '0';
+                    project.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        project.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+        
+        // Initialize all projects as visible
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.classList.add('show');
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+        
+        // Typing effect for code window
+        const typingElement = document.querySelector('.typing-effect');
+        if (typingElement) {
+            const text = "'En développement...'";
+            let index = 0;
+            typingElement.textContent = '';
+            
+            setInterval(() => {
+                if (index < text.length) {
+                    typingElement.textContent += text[index];
+                    index++;
+                } else {
+                    setTimeout(() => {
+                        typingElement.textContent = "'";
+                        index = 1;
+                    }, 2000);
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>

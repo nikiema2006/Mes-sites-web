@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T2i Immobilier - Le Partenariat Sûr dans l'Immobilier | Ouagadougou</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #F26522;
+            --primary-green: #4CAF50;
+            --dark-green: #2E7D32;
+            --light-orange: #FFF3E0;
+            --light-green: #E8F5E9;
+            --text-dark: #1a1a1a;
+            --text-gray: #666;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 40px;
+            position: relative;
+        }
+
+        .roof {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 20px solid var(--primary-orange);
+        }
+
+        .roof::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -15px;
+            width: 30px;
+            height: 15px;
+            background: var(--primary-orange);
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .logo-text span {
+            color: var(--primary-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-orange);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        .nav-cta {
+            background: var(--primary-orange);
+            color: var(--white) !important;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            height: 90vh;
+            min-height: 600px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(242, 101, 34, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-orange);
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-tag {
+            color: var(--primary-orange);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-green);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--bg-light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-green));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--primary-orange);
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            background: var(--primary-orange);
+            color: var(--white);
+            transform: rotateY(360deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .service-features li {
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .service-features i {
+            color: var(--primary-green);
+        }
+
+        /* Properties Section */
+        .properties-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid var(--primary-orange);
+            background: transparent;
+            color: var(--primary-orange);
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .property-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary-orange);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .property-badge.rent {
+            background: var(--primary-green);
+        }
+
+        .property-badge.land {
+            background: #2196F3;
+        }
+
+        .property-image {
+            height: 250px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .property-card:hover .property-image img {
+            transform: scale(1.1);
+        }
+
+        .property-content {
+            padding: 1.5rem;
+        }
+
+        .property-type {
+            color: var(--primary-orange);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .property-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .property-location {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .property-features span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .property-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .property-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .property-price span {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Why Choose Us */
+        .why-us {
+            background: linear-gradient(135deg, var(--light-orange) 0%, var(--light-green) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-us::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(242, 101, 34, 0.05);
+            border-radius: 50%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-box {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--light-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+            color: var(--primary-orange);
+        }
+
+        .feature-box h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .feature-box p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Location Section */
+        .location {
+            background: var(--white);
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .location-info h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .location-details {
+            margin-bottom: 2rem;
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .location-text h4 {
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        .location-text p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .location-phones {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .phone-link {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .phone-link:hover {
+            color: var(--primary-orange);
+        }
+
+        .location-map {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .map-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-orange);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: rotate(-45deg) translateY(0); }
+            50% { transform: rotate(-45deg) translateY(-10px); }
+        }
+
+        .map-marker i {
+            transform: rotate(45deg);
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .map-label {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .map-label h4 {
+            color: var(--primary-orange);
+            margin-bottom: 0.3rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--bg-light);
+        }
+
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: var(--primary-orange);
+            opacity: 0.2;
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-dot.active {
+            background: var(--primary-orange);
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--white);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-form {
+            background: var(--bg-light);
+            padding: 2.5rem;
+            border-radius: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .contact-info-side {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .contact-card h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-card h3 i {
+            color: var(--primary-orange);
+        }
+
+        .contact-card p {
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-card a:hover {
+            color: var(--primary-orange);
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            color: var(--text-gray);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 4rem 2rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-orange);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .footer-logo-text span {
+            color: var(--primary-orange);
+        }
+
+        .footer-logo-text .green {
+            color: var(--primary-green);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-orange);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .location-content,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <div class="roof"></div>
+                </div>
+                <div class="logo-text">T2i <span>immobilier</span></div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#proprietes">Propriétés</a></li>
+                <li><a href="#apropos">À Propos</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="tel:+22670781111" class="nav-cta">
+                    <i class="fas fa-phone"></i>
+                    70 78 11 11
+                </a></li>
+            </ul>
+            
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-map-marker-alt"></i> Ouagadougou, Burkina Faso
+            </div>
+            <h1>Votre Partenaire de Confiance dans l'Immobilier</h1>
+            <p>Vente, location de villas meublées et parcelles dans les meilleurs quartiers de la capitale</p>
+            <div class="hero-buttons">
+                <a href="#proprietes" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Voir les Propriétés
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    <i class="fas fa-calendar-check"></i>
+                    Prendre Rendez-vous
+                </a>
+            </div>
+        </div>
+        
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Biens Vendus</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">Années d'Expérience</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Clients Satisfaits</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Disponibilité</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Nos Services</span>
+                <h2 class="section-title">Solutions Immobilières Complètes</h2>
+                <p class="section-subtitle">Que vous cherchiez à acheter, louer ou investir, nous vous accompagnons dans toutes vos démarches immobilières à Ouagadougou.</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Vente de Villas</h3>
+                    <p>Des villas modernes et traditionnelles dans les quartiers prisés comme Ouaga 2000, ZACA et les zones résidentielles sécurisées.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Villas neuves et anciennes</li>
+                        <li><i class="fas fa-check"></i> Standing moderne & luxe</li>
+                        <li><i class="fas fa-check"></i> Actes authentiques garantis</li>
+                        <li><i class="fas fa-check"></i> Négociation accompagnée</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3>Location Meublée</h3>
+                    <p>Des résidences entièrement équipées pour vos courts et longs séjours. Confort et sécurité garantis.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Courte & longue durée</li>
+                        <li><i class="fas fa-check"></i> Toutes commodités incluses</li>
+                        <li><i class="fas fa-check"></i> Quartiers sécurisés</li>
+                        <li><i class="fas fa-check"></i> Service conciergerie</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <h3>Parcelles & Terrains</h3>
+                    <p>Investissez dans le foncier avec des parcelles viabilisées dans les zones en forte croissance comme ZACA et Ouaga 2000.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Terrains viabilisés</li>
+                        <li><i class="fas fa-check"></i> Titres fonciers sécurisés</li>
+                        <li><i class="fas fa-check"></i> Zones à fort potentiel</li>
+                        <li><i class="fas fa-check"></i> Accompagnement juridique</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section class="properties" id="proprietes">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Nos Biens</span>
+                <h2 class="section-title">Propriétés en Vedette</h2>
+                <p class="section-subtitle">Découvrez notre sélection exclusive de biens immobiliers disponibles immédiatement.</p>
+            </div>
+            
+            <div class="properties-filter fade-in">
+                <button class="filter-btn active" onclick="filterProperties('all')">Tous</button>
+                <button class="filter-btn" onclick="filterProperties('sale')">À Vendre</button>
+                <button class="filter-btn" onclick="filterProperties('rent')">Location</button>
+                <button class="filter-btn" onclick="filterProperties('land')">Parcelles</button>
+            </div>
+            
+            <div class="properties-grid">
+                <!-- Property 1 -->
+                <div class="property-card fade-in" data-category="sale">
+                    <span class="property-badge">À Vendre</span>
+                    <div class="property-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Villa Luxe</div>
+                        <h3 class="property-title">Villa Moderne 5 Pièces</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Ouaga 2000, Ouagadougou
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-bed"></i> 4 Chb</span>
+                            <span><i class="fas fa-bath"></i> 3 Sdb</span>
+                            <span><i class="fas fa-ruler-combined"></i> 450 m²</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">350 000 000 <span>FCFA</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property 2 -->
+                <div class="property-card fade-in" data-category="rent">
+                    <span class="property-badge rent">Location</span>
+                    <div class="property-image">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Appartement Meublé</div>
+                        <h3 class="property-title">Résidence Sécurisée 3 Pièces</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Zone du Bois, Ouagadougou
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-bed"></i> 2 Chb</span>
+                            <span><i class="fas fa-bath"></i> 2 Sdb</span>
+                            <span><i class="fas fa-ruler-combined"></i> 120 m²</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">800 000 <span>FCFA/mois</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property 3 -->
+                <div class="property-card fade-in" data-category="land">
+                    <span class="property-badge land">Parcelle</span>
+                    <div class="property-image">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Terrain Viabilisé</div>
+                        <h3 class="property-title">Parcelle Projet ZACA</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Projet ZACA, Centre-ville
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-ruler-combined"></i> 1 000 m²</span>
+                            <span><i class="fas fa-file-contract"></i> Titre foncier</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">450 000 000 <span>FCFA</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property 4 -->
+                <div class="property-card fade-in" data-category="sale">
+                    <span class="property-badge">À Vendre</span>
+                    <div class="property-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Villa Traditionnelle</div>
+                        <h3 class="property-title">Villa avec Jardin</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Koulouba, Ouagadougou
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-bed"></i> 6 Chb</span>
+                            <span><i class="fas fa-bath"></i> 4 Sdb</span>
+                            <span><i class="fas fa-ruler-combined"></i> 800 m²</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">280 000 000 <span>FCFA</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property 5 -->
+                <div class="property-card fade-in" data-category="rent">
+                    <span class="property-badge rent">Location</span>
+                    <div class="property-image">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Villa Meublée</div>
+                        <h3 class="property-title">Villa Standing avec Piscine</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Patte d'Oie, Ouagadougou
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-bed"></i> 5 Chb</span>
+                            <span><i class="fas fa-bath"></i> 4 Sdb</span>
+                            <span><i class="fas fa-swimming-pool"></i> Piscine</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">1 500 000 <span>FCFA/mois</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property 6 -->
+                <div class="property-card fade-in" data-category="land">
+                    <span class="property-badge land">Parcelle</span>
+                    <div class="property-image">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-type">Terrain Résidentiel</div>
+                        <h3 class="property-title">Parcelle Ouaga 2000</h3>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Ouaga 2000 Extension
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-ruler-combined"></i> 500 m²</span>
+                            <span><i class="fas fa-check"></i> Viabilisé</span>
+                        </div>
+                        <div class="property-footer">
+                            <div class="property-price">75 000 000 <span>FCFA</span></div>
+                            <a href="#contact" class="btn btn-primary btn-small">Détails</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us" id="apropos">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Pourquoi Nous</span>
+                <h2 class="section-title">Le Partenariat Sûr</h2>
+                <p class="section-subtitle">Depuis plus de 10 ans, nous accompagnons nos clients avec professionnalisme et transparence dans tous leurs projets immobiliers.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-box fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Expertise Locale</h3>
+                    <p>Plus de 10 ans d'expérience sur le marché immobilier de Ouagadougou et parfaite connaissance des quartiers.</p>
+                </div>
+                
+                <div class="feature-box fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Accompagnement Juridique</h3>
+                    <p>Verification des titres, rédaction des actes et suivi administratif complet pour une transaction sécurisée.</p>
+                </div>
+                
+                <div class="feature-box fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Large Choix</h3>
+                    <p>Des centaines de biens disponibles : villas, appartements, parcelles dans tous les secteurs de la capitale.</p>
+                </div>
+                
+                <div class="feature-box fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Disponible 7j/7</h3>
+                    <p>Notre équipe est à votre écoute tous les jours pour répondre à vos questions et vous faire visiter.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Où Nous Trouver</span>
+                <h2 class="section-title">Notre Agence</h2>
+                <p class="section-subtitle">Située en plein centre-ville, face au projet ZACA, notre agence vous accueille du lundi au samedi.</p>
+            </div>
+            
+            <div class="location-content">
+                <div class="location-info fade-in">
+                    <h3>Immeuble Zidnaba, Avenue de la Grande Mosquée</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 2rem;">Face au projet ZACA, au cœur du quartier des affaires de Ouagadougou.</p>
+                    
+                    <div class="location-details">
+                        <div class="location-item">
+                            <div class="location-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="location-text">
+                                <h4>Adresse</h4>
+                                <p>Immeuble Zidnaba, Avenue de la Grande Mosquée<br>Face au projet ZACA<br>Ouagadougou - Burkina Faso</p>
+                            </div>
+                        </div>
+                        
+                        <div class="location-item">
+                            <div class="location-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="location-text">
+                                <h4>Téléphones</h4>
+                                <div class="location-phones">
+                                    <a href="tel:+22625330705" class="phone-link">
+                                        <i class="fas fa-phone"></i> (+226) 25 33 07 05
+                                    </a>
+                                    <a href="tel:+22670781111" class="phone-link">
+                                        <i class="fas fa-mobile-alt"></i> (+226) 70 78 11 11
+                                    </a>
+                                    <a href="tel:+22676744141" class="phone-link">
+                                        <i class="fas fa-mobile-alt"></i> (+226) 76 74 41 41
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-item">
+                            <div class="location-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="location-text">
+                                <h4>Site Web</h4>
+                                <a href="https://t2iimmobilier.com" target="_blank" style="color: var(--primary-green); text-decoration: none; font-weight: 600;">t2iimmobilier.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="https://maps.google.com/?q=Ouagadougou+ZACA" target="_blank" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-directions"></i>
+                        Obtenir l'Itinéraire
+                    </a>
+                </div>
+                
+                <div class="location-map fade-in">
+                    <div class="map-container">
+                        <div class="map-marker">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="map-label">
+                            <h4>T2i Immobilier</h4>
+                            <p>Immeuble Zidnaba</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Témoignages</span>
+                <h2 class="section-title">Ce Que Disent Nos Clients</h2>
+            </div>
+            
+            <div class="testimonials-slider fade-in">
+                <div class="testimonial-card" id="testimonial-1">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="testimonial-text">"Grâce à T2i Immobilier, j'ai trouvé la villa de mes rêves à Ouaga 2000 en moins d'un mois. L'équipe a été professionnelle du début à la fin, avec un accompagnement juridique impeccable."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AK</div>
+                        <div class="author-info">
+                            <h4>Amadou K.</h4>
+                            <p>Propriétaire à Ouaga 2000</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-nav">
+                    <div class="nav-dot active" onclick="showTestimonial(1)"></div>
+                    <div class="nav-dot" onclick="showTestimonial(2)"></div>
+                    <div class="nav-dot" onclick="showTestimonial(3)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Contact</span>
+                <h2 class="section-title">Parlons de Votre Projet</h2>
+                <p class="section-subtitle">Remplissez le formulaire ci-dessous et nous vous recontacterons dans les plus brefs délais.</p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-form fade-in">
+                    <form onsubmit="handleSubmit(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nom">Nom complet *</label>
+                                <input type="text" id="nom" name="nom" required placeholder="Votre nom">
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone">Téléphone *</label>
+                                <input type="tel" id="telephone" name="telephone" required placeholder="+226 XX XX XX XX">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="votre@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="type">Type de bien recherché *</label>
+                            <select id="type" name="type" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="achat-villa">Achat Villa</option>
+                                <option value="achat-appartement">Achat Appartement</option>
+                                <option value="location">Location Meublée</option>
+                                <option value="parcelle">Achat Parcelle</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Décrivez votre projet..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-paper-plane"></i>
+                            Envoyer ma Demande
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="contact-info-side fade-in">
+                    <div class="contact-card">
+                        <h3><i class="fas fa-clock"></i> Horaires d'Ouverture</h3>
+                        <ul class="hours-list">
+                            <li>
+                                <span>Lundi - Vendredi</span>
+                                <span>08:00 - 18:00</span>
+                            </li>
+                            <li>
+                                <span>Samedi</span>
+                                <span>09:00 - 13:00</span>
+                            </li>
+                            <li>
+                                <span>Dimanche</span>
+                                <span>Sur rendez-vous</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3><i class="fas fa-bolt"></i> Contact Rapide</h3>
+                        <p>Besoin d'une réponse urgente ?</p>
+                        <p style="margin-top: 1rem;">
+                            <a href="tel:+22670781111" style="font-size: 1.3rem;">
+                                <i class="fas fa-phone"></i> 70 78 11 11
+                            </a>
+                        </p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Disponible aussi sur WhatsApp</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3><i class="fas fa-shield-alt"></i> Engagement Qualité</h3>
+                        <p>✓ Biens vérifiés et visités</p>
+                        <p>✓ Transactions sécurisées</p>
+                        <p>✓ Accompagnement personnalisé</p>
+                        <p>✓ Service après-vente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="transform: scale(0.8);">
+                        <div class="roof"></div>
+                    </div>
+                    <div class="footer-logo-text">
+                        <span>T2i</span> <span class="green">immobilier</span>
+                    </div>
+                </div>
+                <p>Le partenariat sûr dans l'immobilier !<br><br>
+                Votre agence immobilière de confiance à Ouagadougou, spécialisée dans la vente, location et l'achat de parcelles.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Liens Rapides</h3>
+                <ul class="footer-links">
+                    <li><a href="#accueil"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+                    <li><a href="#services"><i class="fas fa-chevron-right"></i> Nos Services</a></li>
+                    <li><a href="#proprietes"><i class="fas fa-chevron-right"></i> Propriétés</a></li>
+                    <li><a href="#apropos"><i class="fas fa-chevron-right"></i> À Propos</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Nos Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Vente de Villas</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Location Meublée</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Achat de Parcelles</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Conseil Immobilier</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Gestion Locative</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p><i class="fas fa-map-marker-alt" style="color: var(--primary-orange); margin-right: 0.5rem;"></i> 
+                Immeuble Zidnaba, Av. Grande Mosquée<br>
+                Face projet ZACA, Ouagadougou</p>
+                <p style="margin-top: 1rem;">
+                    <i class="fas fa-phone" style="color: var(--primary-orange); margin-right: 0.5rem;"></i>
+                    (+226) 25 33 07 05<br>
+                    <i class="fas fa-mobile-alt" style="color: var(--primary-orange); margin-right: 0.5rem;"></i>
+                    (+226) 70 78 11 11<br>
+                    <i class="fas fa-mobile-alt" style="color: var(--primary-orange); margin-right: 0.5rem;"></i>
+                    (+226) 76 74 41 41
+                </p>
+                <p style="margin-top: 1rem;">
+                    <i class="fas fa-globe" style="color: var(--primary-orange); margin-right: 0.5rem;"></i>
+                    t2iimmobilier.com
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 T2i Immobilier. Tous droits réservés. | Conçu avec <i class="fas fa-heart" style="color: var(--primary-orange);"></i> à Ouagadougou</p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Property filtering
+        function filterProperties(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter cards
+            const cards = document.querySelectorAll('.property-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Testimonials slider
+        const testimonials = [
+            {
+                text: "Grâce à T2i Immobilier, j'ai trouvé la villa de mes rêves à Ouaga 2000 en moins d'un mois. L'équipe a été professionnelle du début à la fin, avec un accompagnement juridique impeccable.",
+                author: "Amadou K.",
+                role: "Propriétaire à Ouaga 2000",
+                initials: "AK"
+            },
+            {
+                text: "J'ai loué un appartement meublé pour un séjour de 6 mois. La qualité du service et la réactivité de l'équipe m'ont vraiment impressionné. Je recommande vivement !",
+                author: "Marie D.",
+                role: "Consultante internationale",
+                initials: "MD"
+            },
+            {
+                text: "Investir dans une parcelle au projet ZACA était un rêve. T2i Immobilier m'a accompagné dans toutes les démarches administratives. Un grand merci pour votre professionnalisme.",
+                author: "Jean B.",
+                role: "Investisseur",
+                initials: "JB"
+            }
+        ];
+
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            currentTestimonial = index - 1;
+            const card = document.querySelector('.testimonial-card');
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            // Update dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentTestimonial);
+            });
+            
+            // Animate card change
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                const t = testimonials[currentTestimonial];
+                card.querySelector('.testimonial-text').textContent = `"${t.text}"`;
+                card.querySelector('.author-info h4').textContent = t.author;
+                card.querySelector('.author-info p').textContent = t.role;
+                card.querySelector('.author-avatar').textContent = t.initials;
+                
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // Auto-rotate testimonials
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial + 1);
+        }, 5000);
+
+        // Form submission
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('Merci pour votre message ! Nous vous contacterons dans les plus brefs délais.');
+            e.target.reset();
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
