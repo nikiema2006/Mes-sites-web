@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Viva Hôtel — Ouagadougou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET & VARIABLES ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a1a;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;width:100%;object-fit:cover}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+:root{
+  --blue:#2BA7D8;
+  --blue-light:#7ECDE8;
+  --blue-dark:#1A7FA8;
+  --blue-pale:#EBF7FC;
+  --black:#111111;
+  --dark:#1A1A1A;
+  --gray:#6B7280;
+  --gray-light:#F4F6F8;
+  --white:#FFFFFF;
+  --border:#E5EAF0;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── PAGE SYSTEM ─── */
+.page{display:none}
+.page.active{display:block;animation:fadeUp .5s var(--ease) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── NAVBAR ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,0.08)}
+
+.nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+.nav-logo-icon{
+  width:44px;height:44px;
+  border:2px solid var(--blue);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;color:var(--blue);
+  letter-spacing:-1px;
+  position:relative;
+}
+.nav-logo-icon::before,.nav-logo-icon::after{
+  content:'';position:absolute;
+  height:2px;width:18px;background:var(--blue);top:50%;
+}
+.nav-logo-icon::before{right:calc(100% + 4px)}
+.nav-logo-icon::after{left:calc(100% + 4px)}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1}
+.nav-logo-text .name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--black);letter-spacing:.5px}
+.nav-logo-text .sub{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-top:2px}
+
+.nav-links{display:flex;align-items:center;gap:8px;list-style:none}
+.nav-links a{
+  font-size:.78rem;font-weight:500;letter-spacing:.5px;
+  color:var(--dark);padding:8px 14px;border-radius:6px;
+  transition:background .2s,color .2s;
+}
+.nav-links a:hover,.nav-links a.active{background:var(--blue-pale);color:var(--blue)}
+.nav-cta{
+  background:var(--blue);color:#fff;
+  font-size:.78rem;font-weight:500;letter-spacing:.5px;
+  padding:10px 24px;border-radius:8px;
+  transition:background .2s,transform .15s;
+}
+.nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px)}
+
+.hamburger{display:none;flex-direction:column;gap:5px;width:26px;padding:4px 0}
+.hamburger span{display:block;height:2px;background:var(--dark);border-radius:2px;transition:.3s}
+
+/* ─── TYPOGRAPHY ─── */
+.label{font-size:.7rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--blue)}
+.h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.5rem);line-height:1.1;color:var(--black)}
+.h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);line-height:1.15;color:var(--black)}
+.h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--black)}
+.lead{font-size:1.05rem;line-height:1.8;color:var(--gray);font-weight:300}
+
+/* ─── BUTTONS ─── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.82rem;font-weight:500;letter-spacing:.3px;
+  padding:14px 28px;border-radius:8px;
+  transition:all .2s var(--ease);
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(43,167,216,.3)}
+.btn-secondary{background:var(--black);color:#fff}
+.btn-secondary:hover{background:#333;transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--blue);color:var(--blue)}
+.btn-outline:hover{background:var(--blue);color:#fff;transform:translateY(-2px)}
+.btn-ghost{color:var(--blue);font-weight:500}
+.btn-ghost:hover{gap:12px}
+.btn-ghost::after{content:'→';transition:transform .2s}
+.btn-ghost:hover::after{transform:translateX(4px)}
+
+/* ─── SECTION LAYOUT ─── */
+.section{padding:96px 48px}
+.section-sm{padding:64px 48px}
+.container{max-width:1200px;margin:0 auto}
+.divider{width:48px;height:3px;background:var(--blue);border-radius:2px;margin:20px 0 28px}
+
+/* ─── PAGE HERO ─── */
+.page-hero{
+  position:relative;height:50vh;min-height:360px;
+  display:flex;align-items:flex-end;
+  padding:0 48px 56px;
+  overflow:hidden;margin-top:72px;
+}
+.page-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.page-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 30%,rgba(0,0,0,.2))}
+.page-hero-content{position:relative;z-index:2}
+.page-hero .label{color:var(--blue-light)}
+.page-hero .h1{color:#fff;margin-top:8px}
+
+/* ═══════════════════════════
+   HOME PAGE
+═══════════════════════════ */
+
+/* HERO */
+.hero{
+  position:relative;height:100vh;min-height:640px;
+  display:flex;align-items:center;
+  overflow:hidden;margin-top:72px;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1800&q=85') center/cover;
+  animation:zoomIn 10s ease-out both;
+}
+@keyframes zoomIn{from{transform:scale(1.07)}to{transform:scale(1)}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.2) 65%,rgba(0,0,0,0) 100%)}
+.hero-content{position:relative;z-index:2;max-width:620px;padding:0 80px;animation:slideUp .9s .3s both}
+@keyframes slideUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+.hero-content .label{color:var(--blue-light)}
+.hero-content .h1{color:#fff;margin-top:12px}
+.hero-content .h1 span{font-style:italic}
+.hero-content .lead{color:rgba(255,255,255,.75);margin-top:20px;max-width:480px}
+.hero-actions{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+
+/* BOOKING BAR */
+.booking-bar{
+  background:#fff;
+  border-top:3px solid var(--blue);
+  box-shadow:0 -2px 32px rgba(0,0,0,.1);
+  padding:24px 48px;
+}
+.booking-bar-inner{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;
+  gap:0;align-items:stretch;
+}
+.booking-field{
+  padding:12px 24px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:4px;
+}
+.booking-field:last-of-type{border-right:none}
+.booking-field label{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:500}
+.booking-field input,.booking-field select{
+  border:none;outline:none;font-family:'DM Sans',sans-serif;
+  font-size:.9rem;color:var(--dark);font-weight:400;
+  background:transparent;padding:0;cursor:pointer;
+}
+.booking-field select option{background:#fff}
+.booking-submit{
+  background:var(--blue);color:#fff;
+  padding:0 32px;border-radius:0;
+  font-size:.82rem;font-weight:500;letter-spacing:.5px;
+  transition:background .2s;
+  display:flex;align-items:center;gap:8px;
+}
+.booking-submit:hover{background:var(--blue-dark)}
+
+/* STATS */
+.stats{background:var(--gray-light);padding:48px}
+.stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.stat{background:var(--gray-light);padding:36px;text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--blue);line-height:1}
+.stat-label{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:8px}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.about-images{position:relative;height:560px}
+.about-img-main{position:absolute;top:0;left:0;width:75%;height:80%;object-fit:cover;border-radius:2px}
+.about-img-accent{position:absolute;bottom:0;right:0;width:52%;height:54%;object-fit:cover;border-radius:2px;box-shadow:0 24px 48px rgba(0,0,0,.15)}
+.about-badge{
+  position:absolute;top:40%;left:60%;transform:translate(-50%,-50%);
+  width:90px;height:90px;border-radius:50%;
+  background:var(--blue);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  z-index:2;
+}
+.about-badge .num{font-size:1.8rem;line-height:1}
+.about-badge .txt{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.checklist{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.check-item{display:flex;align-items:center;gap:12px;font-size:.88rem;color:var(--dark)}
+.check-item::before{content:'';width:20px;height:20px;border-radius:50%;background:var(--blue-pale);border:2px solid var(--blue);flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%232BA7D8'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");background-size:12px;background-position:center;background-repeat:no-repeat}
+
+/* ROOMS SECTION */
+.rooms-section{background:var(--gray-light)}
+.rooms-tabs{display:flex;gap:4px;margin:32px 0 0;border-bottom:2px solid var(--border)}
+.room-tab{
+  padding:12px 24px;font-size:.82rem;font-weight:500;
+  color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;
+  transition:.2s;
+}
+.room-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.room-tab:hover{color:var(--blue)}
+.room-panels{margin-top:40px}
+.room-panel{display:none;animation:fadeUp .4s both}
+.room-panel.active{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.room-panel-img{position:relative;border-radius:2px;overflow:hidden}
+.room-panel-img img{height:460px}
+.room-panel-tag{
+  position:absolute;top:20px;left:20px;
+  background:var(--blue);color:#fff;
+  font-size:.65rem;letter-spacing:2px;text-transform:uppercase;
+  padding:6px 14px;font-weight:500;
+}
+.room-amenity-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0 32px}
+.room-amenity{
+  display:flex;align-items:center;gap:10px;
+  font-size:.82rem;color:var(--gray);
+  background:#fff;padding:10px 14px;border-radius:6px;
+  border:1px solid var(--border);
+}
+.room-amenity-icon{font-size:1rem}
+.room-price{
+  display:flex;align-items:baseline;gap:6px;
+  padding:20px;background:var(--blue-pale);border-radius:8px;
+  border-left:3px solid var(--blue);margin-bottom:24px;
+}
+.price-from{font-size:.75rem;color:var(--gray)}
+.price-amount{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--blue)}
+.price-per{font-size:.75rem;color:var(--gray)}
+
+/* SERVICES SECTION */
+.services-grid{
+  margin-top:56px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+  background:var(--border);
+}
+.service-card{
+  background:#fff;
+  overflow:hidden;
+  transition:transform .3s var(--ease);
+}
+.service-card:hover{transform:translateY(-6px);z-index:2;box-shadow:0 20px 48px rgba(0,0,0,.12)}
+.service-card img{height:240px;transition:transform .5s ease}
+.service-card:hover img{transform:scale(1.05)}
+.service-body{padding:28px}
+.service-icon{width:44px;height:44px;background:var(--blue-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px}
+.service-title{font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:8px}
+.service-desc{font-size:.82rem;color:var(--gray);line-height:1.7}
+
+/* TESTIMONIALS */
+.testimonials-section{background:var(--black)}
+.testimonials-section .label{color:var(--blue-light)}
+.testimonials-section .h2{color:#fff}
+.testi-grid{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi-card{
+  background:#1E1E1E;padding:36px;border-radius:2px;
+  border-top:3px solid var(--blue);
+  transition:transform .3s;
+}
+.testi-card:hover{transform:translateY(-4px)}
+.testi-stars{color:var(--blue);font-size:.9rem;letter-spacing:2px;margin-bottom:20px}
+.testi-quote{font-family:'Playfair Display',serif;font-size:1.05rem;color:#E5E5E5;line-height:1.75;font-style:italic}
+.testi-author{margin-top:24px;display:flex;align-items:center;gap:12px}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:500;color:#fff;font-size:.9rem;flex-shrink:0}
+.testi-name{font-size:.82rem;font-weight:500;color:#E5E5E5}
+.testi-role{font-size:.72rem;color:#666;margin-top:2px}
+
+/* CTA STRIP */
+.cta-strip{
+  background:var(--blue);padding:80px 48px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-strip::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1551882547-ff40c4fe1fa7?w=1600&q=70') center/cover;
+  opacity:.15;
+}
+.cta-strip-content{position:relative;z-index:1}
+.cta-strip h2{font-family:'Playfair Display',serif;font-size:2.5rem;color:#fff;margin-bottom:12px}
+.cta-strip p{color:rgba(255,255,255,.8);font-size:1rem;margin-bottom:36px}
+.cta-strip .btn-secondary{background:#fff;color:var(--blue)}
+.cta-strip .btn-secondary:hover{background:#f0f0f0}
+
+/* ═══════════════════════════
+   ROOMS PAGE
+═══════════════════════════ */
+.room-detail-block{
+  padding:80px 48px;border-bottom:1px solid var(--border);
+  display:grid;gap:64px;align-items:center;
+}
+.room-detail-block:nth-child(odd){grid-template-columns:1.1fr 1fr}
+.room-detail-block:nth-child(even){grid-template-columns:1fr 1.1fr}
+.room-detail-block:nth-child(even) .room-detail-img{order:2}
+.room-detail-block:nth-child(even) .room-detail-info{order:1}
+.room-detail-img{border-radius:2px;overflow:hidden}
+.room-detail-img img{height:480px}
+.room-detail-policy{
+  margin-top:48px;background:var(--gray-light);padding:48px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+}
+.policy-item h4{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:8px}
+.policy-item p{font-size:.82rem;color:var(--gray);line-height:1.7}
+
+/* ═══════════════════════════
+   RESTAURANT PAGE
+═══════════════════════════ */
+.resto-intro{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.resto-intro img{height:520px;border-radius:2px;object-fit:cover}
+.timing-row{display:flex;gap:24px;margin-top:32px;flex-wrap:wrap}
+.timing-chip{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 18px;border-radius:8px;background:var(--blue-pale);
+  font-size:.82rem;color:var(--blue);font-weight:500;
+}
+.menu-section-wrap{background:var(--gray-light)}
+.menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:48px}
+.menu-group-title{
+  font-family:'Playfair Display',serif;font-size:1.3rem;
+  color:var(--black);padding-bottom:14px;
+  border-bottom:2px solid var(--blue);margin-bottom:8px;
+}
+.menu-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:16px 0;border-bottom:1px solid var(--border);gap:16px;
+}
+.menu-row-name{font-size:.9rem;font-weight:500;color:var(--dark)}
+.menu-row-desc{font-size:.75rem;color:var(--gray);margin-top:2px}
+.menu-row-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--blue);white-space:nowrap}
+.bar-block{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.bar-block img{height:480px;border-radius:2px;object-fit:cover}
+
+/* ═══════════════════════════
+   SERVICES PAGE
+═══════════════════════════ */
+.services-detailed-grid{
+  margin-top:52px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+.svc-card{
+  border:1px solid var(--border);border-radius:4px;
+  overflow:hidden;transition:box-shadow .3s,transform .3s;
+}
+.svc-card:hover{box-shadow:0 16px 40px rgba(0,0,0,.1);transform:translateY(-4px)}
+.svc-card img{height:200px}
+.svc-card-body{padding:28px}
+.svc-card-icon{font-size:1.8rem;margin-bottom:12px}
+.svc-card-title{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:10px}
+.svc-card-desc{font-size:.82rem;color:var(--gray);line-height:1.7}
+.svc-features{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+.svc-feat{font-size:.78rem;color:var(--gray);display:flex;align-items:center;gap:8px}
+.svc-feat::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0}
+
+/* ═══════════════════════════
+   EVENTS PAGE
+═══════════════════════════ */
+.events-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin-top:52px}
+.event-card-2{background:#fff;overflow:hidden;transition:box-shadow .3s}
+.event-card-2:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);z-index:2}
+.event-card-2 img{height:260px}
+.event-card-2-body{padding:32px}
+.event-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-pale);color:var(--blue);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:4px;margin-bottom:14px;font-weight:500}
+.event-title-2{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:10px}
+.event-desc-2{font-size:.82rem;color:var(--gray);line-height:1.7}
+.event-specs-2{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap}
+.event-spec-2{font-size:.75rem;color:var(--gray)}
+.event-spec-2 strong{display:block;color:var(--blue);font-size:.95rem;font-family:'Playfair Display',serif;font-weight:400}
+.quote-form{background:var(--gray-light);padding:64px 48px}
+.form-title{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:8px}
+.form-wrap{max-width:900px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;color:var(--gray)}
+.field input,.field select,.field textarea{
+  padding:12px 16px;border:1.5px solid var(--border);border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--dark);
+  outline:none;transition:border-color .2s;background:#fff;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue)}
+.field textarea{height:110px;resize:vertical}
+
+/* ═══════════════════════════
+   PROXIMITY PAGE
+═══════════════════════════ */
+.proximity-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+.prox-card{
+  padding:32px;border:1px solid var(--border);border-radius:4px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.prox-card:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(43,167,216,.1)}
+.prox-dist{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:12px}
+.prox-name{font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:8px}
+.prox-desc{font-size:.82rem;color:var(--gray);line-height:1.6}
+.map-embed{
+  height:380px;background:var(--gray-light);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;border:1px solid var(--border);
+  border-radius:4px;margin-top:52px;
+}
+.map-embed span{font-size:2.5rem}
+.map-embed p{font-size:.82rem;color:var(--gray)}
+.transport-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.transport-card-2{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:24px;background:var(--blue-pale);border-radius:8px;
+}
+.transport-icon-2{font-size:1.6rem;flex-shrink:0}
+.transport-title-2{font-size:.9rem;font-weight:500;margin-bottom:4px}
+.transport-desc-2{font-size:.78rem;color:var(--gray);line-height:1.6}
+
+/* ═══════════════════════════
+   CONTACT PAGE
+═══════════════════════════ */
+.contact-split{display:grid;grid-template-columns:380px 1fr;gap:64px;align-items:start}
+.contact-sidebar{position:sticky;top:100px}
+.contact-info-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:24px}
+.contact-detail{display:flex;gap:14px;margin-bottom:28px;align-items:flex-start}
+.contact-detail-icon{
+  width:40px;height:40px;background:var(--blue-pale);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+}
+.contact-detail-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:4px}
+.contact-detail-value{font-size:.88rem;color:var(--dark);line-height:1.6}
+.hours-list{margin-top:32px;padding:24px;background:var(--gray-light);border-radius:8px}
+.hours-title{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:16px}
+.hours-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.hours-row:last-child{border-bottom:none}
+.hours-row span:last-child{font-weight:500;color:var(--blue)}
+.reservation-form{background:#fff;border:1px solid var(--border);border-radius:8px;padding:48px}
+.reservation-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px}
+.reservation-subtitle{font-size:.88rem;color:var(--gray);margin-bottom:32px}
+
+/* ─── FOOTER ─── */
+footer{background:var(--black);padding:80px 48px 40px;color:#fff}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:56px;padding-bottom:56px;border-bottom:1px solid #2A2A2A}
+.footer-logo-wrap .fname{font-family:'Playfair Display',serif;font-size:1.8rem;color:#fff;letter-spacing:1px}
+.footer-logo-wrap .fsub{font-size:.55rem;letter-spacing:4px;text-transform:uppercase;color:#555;margin-top:2px}
+.footer-tagline{font-size:.85rem;color:#555;line-height:1.8;margin-top:16px}
+.footer-col h4{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col ul a{font-size:.82rem;color:#666;transition:color .2s}
+.footer-col ul a:hover{color:#fff}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:32px}
+.footer-bottom p{font-size:.75rem;color:#444}
+.socials{display:flex;gap:8px}
+.social-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid #2A2A2A;color:#555;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;transition:.2s;
+}
+.social-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ─── MOBILE ─── */
+@media(max-width:1024px){
+  nav{padding:0 24px}
+  .section,.section-sm{padding:72px 24px}
+  .page-hero{padding:0 24px 40px}
+  .booking-bar{padding:20px 24px}
+  .booking-bar-inner{grid-template-columns:1fr 1fr;gap:12px}
+  .booking-field{border-right:none;border-bottom:1px solid var(--border);padding:10px 0}
+  .booking-submit{grid-column:1/-1;padding:14px;border-radius:8px;justify-content:center}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .about-images{height:380px}
+  .room-panel.active{grid-template-columns:1fr;gap:32px}
+  .services-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:1fr 1fr}
+  .room-detail-block{grid-template-columns:1fr!important;gap:32px}
+  .room-detail-block:nth-child(even) .room-detail-img{order:0}
+  .room-detail-block:nth-child(even) .room-detail-info{order:0}
+  .room-detail-policy{grid-template-columns:1fr}
+  .resto-intro{grid-template-columns:1fr}
+  .menu-cols{grid-template-columns:1fr}
+  .bar-block{grid-template-columns:1fr}
+  .services-detailed-grid{grid-template-columns:repeat(2,1fr)}
+  .events-grid-2{grid-template-columns:1fr}
+  .proximity-grid-3{grid-template-columns:repeat(2,1fr)}
+  .transport-row{grid-template-columns:1fr}
+  .contact-split{grid-template-columns:1fr}
+  .contact-sidebar{position:static}
+  .footer-top{grid-template-columns:1fr 1fr;gap:40px}
+  .hero-content{padding:0 24px}
+  .cta-strip{padding:60px 24px}
+  .quote-form{padding:48px 24px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-links.open{
+    display:flex;flex-direction:column;
+    position:fixed;inset:72px 0 0 0;
+    background:#fff;padding:32px 24px;gap:4px;z-index:999;
+    overflow-y:auto;border-top:1px solid var(--border);
+  }
+  .nav-links.open a{padding:14px 16px;border-radius:8px}
+  .hamburger{display:flex}
+  .hero-content .h1{font-size:2.4rem}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .services-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .services-detailed-grid{grid-template-columns:1fr}
+  .events-grid-2{grid-template-columns:1fr}
+  .proximity-grid-3{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:16px;text-align:center}
+  .reservation-form{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon">VH</div>
+    <div class="nav-logo-text">
+      <span class="name">Viva</span>
+      <span class="sub">Hôtel</span>
+    </div>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" data-page="home" onclick="showPage('home')">Accueil</a></li>
+    <li><a href="#" data-page="rooms" onclick="showPage('rooms')">Chambres</a></li>
+    <li><a href="#" data-page="restaurant" onclick="showPage('restaurant')">Restaurant</a></li>
+    <li><a href="#" data-page="services" onclick="showPage('services')">Services</a></li>
+    <li><a href="#" data-page="events" onclick="showPage('events')">Événements</a></li>
+    <li><a href="#" data-page="proximity" onclick="showPage('proximity')">À Proximité</a></li>
+    <li><a href="#" data-page="contact" onclick="showPage('contact')">Contact</a></li>
+    <li><button class="nav-cta" onclick="showPage('contact')">Réserver</button></li>
+  </ul>
+
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════
+     HOME PAGE
+═══════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="label">★★★★ Ouagadougou, Burkina Faso</p>
+      <h1 class="h1" style="margin-top:12px">Bienvenue<br/>au <span>Viva Hôtel</span></h1>
+      <p class="lead" style="color:rgba(255,255,255,.75);margin-top:16px;max-width:460px">Votre adresse premium au cœur de Ouagadougou. Confort moderne, hospitalité sincère, à 2 km de l'aéroport international.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showPage('contact')">Réserver maintenant</button>
+        <button class="btn btn-ghost" style="color:#fff" onclick="showPage('rooms')">Voir les chambres →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING BAR -->
+  <div class="booking-bar">
+    <div class="booking-bar-inner">
+      <div class="booking-field">
+        <label>Arrivée</label>
+        <input type="date"/>
+      </div>
+      <div class="booking-field">
+        <label>Départ</label>
+        <input type="date"/>
+      </div>
+      <div class="booking-field">
+        <label>Chambre</label>
+        <select>
+          <option>Standard</option>
+          <option>Privilège</option>
+          <option>Junior Suite</option>
+        </select>
+      </div>
+      <div class="booking-field">
+        <label>Personnes</label>
+        <select>
+          <option>1 personne</option>
+          <option>2 personnes</option>
+          <option>3 personnes</option>
+        </select>
+      </div>
+      <button class="booking-submit" onclick="showPage('contact')">
+        <span>Vérifier disponibilité</span> →
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-num">42</div><div class="stat-label">Chambres & Suites</div></div>
+      <div class="stat"><div class="stat-num">4★</div><div class="stat-label">Étoiles</div></div>
+      <div class="stat"><div class="stat-num">2 km</div><div class="stat-label">Aéroport T. Sankara</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Service en continu</div></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-images">
+          <img class="about-img-main" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=80" alt="Viva Hôtel"/>
+          <img class="about-img-accent" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80" alt="Piscine"/>
+          <div class="about-badge"><span class="num">No.1</span><span class="txt">Ouaga</span></div>
+        </div>
+        <div>
+          <p class="label">À Propos du Viva Hôtel</p>
+          <div class="divider"></div>
+          <h2 class="h2">Un hôtel moderne<br/>au cœur du Burkina</h2>
+          <p class="lead" style="margin-top:20px">Situé boulevard Tensoba Benda dans le quartier Karpala, le Viva Hôtel est l'établissement de référence à Ouagadougou. Nos 42 chambres et suites allient design contemporain et confort optimal pour une clientèle d'affaires et de loisirs.</p>
+          <div class="checklist">
+            <div class="check-item">Chambre Standard, Privilège et Junior Suite</div>
+            <div class="check-item">Restaurant gastronomique & Rooftop Bar</div>
+            <div class="check-item">Piscine extérieure, Spa et Terrasse</div>
+            <div class="check-item">Salles de conférence & Banquet</div>
+            <div class="check-item">Parking gratuit & Navette aéroport</div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:36px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="showPage('rooms')">Nos hébergements</button>
+            <button class="btn btn-outline" onclick="showPage('services')">Nos services</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOMS TABS -->
+  <section class="section" style="background:var(--gray-light);padding-top:72px">
+    <div class="container">
+      <p class="label">Hébergements</p>
+      <div class="divider"></div>
+      <h2 class="h2">Chambres & Suites</h2>
+      <div class="rooms-tabs">
+        <div class="room-tab active" onclick="switchTab(0)">Chambre Standard</div>
+        <div class="room-tab" onclick="switchTab(1)">Chambre Privilège</div>
+        <div class="room-tab" onclick="switchTab(2)">Junior Suite</div>
+      </div>
+      <div class="room-panels">
+
+        <div class="room-panel active" id="tab0">
+          <div class="room-panel-img">
+            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80" alt="Standard"/>
+            <div class="room-panel-tag">Standard</div>
+          </div>
+          <div>
+            <p class="label">Hébergement</p>
+            <div class="divider"></div>
+            <h3 class="h3" style="font-size:1.8rem">Chambre Standard</h3>
+            <p class="lead" style="margin-top:12px;font-size:.9rem">Confort moderne et fonctionnel. Tout le nécessaire pour un séjour reposant, que vous soyez en voyage d'affaires ou de détente.</p>
+            <div class="room-amenity-grid">
+              <div class="room-amenity"><span class="room-amenity-icon">❄️</span> Climatisation</div>
+              <div class="room-amenity"><span class="room-amenity-icon">📶</span> Wi-Fi gratuit</div>
+              <div class="room-amenity"><span class="room-amenity-icon">📺</span> TV câble HD</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🚿</span> Salle de bain privée</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🔒</span> Coffre-fort</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🛎️</span> Room service 24h</div>
+            </div>
+            <div class="room-price">
+              <span class="price-from">À partir de</span>
+              <span class="price-amount">199$</span>
+              <span class="price-per">/ nuit</span>
+            </div>
+            <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+          </div>
+        </div>
+
+        <div class="room-panel" id="tab1">
+          <div class="room-panel-img">
+            <img src="https://images.unsplash.com/photo-1591088398332-8596b4b2f00c?w=900&q=80" alt="Privilège"/>
+            <div class="room-panel-tag">Privilège</div>
+          </div>
+          <div>
+            <p class="label">Prestige</p>
+            <div class="divider"></div>
+            <h3 class="h3" style="font-size:1.8rem">Chambre Privilège</h3>
+            <p class="lead" style="margin-top:12px;font-size:.9rem">Un niveau supérieur de confort avec balcon privatif et vue panoramique sur Ouagadougou. Idéale pour les séjours prolongés.</p>
+            <div class="room-amenity-grid">
+              <div class="room-amenity"><span class="room-amenity-icon">🌅</span> Balcon privatif</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🛁</span> Baignoire & douche</div>
+              <div class="room-amenity"><span class="room-amenity-icon">☕</span> Thé & café inclus</div>
+              <div class="room-amenity"><span class="room-amenity-icon">💼</span> Bureau de travail</div>
+              <div class="room-amenity"><span class="room-amenity-icon">👘</span> Peignoir & chaussons</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🌟</span> Accueil VIP</div>
+            </div>
+            <div class="room-price">
+              <span class="price-from">À partir de</span>
+              <span class="price-amount">279$</span>
+              <span class="price-per">/ nuit</span>
+            </div>
+            <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+          </div>
+        </div>
+
+        <div class="room-panel" id="tab2">
+          <div class="room-panel-img">
+            <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900&q=80" alt="Junior Suite"/>
+            <div class="room-panel-tag">Suite</div>
+          </div>
+          <div>
+            <p class="label">Excellence</p>
+            <div class="divider"></div>
+            <h3 class="h3" style="font-size:1.8rem">Junior Suite</h3>
+            <p class="lead" style="margin-top:12px;font-size:.9rem">Notre hébergement phare. Salon séparé, salle de bain de prestige et service de conciergerie personnalisé pour une expérience inoubliable.</p>
+            <div class="room-amenity-grid">
+              <div class="room-amenity"><span class="room-amenity-icon">🛋️</span> Salon séparé</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🫧</span> Jacuzzi</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🍾</span> Champagne d'accueil</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🎯</span> Conciergerie dédié</div>
+              <div class="room-amenity"><span class="room-amenity-icon">🌸</span> Décoration florale</div>
+              <div class="room-amenity"><span class="room-amenity-icon">⏰</span> Late check-out</div>
+            </div>
+            <div class="room-price">
+              <span class="price-from">À partir de</span>
+              <span class="price-amount">399$</span>
+              <span class="price-per">/ nuit</span>
+            </div>
+            <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section">
+    <div class="container">
+      <p class="label">Ce que nous offrons</p>
+      <div class="divider"></div>
+      <h2 class="h2">Nos Services</h2>
+    </div>
+    <div class="services-grid" style="max-width:1296px;margin:52px auto 0">
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80" alt="Piscine"/>
+        <div class="service-body">
+          <div class="service-icon">🏊</div>
+          <div class="service-title">Piscine & Terrasse</div>
+          <p class="service-desc">Détente au bord de l'eau dans un espace lumineux et rafraîchissant, ouvert de 7h à 21h.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Restaurant"/>
+        <div class="service-body">
+          <div class="service-icon">🍽️</div>
+          <div class="service-title">Restaurant Gastronomique</div>
+          <p class="service-desc">Cuisine locale et internationale élaborée par notre chef, dans un cadre contemporain et chaleureux.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80" alt="Spa"/>
+        <div class="service-body">
+          <div class="service-icon">💆</div>
+          <div class="service-title">Spa & Bien-être</div>
+          <p class="service-desc">Massages, soins du visage et rituels africains pour une relaxation complète du corps et de l'esprit.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80" alt="Rooftop"/>
+        <div class="service-body">
+          <div class="service-icon">🌅</div>
+          <div class="service-title">Rooftop Bar</div>
+          <p class="service-desc">Cocktails artisanaux et vue panoramique sur Ouagadougou, du coucher du soleil à minuit.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Conférence"/>
+        <div class="service-body">
+          <div class="service-icon">💼</div>
+          <div class="service-title">Salles de Conférence</div>
+          <p class="service-desc">Espaces modulables et équipés pour séminaires, formations et réunions d'entreprise jusqu'à 100 personnes.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=600&q=80" alt="Parking"/>
+        <div class="service-body">
+          <div class="service-icon">🚗</div>
+          <div class="service-title">Parking & Navette</div>
+          <p class="service-desc">Parking sécurisé gratuit et service de navette vers l'aéroport Thomas Sankara sur réservation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-section">
+    <div class="container">
+      <p class="label">Avis clients</p>
+      <div class="divider"></div>
+      <h2 class="h2" style="color:#fff">Ce qu'ils disent</h2>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Un séjour impeccable. Personnel attentionné, chambres propres et modernes. Le restaurant est une vraie surprise gastronomique pour Ouagadougou."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div><div class="testi-name">Amadou Koné</div><div class="testi-role">Sénégal — Voyageur d'affaires</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Meilleur rapport qualité-prix de la ville. La piscine, le rooftop bar, et l'accueil font de cet endroit une référence. Je reviens à chaque passage."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">M</div>
+            <div><div class="testi-name">Marie-Claire Dubois</div><div class="testi-role">France — Touriste</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Nous avons organisé notre séminaire annuel ici. Équipements au top, traiteur excellent, équipe très professionnelle. Je recommande sans hésiter."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">S</div>
+            <div><div class="testi-name">Seydou Bassolé</div><div class="testi-role">Burkina Faso — Directeur</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="cta-strip-content container">
+      <h2>Prêt pour votre séjour à Ouagadougou ?</h2>
+      <p>Réservez directement pour profiter de nos meilleurs tarifs et d'une annulation flexible.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="showPage('contact')">Réserver maintenant</button>
+        <button class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:#fff" onclick="showPage('rooms')">Voir les chambres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo-wrap"><div class="fname">Viva Hôtel</div><div class="fsub">Ouagadougou</div></div>
+          <p class="footer-tagline">L'adresse premium de référence à Ouagadougou. Confort moderne, hospitalité sincère et services d'excellence.</p>
+        </div>
+        <div class="footer-col"><h4>Pages</h4><ul>
+          <li><a href="#" onclick="showPage('home')">Accueil</a></li>
+          <li><a href="#" onclick="showPage('rooms')">Chambres & Suites</a></li>
+          <li><a href="#" onclick="showPage('restaurant')">Restaurant & Bar</a></li>
+          <li><a href="#" onclick="showPage('services')">Nos services</a></li>
+          <li><a href="#" onclick="showPage('events')">Événements</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Infos</h4><ul>
+          <li><a href="#" onclick="showPage('proximity')">À proximité</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact & Réservation</a></li>
+          <li><a href="#">Politique d'annulation</a></li>
+          <li><a href="#">Mentions légales</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul>
+          <li><a href="#">Bld Tensoba Benda, Karpala</a></li>
+          <li><a href="#">Ouagadougou, Burkina Faso</a></li>
+          <li><a href="mailto:info@viva-hotel.com">info@viva-hotel.com</a></li>
+          <li><a href="#">Check-in : 14h | Out : 11h</a></li>
+        </ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Viva Hôtel Ouagadougou. Tous droits réservés.</p>
+        <div class="socials">
+          <a class="social-btn" href="#">fb</a>
+          <a class="social-btn" href="#">ig</a>
+          <a class="social-btn" href="#">in</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════════════
+     ROOMS PAGE
+═══════════════════════════ -->
+<div id="page-rooms" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Hébergements</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">Chambres & Suites</h1>
+    </div>
+  </div>
+
+  <div class="container" style="max-width:100%;padding:0">
+    <div class="room-detail-block" style="max-width:1200px;margin:0 auto;padding:80px 48px">
+      <div class="room-detail-img">
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80" alt="Standard"/>
+      </div>
+      <div class="room-detail-info">
+        <p class="label">Hébergement</p>
+        <div class="divider"></div>
+        <h2 class="h2">Chambre Standard</h2>
+        <p class="lead" style="margin-top:16px;font-size:.92rem">Confort moderne et fonctionnel pour un séjour serein. Nos chambres Standard sont équipées avec soin pour répondre à toutes vos attentes, que vous voyagiez pour affaires ou pour le plaisir.</p>
+        <div class="room-amenity-grid" style="margin-top:28px">
+          <div class="room-amenity"><span class="room-amenity-icon">❄️</span> Climatisation</div>
+          <div class="room-amenity"><span class="room-amenity-icon">📶</span> Wi-Fi gratuit</div>
+          <div class="room-amenity"><span class="room-amenity-icon">📺</span> TV câble HD</div>
+          <div class="room-amenity"><span class="room-amenity-icon">🚿</span> Salle de bain privée</div>
+          <div class="room-amenity"><span class="room-amenity-icon">🔒</span> Coffre-fort</div>
+          <div class="room-amenity"><span class="room-amenity-icon">🛎️</span> Room service 24h</div>
+          <div class="room-amenity"><span class="room-amenity-icon">🧴</span> Produits d'accueil</div>
+          <div class="room-amenity"><span class="room-amenity-icon">🧊</span> Minibar</div>
+        </div>
+        <div class="room-price">
+          <span class="price-from">À partir de</span>
+          <span class="price-amount">199$</span>
+          <span class="price-per">/ nuit</span>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);background:var(--gray-light)">
+      <div class="room-detail-block" style="max-width:1200px;margin:0 auto;padding:80px 48px;background:var(--gray-light)">
+        <div class="room-detail-info">
+          <p class="label">Prestige</p>
+          <div class="divider"></div>
+          <h2 class="h2">Chambre Privilège</h2>
+          <p class="lead" style="margin-top:16px;font-size:.92rem">Élevez votre séjour avec notre chambre Privilège. Dotée d'un balcon privatif avec vue sur la ville, elle offre un cadre de vie supérieur alliant espace, lumière et confort premium.</p>
+          <div class="room-amenity-grid" style="margin-top:28px">
+            <div class="room-amenity"><span class="room-amenity-icon">🌅</span> Balcon privatif</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🛁</span> Baignoire & douche</div>
+            <div class="room-amenity"><span class="room-amenity-icon">☕</span> Machine à café</div>
+            <div class="room-amenity"><span class="room-amenity-icon">💼</span> Bureau de travail</div>
+            <div class="room-amenity"><span class="room-amenity-icon">👘</span> Peignoir & chaussons</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🌟</span> Accueil personnalisé</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🛏️</span> Lit king-size</div>
+            <div class="room-amenity"><span class="room-amenity-icon">📶</span> Wi-Fi dédié</div>
+          </div>
+          <div class="room-price">
+            <span class="price-from">À partir de</span>
+            <span class="price-amount">279$</span>
+            <span class="price-per">/ nuit</span>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+        </div>
+        <div class="room-detail-img">
+          <img src="https://images.unsplash.com/photo-1591088398332-8596b4b2f00c?w=900&q=80" alt="Privilège"/>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border)">
+      <div class="room-detail-block" style="max-width:1200px;margin:0 auto;padding:80px 48px">
+        <div class="room-detail-img">
+          <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900&q=80" alt="Junior Suite"/>
+        </div>
+        <div class="room-detail-info">
+          <p class="label">Excellence</p>
+          <div class="divider"></div>
+          <h2 class="h2">Junior Suite</h2>
+          <p class="lead" style="margin-top:16px;font-size:.92rem">Notre hébergement signature. Un espace de vie généreux avec salon séparé, salle de bain de prestige et service de conciergerie dédié pour une expérience d'exception.</p>
+          <div class="room-amenity-grid" style="margin-top:28px">
+            <div class="room-amenity"><span class="room-amenity-icon">🛋️</span> Salon séparé</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🫧</span> Jacuzzi</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🍾</span> Champagne d'accueil</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🎯</span> Conciergerie dédiée</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🌸</span> Décoration florale</div>
+            <div class="room-amenity"><span class="room-amenity-icon">⏰</span> Late check-out offert</div>
+            <div class="room-amenity"><span class="room-amenity-icon">☀️</span> Petit-déjeuner inclus</div>
+            <div class="room-amenity"><span class="room-amenity-icon">🚗</span> Transfert aéroport</div>
+          </div>
+          <div class="room-price">
+            <span class="price-from">À partir de</span>
+            <span class="price-amount">399$</span>
+            <span class="price-per">/ nuit</span>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('contact')">Réserver cette chambre</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-detail-policy" style="max-width:100%;border-top:1px solid var(--border)">
+      <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+        <div class="policy-item">
+          <h4>⏰ Horaires</h4>
+          <p>Check-in à partir de 14h00. Check-out avant 11h00. Early check-in sur demande selon disponibilité.</p>
+        </div>
+        <div class="policy-item">
+          <h4>🔄 Annulation</h4>
+          <p>Annulation gratuite selon les tarifs sélectionnés. Conditions détaillées communiquées lors de la réservation.</p>
+        </div>
+        <div class="policy-item">
+          <h4>✅ Inclus</h4>
+          <p>Wi-Fi haut débit gratuit, parking sécurisé et accès à la piscine inclus dans tous les hébergements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:0">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0">
+        <p>© 2025 Viva Hôtel Ouagadougou. Tous droits réservés.</p>
+        <div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════
+     RESTAURANT PAGE
+═══════════════════════════ -->
+<div id="page-restaurant" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Gastronomie</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">Restaurant & Bar</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="resto-intro">
+        <div>
+          <p class="label">Notre Table</p>
+          <div class="divider"></div>
+          <h2 class="h2">Une cuisine qui célèbre l'Afrique</h2>
+          <p class="lead" style="margin-top:20px">Notre chef compose une carte qui rend hommage aux saveurs burkinabè tout en explorant les grandes cuisines du monde. Produits locaux, techniques contemporaines, dressages soignés.</p>
+          <p class="lead" style="margin-top:12px">Dans un espace moderne et lumineux, laissez-vous guider par notre équipe de salle pour une expérience culinaire complète, du petit-déjeuner au dîner.</p>
+          <div class="timing-row">
+            <div class="timing-chip">🌅 Petit-déjeuner : 7h — 10h30</div>
+            <div class="timing-chip">☀️ Déjeuner : 12h — 14h30</div>
+            <div class="timing-chip">🌙 Dîner : 19h — 22h</div>
+          </div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Restaurant Viva"/>
+      </div>
+    </div>
+  </section>
+
+  <section class="section menu-section-wrap" style="padding-top:72px">
+    <div class="container">
+      <p class="label">Notre Carte</p>
+      <div class="divider"></div>
+      <h2 class="h2">Menu Signature</h2>
+      <div class="menu-cols">
+        <div>
+          <p class="menu-group-title">Entrées</p>
+          <div class="menu-row"><div><div class="menu-row-name">Salade Moringa & Avocat</div><div class="menu-row-desc">Vinaigrette citron vert et gingembre local</div></div><span class="menu-row-price">4 500 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Crevettes au Beurre d'Arachide</div><div class="menu-row-desc">Légumes croquants, sauce pimentée douce</div></div><span class="menu-row-price">6 500 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Velouté de Patate Douce</div><div class="menu-row-desc">Crème de coco, noix de cajou grillées</div></div><span class="menu-row-price">3 800 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Carpaccio de Poisson du Lac</div><div class="menu-row-desc">Huile d'olive, câpres, zeste de citron</div></div><span class="menu-row-price">5 200 XOF</span></div>
+
+          <p class="menu-group-title" style="margin-top:48px">Desserts</p>
+          <div class="menu-row"><div><div class="menu-row-name">Fondant Chocolat Côte d'Ivoire</div><div class="menu-row-desc">Glace vanille de Madagascar</div></div><span class="menu-row-price">3 200 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Tarte Tatin à la Mangue</div><div class="menu-row-desc">Chantilly au bissap</div></div><span class="menu-row-price">2 800 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Fruits Tropicaux & Tamarin</div><div class="menu-row-desc">Menthe fraîche, coulis de tamarin</div></div><span class="menu-row-price">2 500 XOF</span></div>
+        </div>
+        <div>
+          <p class="menu-group-title">Plats Principaux</p>
+          <div class="menu-row"><div><div class="menu-row-name">Poulet Yassa à notre Façon</div><div class="menu-row-desc">Riz parfumé, oignons caramélisés, olives</div></div><span class="menu-row-price">9 500 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Filet de Bœuf Grillé</div><div class="menu-row-desc">Sauce poivre de Guinée, légumes rôtis</div></div><span class="menu-row-price">14 000 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Langouste au Beurre Pimenté</div><div class="menu-row-desc">Risotto citronné, coriandre fraîche</div></div><span class="menu-row-price">22 000 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Thiéboudienne Royal</div><div class="menu-row-desc">Riz au poisson, légumes du marché</div></div><span class="menu-row-price">11 500 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Agneau Épices du Sahel</div><div class="menu-row-desc">Couscous moelleux, légumes confits au cumin</div></div><span class="menu-row-price">16 000 XOF</span></div>
+          <div class="menu-row"><div><div class="menu-row-name">Plat Végétarien du Jour</div><div class="menu-row-desc">Selon les arrivages du marché local</div></div><span class="menu-row-price">7 500 XOF</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="bar-block">
+        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" alt="Rooftop Bar"/>
+        <div>
+          <p class="label">Bar & Rooftop</p>
+          <div class="divider"></div>
+          <h2 class="h2">Le Rooftop Bar</h2>
+          <p class="lead" style="margin-top:16px">Au sommet du Viva Hôtel, notre bar rooftop offre une vue imprenable sur Ouagadougou. Cocktails signatures aux saveurs africaines, bière fraîche, vins sélectionnés.</p>
+          <p class="lead" style="margin-top:12px">Notre mixologue crée des créations uniques inspirées des épices et fruits locaux : bissap, tamarin, gingembre, baobab.</p>
+          <div class="timing-chip" style="display:inline-flex;margin-top:24px">🌅 Ouvert de 17h00 à 00h00</div>
+          <div style="margin-top:28px"><button class="btn btn-outline" onclick="showPage('contact')">Réserver une table</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:0"><p>© 2025 Viva Hôtel Ouagadougou.</p><div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div></div></div></footer>
+</div>
+
+<!-- ═══════════════════════════
+     SERVICES PAGE
+═══════════════════════════ -->
+<div id="page-services" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Bien-être & Confort</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">Nos Services</h1>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <p class="label">Nos Prestations</p>
+      <div class="divider"></div>
+      <h2 class="h2">Tout pour votre confort</h2>
+      <p class="lead" style="margin-top:16px;max-width:640px">Chaque service est pensé pour enrichir votre séjour. Notre équipe est à votre disposition 24h/24 pour répondre à toutes vos demandes.</p>
+      <div class="services-detailed-grid">
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80" alt="Piscine"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">🏊</div>
+            <div class="svc-card-title">Piscine Extérieure</div>
+            <p class="svc-card-desc">Espace de détente rafraîchissant avec chaises longues, parasols et service de boissons au bord du bassin.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Accès libre pour résidents</span>
+              <span class="svc-feat">Service boissons inclus</span>
+              <span class="svc-feat">Ouvert 7h — 21h</span>
+            </div>
+          </div>
+        </div>
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80" alt="Spa"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">💆</div>
+            <div class="svc-card-title">Spa & Bien-être</div>
+            <p class="svc-card-desc">Massages, soins du visage, hammam et rituels inspirés des traditions africaines pour une relaxation profonde.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Massages corpo & faciaux</span>
+              <span class="svc-feat">Hammam et sauna</span>
+              <span class="svc-feat">Sur rendez-vous — 9h à 20h</span>
+            </div>
+          </div>
+        </div>
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80" alt="Bar"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">🌅</div>
+            <div class="svc-card-title">Rooftop & Terrasse</div>
+            <p class="svc-card-desc">Vue panoramique 360° sur Ouagadougou depuis notre terrasse en rooftop, idéale pour des soirées privées et cocktails.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Vue panoramique sur la ville</span>
+              <span class="svc-feat">Bar à cocktails africains</span>
+              <span class="svc-feat">Privatisation possible</span>
+            </div>
+          </div>
+        </div>
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1497366412874-3415097a27e7?w=600&q=80" alt="Conciergerie"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">🔔</div>
+            <div class="svc-card-title">Conciergerie 24h/24</div>
+            <p class="svc-card-desc">Notre équipe est disponible à toute heure pour organiser transferts, réservations et toutes vos demandes spéciales.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Room service 24h/24</span>
+              <span class="svc-feat">Organisation de transferts</span>
+              <span class="svc-feat">Réservations restaurants</span>
+            </div>
+          </div>
+        </div>
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=600&q=80" alt="Parking"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">🚗</div>
+            <div class="svc-card-title">Parking & Navette</div>
+            <p class="svc-card-desc">Parking sécurisé gratuit avec vidéosurveillance et service de navette depuis et vers l'aéroport Thomas Sankara.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Parking sécurisé gratuit</span>
+              <span class="svc-feat">Navette aéroport sur demande</span>
+              <span class="svc-feat">Surveillance 24h/24</span>
+            </div>
+          </div>
+        </div>
+        <div class="svc-card">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" alt="Business"/>
+          <div class="svc-card-body">
+            <div class="svc-card-icon">💻</div>
+            <div class="svc-card-title">Business Center</div>
+            <p class="svc-card-desc">Wi-Fi haut débit partout dans l'hôtel. Business center équipé pour vos besoins professionnels.</p>
+            <div class="svc-features">
+              <span class="svc-feat">Wi-Fi gratuit — tout l'hôtel</span>
+              <span class="svc-feat">Impression & photocopies</span>
+              <span class="svc-feat">Réunions privées disponibles</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:0"><p>© 2025 Viva Hôtel Ouagadougou.</p><div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div></div></div></footer>
+</div>
+
+<!-- ═══════════════════════════
+     EVENTS PAGE
+═══════════════════════════ -->
+<div id="page-events" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Business & Célébrations</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">Événements & Affaires</h1>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <p class="label">Nos Espaces</p>
+      <div class="divider"></div>
+      <h2 class="h2">Des lieux adaptés à chaque occasion</h2>
+      <p class="lead" style="margin-top:16px;max-width:640px">Du séminaire d'entreprise au mariage somptueux, le Viva Hôtel dispose d'espaces modulables et entièrement équipés pour faire de votre événement un succès.</p>
+      <div class="events-grid-2">
+        <div class="event-card-2">
+          <img src="https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?w=800&q=80" alt="Conférence"/>
+          <div class="event-card-2-body">
+            <div class="event-badge">Jusqu'à 100 personnes</div>
+            <h3 class="event-title-2">Salle de Conférence</h3>
+            <p class="event-desc-2">Vidéoprojecteur 4K, système audio professionnel, Wi-Fi dédié et mobilier modulable. Idéale pour séminaires, formations et présentations.</p>
+            <div class="event-specs-2">
+              <div class="event-spec-2"><strong>100</strong>Capacité max</div>
+              <div class="event-spec-2"><strong>Théâtre</strong>Configuration</div>
+              <div class="event-spec-2"><strong>4K HD</strong>Projecteur</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card-2">
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80" alt="Banquet"/>
+          <div class="event-card-2-body">
+            <div class="event-badge">Jusqu'à 200 personnes</div>
+            <h3 class="event-title-2">Salle de Banquet</h3>
+            <p class="event-desc-2">Grand espace élégant pour mariages, dîners de gala et réceptions privées. Notre équipe gère décoration et traiteur sur mesure.</p>
+            <div class="event-specs-2">
+              <div class="event-spec-2"><strong>200</strong>Capacité max</div>
+              <div class="event-spec-2"><strong>Banquet</strong>Configuration</div>
+              <div class="event-spec-2"><strong>Inclus</strong>Traiteur</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card-2">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Rooftop"/>
+          <div class="event-card-2-body">
+            <div class="event-badge">Jusqu'à 80 personnes</div>
+            <h3 class="event-title-2">Terrasse Rooftop</h3>
+            <p class="event-desc-2">Événements en plein air inoubliables avec vue panoramique. Cocktails, soirées privées et célébrations sous les étoiles burkinabè.</p>
+            <div class="event-specs-2">
+              <div class="event-spec-2"><strong>80</strong>Capacité max</div>
+              <div class="event-spec-2"><strong>Cocktail</strong>Configuration</div>
+              <div class="event-spec-2"><strong>360°</strong>Panorama</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-card-2">
+          <img src="https://images.unsplash.com/photo-1497366412874-3415097a27e7?w=800&q=80" alt="Business"/>
+          <div class="event-card-2-body">
+            <div class="event-badge">Jusqu'à 20 personnes</div>
+            <h3 class="event-title-2">Business Center</h3>
+            <p class="event-desc-2">Espace intime et confidentiel pour vos réunions de direction, entretiens et petits groupes de travail.</p>
+            <div class="event-specs-2">
+              <div class="event-spec-2"><strong>20</strong>Capacité max</div>
+              <div class="event-spec-2"><strong>Board</strong>Configuration</div>
+              <div class="event-spec-2"><strong>HD</strong>Écran</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-form">
+    <div class="container form-wrap">
+      <p class="label">Organisez votre événement</p>
+      <div class="divider"></div>
+      <h2 class="form-title">Demande de devis</h2>
+      <p class="lead" style="font-size:.88rem">Remplissez ce formulaire et notre équipe vous contacte sous 24h pour confirmer les disponibilités et établir un devis personnalisé.</p>
+      <div class="form-grid">
+        <div class="field"><label>Nom complet</label><input type="text" placeholder="Jean Dupont"/></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="jean@email.com"/></div>
+        <div class="field"><label>Téléphone</label><input type="tel" placeholder="+226 XX XX XX XX"/></div>
+        <div class="field"><label>Type d'événement</label><select><option>Séminaire / Conférence</option><option>Mariage / Réception</option><option>Dîner de gala</option><option>Formation</option><option>Autre</option></select></div>
+        <div class="field"><label>Date souhaitée</label><input type="date"/></div>
+        <div class="field"><label>Nombre de personnes</label><input type="number" placeholder="50"/></div>
+        <div class="field full"><label>Détails & demandes spéciales</label><textarea placeholder="Décrivez votre événement, vos besoins en équipement, traiteur, décoration…"></textarea></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:8px">Envoyer ma demande</button>
+    </div>
+  </div>
+  <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:0"><p>© 2025 Viva Hôtel Ouagadougou.</p><div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div></div></div></footer>
+</div>
+
+<!-- ═══════════════════════════
+     PROXIMITY PAGE
+═══════════════════════════ -->
+<div id="page-proximity" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Explorer la capitale</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">À Proximité</h1>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <p class="label">Attractions</p>
+      <div class="divider"></div>
+      <h2 class="h2">Découvrez Ouagadougou</h2>
+      <p class="lead" style="margin-top:16px;max-width:600px">Idéalement situé, le Viva Hôtel est votre point de départ pour explorer les richesses de la capitale burkinabè. Notre équipe organise vos excursions sur demande.</p>
+      <div class="proximity-grid-3">
+        <div class="prox-card"><p class="prox-dist">✈ 2 km — 5 min</p><h3 class="prox-name">Aéroport Thomas Sankara</h3><p class="prox-desc">L'aéroport international à seulement 2 km. Navette disponible sur réservation.</p></div>
+        <div class="prox-card"><p class="prox-dist">🏰 6 km — 15 min</p><h3 class="prox-name">Palais du Mogho Naba</h3><p class="prox-desc">Résidence du roi des Mossi, chef spirituel et culturel du peuple burkinabè.</p></div>
+        <div class="prox-card"><p class="prox-dist">🎡 6 km — 15 min</p><h3 class="prox-name">Aqua Park Ouaga</h3><p class="prox-desc">Parc aquatique familial, idéal pour une journée de détente et d'amusement.</p></div>
+        <div class="prox-card"><p class="prox-dist">🏟️ 5 km — 12 min</p><h3 class="prox-name">Stade Municipal</h3><p class="prox-desc">L'un des principaux stades de la capitale, accueillant matchs et événements sportifs.</p></div>
+        <div class="prox-card"><p class="prox-dist">🎶 7 km — 18 min</p><h3 class="prox-name">Musée de la Musique</h3><p class="prox-desc">Instruments et traditions musicales du Burkina Faso dans un musée dédié au patrimoine sonore.</p></div>
+        <div class="prox-card"><p class="prox-dist">🏛️ 11 km — 25 min</p><h3 class="prox-name">Musée National</h3><p class="prox-desc">Des milliers d'objets témoignant de l'histoire et des civilisations du Burkina Faso.</p></div>
+      </div>
+
+      <div class="map-embed">
+        <span>📍</span>
+        <p>Boulevard Tensoba Benda, Karpala — Ouagadougou, Burkina Faso</p>
+        <button class="btn btn-outline" onclick="window.open('https://maps.google.com/?q=Ouagadougou+Burkina+Faso','_blank')">Ouvrir dans Google Maps →</button>
+      </div>
+
+      <h3 class="h3" style="margin-top:64px;margin-bottom:4px">Comment nous rejoindre</h3>
+      <p class="lead" style="font-size:.88rem;margin-bottom:0">Plusieurs options pour rejoindre le Viva Hôtel facilement.</p>
+      <div class="transport-row">
+        <div class="transport-card-2"><div class="transport-icon-2">✈️</div><div><div class="transport-title-2">Par avion</div><p class="transport-desc-2">L'aéroport international Thomas Sankara est à 2 km. Navette sur réservation auprès de la réception.</p></div></div>
+        <div class="transport-card-2"><div class="transport-icon-2">🚕</div><div><div class="transport-title-2">En taxi</div><p class="transport-desc-2">Taxis disponibles 24h/24 à Ouagadougou. Transferts privés organisés par notre conciergerie.</p></div></div>
+        <div class="transport-card-2"><div class="transport-icon-2">🚗</div><div><div class="transport-title-2">En voiture</div><p class="transport-desc-2">Bld Tensoba Benda, quartier Karpala. Parking gratuit sécurisé sur place, vidéosurveillé.</p></div></div>
+      </div>
+    </div>
+  </section>
+  <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:0"><p>© 2025 Viva Hôtel Ouagadougou.</p><div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div></div></div></footer>
+</div>
+
+<!-- ═══════════════════════════
+     CONTACT PAGE
+═══════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="page-hero" style="margin-top:72px">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600&q=80')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content container">
+      <p class="label" style="color:var(--blue-light)">Nous contacter</p>
+      <h1 class="h1" style="color:#fff;margin-top:8px">Contact & Réservation</h1>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div class="contact-split">
+        <div class="contact-sidebar">
+          <p class="label">Informations</p>
+          <div class="divider"></div>
+          <h3 class="contact-info-title">Contactez-nous</h3>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div><div class="contact-detail-label">Adresse</div><div class="contact-detail-value">Boulevard Tensoba Benda<br/>Quartier Karpala<br/>Ouagadougou, Burkina Faso</div></div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">✉️</div>
+            <div><div class="contact-detail-label">Email</div><div class="contact-detail-value">info@viva-hotel.com</div></div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🔔</div>
+            <div><div class="contact-detail-label">Réception</div><div class="contact-detail-value">Ouverte 24h/24 — 7j/7</div></div>
+          </div>
+          <div class="hours-list">
+            <div class="hours-title">Horaires des services</div>
+            <div class="hours-row"><span>Check-in</span><span>14h00</span></div>
+            <div class="hours-row"><span>Check-out</span><span>11h00</span></div>
+            <div class="hours-row"><span>Restaurant</span><span>7h — 22h</span></div>
+            <div class="hours-row"><span>Bar Rooftop</span><span>17h — 00h</span></div>
+            <div class="hours-row"><span>Spa</span><span>9h — 20h</span></div>
+            <div class="hours-row"><span>Piscine</span><span>7h — 21h</span></div>
+          </div>
+        </div>
+
+        <div class="reservation-form">
+          <h3 class="reservation-title">Réserver votre séjour</h3>
+          <p class="reservation-subtitle">Remplissez ce formulaire et nous vous confirmons votre réservation dans les plus brefs délais.</p>
+          <div class="form-grid">
+            <div class="field"><label>Prénom</label><input type="text" placeholder="Jean"/></div>
+            <div class="field"><label>Nom</label><input type="text" placeholder="Dupont"/></div>
+            <div class="field"><label>Email</label><input type="email" placeholder="jean@email.com"/></div>
+            <div class="field"><label>Téléphone</label><input type="tel" placeholder="+226 XX XX XX XX"/></div>
+            <div class="field"><label>Date d'arrivée</label><input type="date"/></div>
+            <div class="field"><label>Date de départ</label><input type="date"/></div>
+            <div class="field"><label>Type de chambre</label><select>
+              <option>Chambre Standard — à partir de 199$/nuit</option>
+              <option>Chambre Privilège — à partir de 279$/nuit</option>
+              <option>Junior Suite — à partir de 399$/nuit</option>
+            </select></div>
+            <div class="field"><label>Nombre de personnes</label><select>
+              <option>1 personne</option><option>2 personnes</option><option>3 personnes</option>
+            </select></div>
+            <div class="field full"><label>Demandes spéciales</label><textarea placeholder="Lit bébé, anniversaire, régime alimentaire, heure d'arrivée…"></textarea></div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px">Envoyer ma réservation</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo-wrap"><div class="fname">Viva Hôtel</div><div class="fsub">Ouagadougou</div></div>
+          <p class="footer-tagline">L'adresse premium de référence à Ouagadougou. Confort moderne, hospitalité sincère.</p>
+        </div>
+        <div class="footer-col"><h4>Pages</h4><ul>
+          <li><a href="#" onclick="showPage('home')">Accueil</a></li>
+          <li><a href="#" onclick="showPage('rooms')">Chambres</a></li>
+          <li><a href="#" onclick="showPage('restaurant')">Restaurant</a></li>
+          <li><a href="#" onclick="showPage('services')">Services</a></li>
+          <li><a href="#" onclick="showPage('events')">Événements</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Infos</h4><ul>
+          <li><a href="#" onclick="showPage('proximity')">À Proximité</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+          <li><a href="#">Annulation</a></li>
+          <li><a href="#">Mentions légales</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul>
+          <li><a href="#">Bld Tensoba Benda, Karpala</a></li>
+          <li><a href="#">Ouagadougou, Burkina Faso</a></li>
+          <li><a href="mailto:info@viva-hotel.com">info@viva-hotel.com</a></li>
+        </ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Viva Hôtel Ouagadougou. Tous droits réservés.</p>
+        <div class="socials"><a class="social-btn" href="#">fb</a><a class="social-btn" href="#">ig</a><a class="social-btn" href="#">in</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Page routing
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active');
+    document.querySelectorAll('.nav-links a[data-page]').forEach(a=>{
+      a.classList.toggle('active',a.dataset.page===id);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+    document.getElementById('navLinks').classList.remove('open');
+  }
+
+  // Tabs (home rooms section)
+  function switchTab(i){
+    document.querySelectorAll('.room-tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+    document.querySelectorAll('.room-panel').forEach((p,j)=>p.classList.toggle('active',i===j));
+  }
+
+  // Mobile menu
+  function toggleMenu(){
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Navbar scroll shadow
+  window.addEventListener('scroll',()=>{
+    document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>10);
+  });
+
+  // Prevent default on nav links
+  document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+</script>
+</body>
+</html>

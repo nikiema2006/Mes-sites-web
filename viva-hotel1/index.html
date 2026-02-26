@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viva Hôtel | Luxe & Sérénité à Ouagadougou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #C9A962;
+            --primary-dark: #B8944F;
+            --secondary: #2C3E50;
+            --accent: #E8D5B7;
+            --white: #FFFFFF;
+            --light-bg: #FAF9F7;
+            --text-dark: #2C3E50;
+            --text-light: #6B7280;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .logo {
+            color: var(--secondary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: var(--text-dark);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        .navbar.scrolled .mobile-menu {
+            color: var(--secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.3)), url('https://imgservice.casai.com/500x245/villa-de-l-int%C3%A9gratio-bf-ouagadougou-ep-33407423-0.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(201, 169, 98, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(201, 169, 98, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--secondary);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--white);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background: var(--light-bg);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border: 1px solid rgba(201, 169, 98, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--white);
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-images {
+            position: relative;
+        }
+
+        .about-img-main {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .about-img-secondary {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 5px solid var(--white);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .about-content h2 {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .about-content h2 span {
+            color: var(--primary);
+        }
+
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item h4 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-item p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Rooms Section */
+        .rooms {
+            padding: 6rem 5%;
+            background: var(--light-bg);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .room-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .room-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .room-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .room-card:hover .room-image img {
+            transform: scale(1.1);
+        }
+
+        .room-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .room-info {
+            padding: 2rem;
+        }
+
+        .room-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .room-features {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .room-features span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .room-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .price span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* Amenities Section */
+        .amenities {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .amenity-category {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .amenity-category:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+
+        .amenity-category h3 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .amenity-category h3 i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .amenity-list {
+            list-style: none;
+        }
+
+        .amenity-list li {
+            padding: 0.5rem 0;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .amenity-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 6rem 5%;
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .gallery .section-header h2 {
+            color: var(--white);
+        }
+
+        .gallery .section-header p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 250px);
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(201, 169, 98, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay i {
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        .item-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
+        .item-2 { grid-column: 3 / 4; grid-row: 1 / 2; }
+        .item-3 { grid-column: 4 / 5; grid-row: 1 / 2; }
+        .item-4 { grid-column: 3 / 5; grid-row: 2 / 3; }
+        .item-5 { grid-column: 1 / 2; grid-row: 3 / 4; }
+        .item-6 { grid-column: 2 / 4; grid-row: 3 / 4; }
+        .item-7 { grid-column: 4 / 5; grid-row: 3 / 4; }
+
+        /* Location Section */
+        .location {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .location-info h2 {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .location-info h2 span {
+            color: var(--primary);
+        }
+
+        .location-details {
+            margin: 2rem 0;
+        }
+
+        .location-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .location-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 0.3rem;
+        }
+
+        .location-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--secondary);
+        }
+
+        .location-item p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .map-container {
+            height: 450px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 5%;
+            background: var(--light-bg);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: 15px;
+            transition: var(--transition);
+        }
+
+        .contact-method:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .contact-method h4 {
+            color: var(--secondary);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-method p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            line-height: 2;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .about,
+            .location,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .about-img-secondary {
+                display: none;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(4, 200px);
+            }
+
+            .item-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
+            .item-2 { grid-column: 1 / 2; grid-row: 3 / 4; }
+            .item-3 { grid-column: 2 / 3; grid-row: 3 / 4; }
+            .item-4 { grid-column: 1 / 3; grid-row: 4 / 5; }
+            .item-5 { grid-column: 1 / 2; grid-row: 5 / 6; }
+            .item-6 { grid-column: 2 / 3; grid-row: 5 / 6; }
+            .item-7 { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(7, 200px);
+            }
+
+            .item-1, .item-2, .item-3, .item-4, .item-5, .item-6, .item-7 {
+                grid-column: 1;
+            }
+
+            .item-1 { grid-row: 1 / 3; }
+            .item-2 { grid-row: 3 / 4; }
+            .item-3 { grid-row: 4 / 5; }
+            .item-4 { grid-row: 5 / 6; }
+            .item-5 { grid-row: 6 / 7; }
+            .item-6 { grid-row: 7 / 8; }
+            .item-7 { display: block; grid-row: 8 / 9; }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo">Viva<span>Hôtel</span></a>
+        <ul class="nav-links">
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#chambres">Chambres</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#galerie">Galerie</a></li>
+            <li><a href="#localisation">Localisation</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="mobile-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <div class="hero-badge">★★★★★ Hôtel de Luxe</div>
+            <h1>Viva Hôtel<br>Ouaga 2000</h1>
+            <p>Découvrez l'élégance africaine contemporaine au cœur de Ouagadougou. Un refuge de sérénité où luxe et chaleur burkinabè se rencontrent.</p>
+            <div class="hero-buttons">
+                <a href="#chambres" class="btn btn-primary">
+                    <i class="fas fa-calendar-check"></i> Réserver maintenant
+                </a>
+                <a href="#galerie" class="btn btn-outline">
+                    <i class="fas fa-play"></i> Découvrir
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="feature-card fade-in">
+            <div class="feature-icon">
+                <i class="fas fa-swimming-pool"></i>
+            </div>
+            <h3>Piscine Paradisiaque</h3>
+            <p>Piscine extérieure avec architecture en arcades typiques, idéale pour se rafraîchir dans un cadre exceptionnel.</p>
+        </div>
+        <div class="feature-card fade-in">
+            <div class="feature-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3>Gastronomie Raffinée</h3>
+            <p>Restaurant panoramique proposant une cuisine locale et internationale, room service disponible 24h/24.</p>
+        </div>
+        <div class="feature-card fade-in">
+            <div class="feature-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Emplacement Privilégié</h3>
+            <p>Situé à Ouaga 2000, à 300m du Musée National et à 7km de l'aéroport international.</p>
+        </div>
+        <div class="feature-card fade-in">
+            <div class="feature-icon">
+                <i class="fas fa-concierge-bell"></i>
+            </div>
+            <h3>Service 5 Étoiles</h3>
+            <p>Réception 24h/24, conciergerie, parking sécurisé et personnel attentif à votre bien-être.</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="apropos">
+        <div class="about-images fade-in">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769858340.jpg?k=e6f02080e70229bc8846e2016a2b66ce341bd67269b4eb35ae8c22b49ed0cf8b&o=" alt="Chambre luxueuse" class="about-img-main">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769856123.jpg?k=060b61c34cbbdab3a9bf19f3253811aff4d3a7834bbef9ba5293d3df14b8e5d7&o=" alt="Salle de bain jacuzzi" class="about-img-secondary">
+        </div>
+        <div class="about-content fade-in">
+            <h2>L'Excellence <span>Burkinabè</span></h2>
+            <p>Le Viva Hôtel Ouaga 2000 incarne le parfait équilibre entre tradition africaine et modernité. Niché dans le prestigieux quartier diplomatique de Ouaga 2000, notre établissement 5 étoiles vous offre une expérience unique alliant confort contemporain et chaleur humaine.</p>
+            <p>Chaque détail a été pensé pour votre bien-être : des chambres élégantes aux balcons privés, en passant par notre piscine aux arcades inspirées de l'architecture sahélienne.</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <h4>42</h4>
+                    <p>Chambres & Suites</p>
+                </div>
+                <div class="stat-item">
+                    <h4>5★</h4>
+                    <p>Étoiles Luxe</p>
+                </div>
+                <div class="stat-item">
+                    <h4>24/7</h4>
+                    <p>Service Conciergerie</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="rooms" id="chambres">
+        <div class="section-header fade-in">
+            <h2>Nos Chambres & Suites</h2>
+            <p>Des espaces élégants et confortables conçus pour votre repos, équipés des meilleures commodités modernes</p>
+        </div>
+        <div class="rooms-grid">
+            <div class="room-card fade-in">
+                <div class="room-image">
+                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769858343.jpg?k=cc160673c7de79e127b31e8b11cb00c3ca605f60c6e1e68f930c48981888e99e&o=" alt="Chambre Standard">
+                    <span class="room-badge">Populaire</span>
+                </div>
+                <div class="room-info">
+                    <h3>Chambre Deluxe</h3>
+                    <div class="room-features">
+                        <span><i class="fas fa-bed"></i> Lit King Size</span>
+                        <span><i class="fas fa-expand"></i> 35 m²</span>
+                        <span><i class="fas fa-wifi"></i> WiFi</span>
+                    </div>
+                    <p>Élégance et confort avec balcon privé, climatisation et mobilier contemporain.</p>
+                    <div class="room-price">
+                        <div class="price">75 000 CFA <span>/ nuit</span></div>
+                        <a href="#contact" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Réserver</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card fade-in">
+                <div class="room-image">
+                    <img src="https://imgservice.casai.com/375x250/viva-hotel-bf-ouagadougou-bc-12941743-3.jpg" alt="Suite Junior">
+                    <span class="room-badge">Vue Piscine</span>
+                </div>
+                <div class="room-info">
+                    <h3>Suite Junior</h3>
+                    <div class="room-features">
+                        <span><i class="fas fa-bed"></i> Lit King Size</span>
+                        <span><i class="fas fa-expand"></i> 50 m²</span>
+                        <span><i class="fas fa-coffee"></i> Salon</span>
+                    </div>
+                    <p>Espace généreux avec salon séparé, vue sur la piscine et salle de bain luxueuse.</p>
+                    <div class="room-price">
+                        <div class="price">120 000 CFA <span>/ nuit</span></div>
+                        <a href="#contact" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Réserver</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card fade-in">
+                <div class="room-image">
+                    <img src="https://media-cdn.tripadvisor.com/media/photo-s/2a/f9/45/36/caption.jpg" alt="Suite Présidentielle">
+                    <span class="room-badge">Luxe Ultime</span>
+                </div>
+                <div class="room-info">
+                    <h3>Suite Présidentielle</h3>
+                    <div class="room-features">
+                        <span><i class="fas fa-bed"></i> 2 Chambres</span>
+                        <span><i class="fas fa-expand"></i> 85 m²</span>
+                        <span><i class="fas fa-hot-tub"></i> Jacuzzi</span>
+                    </div>
+                    <p>L'apogée du luxe avec jacuzzi privatif, deux chambres et service majordome dédié.</p>
+                    <div class="room-price">
+                        <div class="price">250 000 CFA <span>/ nuit</span></div>
+                        <a href="#contact" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Réserver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amenities Section -->
+    <section class="amenities" id="services">
+        <div class="section-header fade-in">
+            <h2>Services & Équipements</h2>
+            <p>Tout ce dont vous avez besoin pour un séjour parfait, dans un cadre exceptionnel</p>
+        </div>
+        <div class="amenities-grid">
+            <div class="amenity-category fade-in">
+                <h3><i class="fas fa-utensils"></i> Restauration & Bar</h3>
+                <ul class="amenity-list">
+                    <li>Restaurant panoramique "Les Arcades"</li>
+                    <li>Spécialités locales et cuisine internationale</li>
+                    <li>Bar lounge avec cocktails signature</li>
+                    <li>Room service 24 heures sur 24</li>
+                    <li>Petit-déjeuner buffet continental</li>
+                    <li>Service traiteur événements</li>
+                </ul>
+            </div>
+
+            <div class="amenity-category fade-in">
+                <h3><i class="fas fa-spa"></i> Bien-être & Loisirs</h3>
+                <ul class="amenity-list">
+                    <li>Piscine extérieure chauffée</li>
+                    <li>Terrasse panoramique</li>
+                    <li>Jardin tropical paysager</li>
+                    <li>Service de massage sur demande</li>
+                    <li>Salle de fitness équipée</li>
+                    <li>Transats et parasols</li>
+                </ul>
+            </div>
+
+            <div class="amenity-category fade-in">
+                <h3><i class="fas fa-briefcase"></i> Business & Événements</h3>
+                <ul class="amenity-list">
+                    <li>Centre d'affaires 24h/24</li>
+                    <li>Salle de réunion modulable</li>
+                    <li>WiFi haut débit gratuit</li>
+                    <li>Service de secrétariat</li>
+                    <li>Location de véhicules avec chauffeur</li>
+                    <li>Transfert aéroport privé</li>
+                </ul>
+            </div>
+
+            <div class="amenity-category fade-in">
+                <h3><i class="fas fa-concierge-bell"></i> Services Premium</h3>
+                <ul class="amenity-list">
+                    <li>Réception et conciergerie 24h/24</li>
+                    <li>Service de blanchisserie express</li>
+                    <li>Coffre-fort dans chaque chambre</li>
+                    <li>Parking privé sécurisé gratuit</li>
+                    <li>Bagagerie et consigne</li>
+                    <li>Personnel multilingue (FR/EN)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="galerie">
+        <div class="section-header fade-in">
+            <h2>Galerie Photos</h2>
+            <p>Plongez dans l'atmosphère unique du Viva Hôtel à travers nos espaces</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item item-1">
+                <img src="https://imgservice.casai.com/500x245/villa-de-l-int%C3%A9gratio-bf-ouagadougou-ep-33407423-0.jpg" alt="Piscine Viva Hotel">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-2">
+                <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769858340.jpg?k=e6f02080e70229bc8846e2016a2b66ce341bd67269b4eb35ae8c22b49ed0cf8b&o=" alt="Chambre">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-3">
+                <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769856123.jpg?k=060b61c34cbbdab3a9bf19f3253811aff4d3a7834bbef9ba5293d3df14b8e5d7&o=" alt="Jacuzzi">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-4">
+                <img src="https://imgservice.casai.com/375x250/viva-hotel-bf-ouagadougou-bc-12941743-3.jpg" alt="Suite">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-5">
+                <img src="https://media-cdn.tripadvisor.com/media/photo-s/2a/f9/45/36/caption.jpg" alt="Intérieur">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-6">
+                <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/769858343.jpg?k=cc160673c7de79e127b31e8b11cb00c3ca605f60c6e1e68f930c48981888e99e&o=" alt="Détails">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="gallery-item item-7">
+                <img src="https://imgservice.vacationcottage.com/375x250/viva-hotel-bf-ouagadougou-bc-12868018-0.jpg?property_id=BC-12868018" alt="Extérieur">
+                <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="localisation">
+        <div class="location-info fade-in">
+            <h2>Notre <span>Localisation</span></h2>
+            <p>Au cœur du quartier diplomatique de Ouaga 2000, le Viva Hôtel bénéficie d'un emplacement stratégique pour vos déplacements professionnels et touristiques.</p>
+            
+            <div class="location-details">
+                <div class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>Adresse</h4>
+                        <p>1, Karpala, Boulevard Tensoba Benda<br>Ouaga 2000, Ouagadougou, Burkina Faso</p>
+                    </div>
+                </div>
+                <div class="location-item">
+                    <i class="fas fa-plane"></i>
+                    <div>
+                        <h4>Aéroport International</h4>
+                        <p>À 7,36 km (15 min de transfert privé)</p>
+                    </div>
+                </div>
+                <div class="location-item">
+                    <i class="fas fa-landmark"></i>
+                    <div>
+                        <h4>Proximité Culturelle</h4>
+                        <p>Musée National de la Musique à 300m<br>Palais Moro Naaba à 5 min</p>
+                    </div>
+                </div>
+                <div class="location-item">
+                    <i class="fas fa-building"></i>
+                    <div>
+                        <h4>Quartier d'Affaires</h4>
+                        <p>Zone diplomatique, ambassades et sièges sociaux à proximité</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="map-container fade-in">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.8774567890123!2d-1.5197!3d12.3714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xe2e95b8d5e5e5e5%3A0x5e5e5e5e5e5e5e5e!2sOuaga%202000%2C%20Ouagadougou%2C%20Burkina%20Faso!5e0!3m2!1sfr!2sfr!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="contact-info fade-in">
+                <h3>Réservez votre séjour</h3>
+                <p>Notre équipe est à votre disposition 24h/24 pour répondre à vos demandes et organiser votre arrivée.</p>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <h4>Téléphone & WhatsApp</h4>
+                        <p>+226 XX XX XX XX</p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>contact@vivahotel.bf<br>reservations@vivahotel.bf</p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h4>Réception 24h/24</h4>
+                        <p>Check-in: 14h00 | Check-out: 12h00</p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h4>Réservation en ligne</h4>
+                        <p>Disponible sur Booking.com, Agoda, Expedia</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form fade-in">
+                <form onsubmit="event.preventDefault(); alert('Merci pour votre demande ! Notre équipe vous contactera dans les plus brefs délais.');">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prénom</label>
+                            <input type="text" placeholder="Votre prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nom</label>
+                            <input type="text" placeholder="Votre nom" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" placeholder="+226 XX XX XX XX">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date d'arrivée</label>
+                            <input type="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date de départ</label>
+                            <input type="date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Type de chambre</label>
+                        <select>
+                            <option>Chambre Deluxe</option>
+                            <option>Suite Junior</option>
+                            <option>Suite Présidentielle</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Message spécial</label>
+                        <textarea rows="3" placeholder="Demandes particulières, occasion spéciale..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; border: none; cursor: pointer;">
+                        <i class="fas fa-paper-plane"></i> Envoyer la demande
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Viva Hôtel</h4>
+                <p>L'excellence hôtelière à Ouagadougou depuis 2020. Un refuge de luxe où tradition africaine et modernité se rencontrent.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tripadvisor"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Liens Rapides</h4>
+                <a href="#chambres">Nos Chambres</a><br>
+                <a href="#services">Services</a><br>
+                <a href="#galerie">Galerie</a><br>
+                <a href="#contact">Contact</a><br>
+                <a href="#">Mentions légales</a>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <a href="#">Restaurant</a><br>
+                <a href="#">Piscine & Spa</a><br>
+                <a href="#">Séminaires</a><br>
+                <a href="#">Mariages & Événements</a><br>
+                <a href="#">Transfert Aéroport</a>
+            </div>
+            <div class="footer-section">
+                <h4>Newsletter</h4>
+                <p>Recevez nos offres exclusives</p>
+                <form style="margin-top: 1rem;">
+                    <input type="email" placeholder="Votre email" style="padding: 0.8rem; border-radius: 5px; border: none; width: 100%; margin-bottom: 0.5rem;">
+                    <button class="btn btn-primary" style="width: 100%; border: none; cursor: pointer;">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Viva Hôtel Ouaga 2000. Tous droits réservés. | Conçu avec élégance au Burkina Faso</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
