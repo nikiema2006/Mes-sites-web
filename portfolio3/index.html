@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWeb BF - Studio Digital Premium au Burkina Faso | Excellence Web à Ouagadougou</title>
+    <meta name="description" content="Agence Web Burkinabè — Ouagadougou. Sites web · E-commerce Mobile Money · Applications sur-mesure · Livraison en 4 semaines">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at center, rgba(120, 119, 198, 0.3) 0%, rgba(0, 0, 0, 0) 70%),
+                        radial-gradient(ellipse at top, rgba(249, 115, 22, 0.15) 0%, rgba(0, 0, 0, 0) 50%),
+                        #0a0a0a;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glow-orange {
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.5);
+        }
+        
+        .comparison-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .comparison-slider .after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            border-right: 2px solid #f97316;
+        }
+        
+        .service-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.1);
+        }
+        
+        .portfolio-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .portfolio-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .portfolio-card:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .faq-content.active {
+            max-height: 500px;
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .marquee {
+            animation: marquee 30s linear infinite;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.6); }
+        }
+        
+        .grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center glow-orange">
+                        <i data-lucide="code-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">OpenWeb<span class="text-orange-500">.bf</span></span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#services" class="text-sm text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="#portfolio" class="text-sm text-gray-300 hover:text-white transition-colors">Réalisations</a>
+                    <a href="#about" class="text-sm text-gray-300 hover:text-white transition-colors">À propos</a>
+                    <a href="#faq" class="text-sm text-gray-300 hover:text-white transition-colors">FAQ</a>
+                </div>
+                
+                <a href="#contact" class="hidden md:inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-full transition-all glow-orange">
+                    Nous contacter
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0a0a0a]/95 backdrop-blur-lg border-b border-white/10">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#services" class="block px-3 py-2 text-base text-gray-300 hover:text-white">Services</a>
+                <a href="#portfolio" class="block px-3 py-2 text-base text-gray-300 hover:text-white">Réalisations</a>
+                <a href="#about" class="block px-3 py-2 text-base text-gray-300 hover:text-white">À propos</a>
+                <a href="#contact" class="block px-3 py-2 text-base text-orange-500 font-semibold">Nous contacter</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen hero-gradient flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 grid-pattern opacity-30"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-1/4 left-10 w-20 h-20 bg-orange-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+        
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 scroll-reveal">
+                <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                <span class="text-sm text-gray-300">Agence Web Burkinabè — Ouagadougou</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 scroll-reveal" style="transition-delay: 100ms;">
+                <span class="block gradient-text mb-2">L'Excellence Digitale,</span>
+                <span class="block text-white">Au Service de Votre <span class="text-orange-500 text-glow">Ambition.</span></span>
+            </h1>
+            
+            <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed scroll-reveal" style="transition-delay: 200ms;">
+                Nous transformons votre vision en réalité digitale. Des expériences web performantes qui propulsent les entreprises burkinabè vers de nouveaux sommets.
+            </p>
+            
+            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center scroll-reveal" style="transition-delay: 300ms;">
+                <a href="#contact" class="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full transition-all glow-orange flex items-center gap-2 pulse-glow">
+                    Démarrer votre projet
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+                <a href="#portfolio" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold rounded-full transition-all flex items-center gap-2">
+                    Voir nos réalisations
+                    <i data-lucide="external-link" class="w-5 h-5"></i>
+                </a>
+            </div>
+            
+            <div class="mt-16 flex flex-wrap justify-center gap-8 text-sm text-gray-500 scroll-reveal" style="transition-delay: 400ms;">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                    <span>Sites web</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                    <span>E-commerce Mobile Money</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                    <span>Applications sur-mesure</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                    <span>Livraison en 4 semaines</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500"></i>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-32 bg-[#0a0a0a] relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                    Votre Site Web.<br>
+                    <span class="text-orange-500">Votre Moment.</span>
+                </h2>
+            </div>
+            
+            <div class="space-y-8 text-lg text-gray-400 text-center max-w-3xl mx-auto mb-20 scroll-reveal">
+                <p class="italic">Il y a 10 ans...<span class="text-white">avoir un site web était un luxe réservé aux grandes entreprises.</span></p>
+                <p class="italic">Il y a 5 ans...<span class="text-white">c'était compliqué, cher, et souvent décevant.</span></p>
+                <p class="text-2xl font-semibold text-white">Aujourd'hui...<span class="text-orange-500">c'est accessible à tous grâce à OpenWeb.</span></p>
+                <p class="text-xl">Demain, ce sera <span class="text-white font-bold">vous.</span></p>
+            </div>
+            
+            <!-- Comparison Slider -->
+            <div class="glass-card rounded-2xl p-8 md:p-12 scroll-reveal">
+                <h3 class="text-2xl font-bold text-center mb-8">Du WordPress au Professionnel</h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4 p-6 rounded-xl bg-red-500/5 border border-red-500/20">
+                        <div class="flex items-center gap-2 text-red-400 mb-4">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                            <span class="font-semibold">Avant OpenWeb</span>
+                        </div>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                                <span>Groupe Selector avait un site WordPress obsolète et peu professionnel</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                                <span>L'image de l'entreprise était ternie par un design dépassé</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                                <span>La gestion des biens immobiliers était manuelle et chronophage</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-4 p-6 rounded-xl bg-orange-500/5 border border-orange-500/20">
+                        <div class="flex items-center gap-2 text-orange-400 mb-4">
+                            <span class="font-semibold">Après OpenWeb</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </div>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Site moderne avec gestion dynamique des biens <span class="text-orange-400 font-bold">+85%</span></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Plus de prospects qualifiés grâce à une meilleure crédibilité</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Image de marque professionnelle et moderne</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Testimonial -->
+                <div class="mt-12 pt-8 border-t border-white/10">
+                    <blockquote class="text-center text-xl italic text-gray-300 mb-6">
+                        "Notre nouveau site reflète enfin le professionnalisme de notre entreprise."
+                    </blockquote>
+                    <div class="flex items-center justify-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg">
+                            GY
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold text-white">Georges YAMEOGO</div>
+                            <div class="text-sm text-gray-500">PDG, Groupe Selector Immobilier</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center scroll-reveal">
+                <p class="text-2xl font-light text-gray-400 mb-2">Et vous, vous commencez quand ?</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Second Testimonial -->
+    <section class="py-20 bg-[#0a0a0a] border-y border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-reveal">
+            <i data-lucide="quote" class="w-12 h-12 text-orange-500/30 mx-auto mb-6"></i>
+            <blockquote class="text-2xl md:text-4xl font-light text-white leading-relaxed mb-8">
+                "OpenWeb a transformé notre présence digitale.<span class="text-gray-500">Notre ancien site WordPress nuisait à notre image.</span> Aujourd'hui, nous avons un site <span class="text-orange-500">à la hauteur de notre ambition.</span>"
+            </blockquote>
+            <div class="flex items-center justify-center gap-4">
+                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-xl">
+                    GY
+                </div>
+                <div class="text-left">
+                    <div class="font-bold text-white text-lg">Georges YAMEOGO</div>
+                    <div class="text-orange-500">PDG, Groupe Selector Immobilier</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="services" class="py-32 bg-[#0a0a0a] relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 scroll-reveal">
+                <h2 class="text-sm font-semibold text-orange-500 tracking-wider uppercase mb-4">Rapidité, Simplicité et Design Élégant</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Pourquoi Travailler Avec Nous</h3>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Des sites web qui convertissent, livrés rapidement, sans compromis sur la qualité.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-8 scroll-reveal group hover:border-orange-500/30 transition-all">
+                    <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-orange-500"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Augmentez Vos Conversions</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Nous créons des sites pensés pour convertir vos visiteurs en clients. Design stratégique, parcours utilisateur optimisé.</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-8 scroll-reveal group hover:border-orange-500/30 transition-all" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i data-lucide="tag" class="w-6 h-6 text-orange-500"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Prix Fixe, Sans Surprise</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Vous savez exactement ce que vous payez dès le départ. Pas de frais cachés, pas de mauvaises surprises.</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-8 scroll-reveal group hover:border-orange-500/30 transition-all" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i data-lucide="gem" class="w-6 h-6 text-orange-500"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Qualité Premium</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Un site qui impressionne et qui fonctionne parfaitement. Nous nous concentrons sur l'excellence, à chaque projet.</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-8 scroll-reveal group hover:border-orange-500/30 transition-all" style="transition-delay: 300ms;">
+                    <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i data-lucide="zap" class="w-6 h-6 text-orange-500"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Mises à Jour en 48h</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Nous travaillons vite. Brouillons, révisions et livrables finaux en 48 heures maximum.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Detailed -->
+    <section class="py-32 bg-[#050505]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 scroll-reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ce qu'on peut faire pour vous</h2>
+                <p class="text-gray-400 text-lg">Chaque projet est différent. Votre solution aussi.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Site Vitrine -->
+                <div class="service-card glass-card rounded-3xl p-8 md:p-10 border border-white/10 scroll-reveal">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="layout" class="w-7 h-7 text-blue-400"></i>
+                        </div>
+                        <span class="px-4 py-1 rounded-full bg-white/5 text-sm text-gray-400 border border-white/10">Devis personnalisé</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Site Vitrine</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Vos clients vous trouvent sur Google. Ils vous appellent. Vous signez.</p>
+                    <div class="flex items-center gap-2 text-sm text-orange-500 font-semibold">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span>Délai: 2-3 semaines</span>
+                    </div>
+                </div>
+                
+                <!-- E-commerce -->
+                <div class="service-card glass-card rounded-3xl p-8 md:p-10 border border-white/10 scroll-reveal" style="transition-delay: 100ms;">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="shopping-bag" class="w-7 h-7 text-orange-500"></i>
+                        </div>
+                        <span class="px-4 py-1 rounded-full bg-white/5 text-sm text-gray-400 border border-white/10">Devis personnalisé</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">E-commerce</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Vos clients achètent à 3h du matin pendant que vous dormez. Paiement Mobile Money inclus.</p>
+                    <div class="flex items-center gap-2 text-sm text-orange-500 font-semibold">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span>Délai: 4-6 semaines</span>
+                    </div>
+                </div>
+                
+                <!-- Application -->
+                <div class="service-card glass-card rounded-3xl p-8 md:p-10 border border-white/10 scroll-reveal" style="transition-delay: 200ms;">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="smartphone" class="w-7 h-7 text-purple-400"></i>
+                        </div>
+                        <span class="px-4 py-1 rounded-full bg-white/5 text-sm text-gray-400 border border-white/10">Devis personnalisé</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Application Sur-Mesure</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Votre idée unique mérite un outil unique. On le construit ensemble.</p>
+                    <div class="flex items-center gap-2 text-sm text-orange-500 font-semibold">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span>Délai: 6-16 semaines</span>
+                    </div>
+                </div>
+                
+                <!-- Maintenance -->
+                <div class="service-card glass-card rounded-3xl p-8 md:p-10 border border-white/10 scroll-reveal" style="transition-delay: 300ms;">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-7 h-7 text-green-400"></i>
+                        </div>
+                        <span class="px-4 py-1 rounded-full bg-white/5 text-sm text-gray-400 border border-white/10">Sur mesure</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Maintenance</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Votre site tombe ? On le sait avant vous. Et on répare.</p>
+                    <div class="flex items-center gap-2 text-sm text-orange-500 font-semibold">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span>Délai: Continu</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center p-8 rounded-2xl bg-white/5 border border-white/10 scroll-reveal">
+                <p class="text-gray-300 mb-6">Tout inclus : design sur-mesure, hébergement, nom de domaine, formation et 30 jours de support.</p>
+                <a href="#contact" class="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 font-semibold transition-colors">
+                    Curieux de savoir combien ça coûte ? C'est gratuit et sans engagement.
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="py-32 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 scroll-reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Nos Réalisations</h2>
+                <p class="text-gray-400 text-lg">Quelques projets récents qui illustrent notre expertise</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Project 1 -->
+                <div class="portfolio-card group relative rounded-3xl overflow-hidden bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-white/10 scroll-reveal">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-purple-600/20 to-blue-600/20 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80')] bg-cover bg-center opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">Immobilier</span>
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">BF2024</span>
+                            <span class="px-3 py-1 rounded-full bg-orange-500/20 backdrop-blur text-xs text-orange-400 border border-orange-500/30">8 semaines</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">Groupe Selector Immobilier</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Site vitrine élégant pour agence immobilière avec gestion dynamique des biens via tableau de bord</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Site Vitrine</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">UX/UI Design</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Dashboard Admin</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="portfolio-card group relative rounded-3xl overflow-hidden bg-gradient-to-br from-orange-900/20 to-yellow-900/20 border border-white/10 scroll-reveal" style="transition-delay: 100ms;">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-orange-600/20 to-yellow-600/20 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80')] bg-cover bg-center opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">E-commerce</span>
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">BF2024</span>
+                            <span class="px-3 py-1 rounded-full bg-orange-500/20 backdrop-blur text-xs text-orange-400 border border-orange-500/30">8 semaines</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">Urban Wave</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Boutique streetwear moderne avec catalogue produits tendance et paiement sécurisé</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">E-commerce</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Design UI/UX</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Intégration</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="portfolio-card group relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border border-white/10 scroll-reveal" style="transition-delay: 200ms;">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-blue-600/20 to-cyan-600/20 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80')] bg-cover bg-center opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">SaaS</span>
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">BF2023</span>
+                            <span class="px-3 py-1 rounded-full bg-orange-500/20 backdrop-blur text-xs text-orange-400 border border-orange-500/30">12 semaines</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">BurkinaShop SaaS</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Plateforme SaaS complète pour la gestion de boutiques en ligne multi-vendeurs</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">SaaS Platform</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Backend</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Frontend</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="portfolio-card group relative rounded-3xl overflow-hidden bg-gradient-to-br from-red-900/20 to-orange-900/20 border border-white/10 scroll-reveal" style="transition-delay: 300ms;">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-red-600/20 to-orange-600/20 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80')] bg-cover bg-center opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">Restauration</span>
+                            <span class="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-xs text-white border border-white/20">BF2024</span>
+                            <span class="px-3 py-1 rounded-full bg-orange-500/20 backdrop-blur text-xs text-orange-400 border border-orange-500/30">6 semaines</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">Sultan Kebab</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Site vitrine élégant avec système de commande en ligne et dashboard administrateur</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Site Vitrine</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Dashboard Admin</span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-400 border border-white/10">Gestion Commandes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 bg-[#050505]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="scroll-reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">L'histoire derrière OpenWeb</h2>
+                    <p class="text-xl text-orange-500 font-semibold mb-6">Quatre Burkinabè qui croient que le web peut changer la donne pour nos entrepreneurs.</p>
+                    <div class="space-y-4 text-gray-400 leading-relaxed">
+                        <p>Le Burkina Faso regorge d'entrepreneurs brillants. Des tailleurs qui créent des merveilles, des restaurateurs qui régalent, des commerçants qui se battent chaque jour.</p>
+                        <p>Leur seul problème ? Ils sont invisibles en ligne. Et pendant ce temps, leurs concurrents avec de beaux sites raflent les clients.</p>
+                        <p class="text-white font-semibold">OpenWeb existe pour changer ça. Pour donner à chaque entrepreneur burkinabè les armes digitales qu'il mérite. Sans jargon. Sans surprises. Juste des résultats.</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 scroll-reveal">
+                    <div class="team-card glass-card rounded-2xl p-6 text-center border border-white/10">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
+                            KB
+                        </div>
+                        <h4 class="font-bold text-white mb-1">Karambiré Ben Ahmed</h4>
+                        <p class="text-sm text-orange-500 mb-2">Développeur Full-Stack</p>
+                        <p class="text-xs text-gray-500">Expert en React, Node.js et architecture cloud</p>
+                    </div>
+                    
+                    <div class="team-card glass-card rounded-2xl p-6 text-center border border-white/10 mt-8">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                            GK
+                        </div>
+                        <h4 class="font-bold text-white mb-1">Guira Kevin</h4>
+                        <p class="text-sm text-orange-500 mb-2">Designer UI/UX</p>
+                        <p class="text-xs text-gray-500">Créateur d'expériences utilisateur exceptionnelles</p>
+                    </div>
+                    
+                    <div class="team-card glass-card rounded-2xl p-6 text-center border border-white/10">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-2xl font-bold">
+                            NG
+                        </div>
+                        <h4 class="font-bold text-white mb-1">Nana Grégoire</h4>
+                        <p class="text-sm text-orange-500 mb-2">Chef de Projet</p>
+                        <p class="text-xs text-gray-500">Spécialiste en gestion de projets digitaux</p>
+                    </div>
+                    
+                    <div class="team-card glass-card rounded-2xl p-6 text-center border border-white/10 mt-8">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-2xl font-bold">
+                            KS
+                        </div>
+                        <h4 class="font-bold text-white mb-1">Kaboré Sylvestre</h4>
+                        <p class="text-sm text-orange-500 mb-2">Développeur Front-End</p>
+                        <p class="text-xs text-gray-500">Spécialiste React et interfaces utilisateur modernes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BF 100% Burkinabè -->
+    <section class="py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-orange-500/5 to-transparent"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card rounded-3xl p-8 md:p-16 border border-orange-500/20 scroll-reveal">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-6xl font-bold text-white mb-4">BF 100% Burkinabè</h2>
+                    <p class="text-xl text-gray-400">OpenWeb est fier d'être une agence burkinabè, pour les entrepreneurs burkinabè.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div>
+                        <h3 class="text-lg font-bold text-orange-500 mb-4">Ce que ça signifie :</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-gray-300">
+                                <i data-lucide="check" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Équipe locale à Ouagadougou (pas d'outsourcing à l'étranger)</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-300">
+                                <i data-lucide="check" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Support en français (pas de barrière linguistique)</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-300">
+                                <i data-lucide="check" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Compréhension du marché local (Mobile Money, réalités internet BF)</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-300">
+                                <i data-lucide="check" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>Même fuseau horaire (on décroche quand vous appelez)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-bold text-orange-500 mb-4">Notre mission :</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">Rendre le web accessible à tous les entrepreneurs burkinabè, pas juste aux grandes entreprises.</p>
+                        
+                        <div class="mt-8 p-6 rounded-xl bg-orange-500/10 border border-orange-500/20">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="heart" class="w-6 h-6 text-orange-500"></i>
+                                <span class="font-bold text-white">Engagement local</span>
+                            </div>
+                            <p class="text-sm text-gray-400">Engagement envers la croissance digitale du Burkina</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-32 bg-[#050505]">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-sm font-semibold text-orange-500 tracking-wider uppercase mb-4">Avant de vous lancer</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white">Les vraies questions qu'on nous pose tous les jours.</h3>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="faq-item glass-card rounded-2xl border border-white/10 overflow-hidden scroll-reveal">
+                    <button class="faq-toggle w-full px-6 py-5 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white">Combien coûte un site web ?</span>
+                        <i data-lucide="plus" class="w-5 h-5 text-orange-500 faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-5">
+                        <p class="text-gray-400">Chaque projet est unique. Un site vitrine commence généralement à 350 000 FCFA, tandis qu'un e-commerce complexe peut aller jusqu'à 1 500 000 FCFA. Contactez-nous pour un devis personnalisé gratuit.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item glass-card rounded-2xl border border-white/10 overflow-hidden scroll-reveal">
+                    <button class="faq-toggle w-full px-6 py-5 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white">Combien de temps ça prend ?</span>
+                        <i data-lucide="plus" class="w-5 h-5 text-orange-500 faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-5">
+                        <p class="text-gray-400">Un site vitrine prend 2-3 semaines, un e-commerce 4-6 semaines, et une application sur-mesure 2-4 mois selon la complexité. Nous respectons toujours nos délais.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item glass-card rounded-2xl border border-white/10 overflow-hidden scroll-reveal">
+                    <button class="faq-toggle w-full px-6 py-5 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white">Proposez-vous des paiements échelonnés ?</span>
+                        <i data-lucide="plus" class="w-5 h-5 text-orange-500 faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-5">
+                        <p class="text-gray-400">Oui ! Nous proposons un paiement en 3 fois : 30% à la signature, 40% à la mi-projet, et 30% à la livraison. Pour les gros projets, nous pouvons étaler sur plus de mensualités.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item glass-card rounded-2xl border border-white/10 overflow-hidden scroll-reveal">
+                    <button class="faq-toggle w-full px-6 py-5 flex justify-between items-center text-left">
+                        <span class="font-semibold text-white">Et après la livraison, ça se passe comment ?</span>
+                        <i data-lucide="plus" class="w-5 h-5 text-orange-500 faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-5">
+                        <p class="text-gray-400">Vous bénéficiez de 30 jours de support gratuit. Ensuite, nous proposons des forfaits de maintenance à partir de 25 000 FCFA/mois incluant hébergement, mises à jour de sécurité et petites modifications.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center scroll-reveal">
+                <p class="text-gray-400 mb-4">D'autres questions ?</p>
+                <a href="#contact" class="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 font-semibold">
+                    Contactez-nous directement
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 bg-[#0a0a0a] relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div class="scroll-reveal">
+                    <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">Lancez Votre Projet</h2>
+                    <p class="text-xl text-gray-400 mb-8">Estimation gratuite en 2 min • Réponse en moins de 2h</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
+                                <i data-lucide="phone" class="w-6 h-6 text-orange-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">Téléphone / WhatsApp</p>
+                                <p class="text-xl font-bold text-white">+226 71 45 18 79</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-orange-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">Localisation</p>
+                                <p class="text-xl font-bold text-white">Ouagadougou, Burkina Faso</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <p class="text-sm text-gray-500 mb-4">Suivez-nous</p>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500/30 transition-all">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500/30 transition-all">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500/30 transition-all">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500/30 transition-all">
+                                <i data-lucide="twitter" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-3xl p-8 border border-white/10 scroll-reveal">
+                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message envoyé ! Nous vous répondrons dans moins de 2h.');">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Nom complet</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" placeholder="Jean Dupont">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" placeholder="jean@entreprise.bf">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Téléphone</label>
+                            <input type="tel" class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors" placeholder="+226 XX XX XX XX">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Type de projet</label>
+                            <select class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-orange-500/50 transition-colors">
+                                <option>Site Vitrine</option>
+                                <option>E-commerce</option>
+                                <option>Application Web</option>
+                                <option>Maintenance</option>
+                                <option>Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                            <textarea rows="4" class="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/50 transition-colors resize-none" placeholder="Parlez-nous de votre projet..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all glow-orange flex items-center justify-center gap-2">
+                            Envoyer ma demande
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                        
+                        <p class="text-xs text-gray-500 text-center">En envoyant ce formulaire, vous acceptez d'être contacté par notre équipe.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-[#050505] border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="code-2" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <span class="text-lg font-bold">OpenWeb<span class="text-orange-500">.bf</span></span>
+                </div>
+                
+                <div class="flex gap-8 text-sm text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Mentions légales</a>
+                    <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
+                    <a href="#" class="hover:text-white transition-colors">CGV</a>
+                </div>
+                
+                <p class="text-sm text-gray-600">© 2024 OpenWeb BF. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-[#0a0a0a]/90', 'backdrop-blur-lg', 'border-white/10');
+                navbar.classList.remove('border-transparent');
+            } else {
+                navbar.classList.remove('bg-[#0a0a0a]/90', 'backdrop-blur-lg', 'border-white/10');
+                navbar.classList.add('border-transparent');
+            }
+        });
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('.faq-icon');
+                
+                // Close all others
+                document.querySelectorAll('.faq-content').forEach(c => {
+                    if (c !== content) c.classList.remove('active');
+                });
+                document.querySelectorAll('.faq-icon').forEach(i => {
+                    if (i !== icon) i.style.transform = 'rotate(0deg)';
+                });
+                
+                // Toggle current
+                content.classList.toggle('active');
+                icon.style.transform = content.classList.contains('active') ? 'rotate(45deg)' : 'rotate(0deg)';
+            });
+        });
+        
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

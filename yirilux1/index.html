@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yirilux – Votre confort, notre métier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   YIRILUX – CSS VARIABLES & RESET
+   ===================================================== */
+:root {
+  --gold: #D4AF37;
+  --gold-light: #F0D060;
+  --gold-dark: #A88820;
+  --black: #0A0A0A;
+  --black-2: #111111;
+  --black-3: #1A1A1A;
+  --grey: #2C2C2C;
+  --grey-light: #3A3A3A;
+  --white: #F5F5F0;
+  --white-dim: rgba(245,245,240,0.85);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Jost', sans-serif;
+  --ease-out: cubic-bezier(0.16,1,0.3,1);
+  --ease-in-out: cubic-bezier(0.45,0,0.55,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* =====================================================
+   GEOMETRIC PATTERN SVG (reusable)
+   ===================================================== */
+.geo-bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpolygon fill='%23D4AF37' fill-opacity='0.04' points='30 5 55 50 5 50'/%3E%3Cpolygon fill='%23D4AF37' fill-opacity='0.025' points='30 15 50 50 10 50'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 60px;
+}
+
+/* =====================================================
+   TYPOGRAPHY HELPERS
+   ===================================================== */
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.section-label::after {
+  content: ''; flex: 0 0 40px; height: 1px; background: var(--gold);
+}
+h2.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--white);
+}
+h2.section-title span { color: var(--gold); font-style: italic; }
+
+/* =====================================================
+   BUTTON STYLES
+   ===================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 2.2rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+  position: relative; overflow: hidden;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+}
+.btn-gold::before {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+.btn-gold:hover::before { left: 100%; }
+.btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+.btn-outline:hover {
+  background: var(--gold);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   SCROLL REVEAL
+   ===================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.2rem 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+}
+#navbar.scrolled {
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(20px);
+  padding: 0.8rem 5%;
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.nav-logo-icon {
+  width: 44px; height: 44px;
+}
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.nav-links {
+  display: flex; gap: 2.5rem; align-items: center;
+}
+.nav-links a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  position: relative;
+  transition: color 0.3s ease;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  padding: 0.6rem 1.6rem;
+  border: 1px solid var(--gold);
+  color: var(--gold) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.2em;
+  transition: background 0.3s, color 0.3s !important;
+}
+.nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+.nav-cta::after { display: none !important; }
+
+/* Hamburger */
+.nav-hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  cursor: pointer; background: none; border: none; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 24px; height: 1.5px; background: var(--gold);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile menu */
+.nav-mobile {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--black-2);
+  z-index: 999;
+  flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem;
+  transform: translateY(-100%);
+  transition: transform 0.5s var(--ease-out);
+}
+.nav-mobile.open { transform: translateY(0); display: flex; }
+.nav-mobile a {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--white-dim);
+  transition: color 0.3s;
+}
+.nav-mobile a:hover { color: var(--gold); }
+
+/* =====================================================
+   HERO
+   ===================================================== */
+#hero {
+  position: relative;
+  height: 100vh; min-height: 700px;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    135deg,
+    #0A0A0A 0%,
+    #1a1206 40%,
+    #0A0A0A 100%
+  );
+}
+/* Slider images */
+.hero-slider {
+  position: absolute; inset: 0;
+  z-index: 0;
+}
+.hero-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.4) 50%, rgba(10,10,10,0.8) 100%);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 0 5%;
+  max-width: 900px;
+}
+.hero-logo-large {
+  width: 120px; height: 120px;
+  margin: 0 auto 2rem;
+  animation: logoFloat 4s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.hero-title span {
+  color: var(--gold);
+  font-style: italic;
+  display: block;
+}
+.hero-slogan {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(212,175,55,0.9);
+  margin-bottom: 2.5rem;
+}
+.hero-line {
+  width: 80px; height: 1px; background: var(--gold);
+  margin: 1rem auto;
+}
+.hero-cta-group {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+/* Search bar */
+.hero-search {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+  background: rgba(26,26,26,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(212,175,55,0.3);
+  padding: 1.2rem 5%;
+}
+.hero-search-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0;
+}
+.search-field {
+  display: flex; flex-direction: column;
+  padding: 0.6rem 1.5rem;
+  border-right: 1px solid rgba(212,175,55,0.2);
+}
+.search-field:last-of-type { border-right: none; }
+.search-field label {
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.3rem; font-weight: 500;
+}
+.search-field select, .search-field input {
+  background: none; border: none; outline: none;
+  color: var(--white); font-family: var(--font-body); font-size: 0.85rem;
+  -webkit-appearance: none;
+}
+.search-field select option { background: var(--black-3); }
+.search-btn {
+  background: var(--gold); color: var(--black);
+  border: none; cursor: pointer;
+  padding: 0 2rem;
+  font-family: var(--font-body); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+.search-btn:hover { background: var(--gold-light); }
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  opacity: 0.6;
+}
+.scroll-indicator span {
+  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+}
+.scroll-mouse {
+  width: 22px; height: 34px;
+  border: 1px solid var(--gold);
+  border-radius: 11px;
+  position: relative;
+}
+.scroll-mouse::after {
+  content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 8px; background: var(--gold); border-radius: 2px;
+  animation: scrollDown 2s infinite;
+}
+@keyframes scrollDown {
+  0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(12px); opacity: 0; }
+}
+
+/* =====================================================
+   STATS
+   ===================================================== */
+#stats {
+  background: var(--black-2);
+  border-top: 1px solid rgba(212,175,55,0.15);
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+  padding: 4rem 5%;
+  position: relative;
+}
+.stats-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-item {
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+.stat-item::after {
+  content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
+  width: 1px; background: rgba(212,175,55,0.2);
+}
+.stat-item:last-child::after { display: none; }
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,245,240,0.55);
+}
+
+/* =====================================================
+   SERVICES
+   ===================================================== */
+#services {
+  padding: 8rem 5%;
+  position: relative;
+}
+.services-header {
+  max-width: 1200px; margin: 0 auto 4rem;
+}
+.services-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px;
+}
+.service-card {
+  background: var(--black-2);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-out), background 0.4s ease;
+  border: 1px solid rgba(212,175,55,0.08);
+}
+.service-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--gold);
+  transform: scaleX(0); transition: transform 0.4s ease;
+}
+.service-card:hover { background: var(--black-3); transform: translateY(-6px); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+  width: 56px; height: 56px;
+  margin-bottom: 1.8rem;
+  color: var(--gold);
+}
+.service-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem; font-weight: 500;
+  color: var(--white); margin-bottom: 1rem; line-height: 1.2;
+}
+.service-card p {
+  font-size: 0.85rem; line-height: 1.8;
+  color: rgba(245,245,240,0.6);
+  margin-bottom: 2rem;
+}
+.service-link {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold);
+  display: flex; align-items: center; gap: 0.5rem;
+  transition: gap 0.3s ease;
+}
+.service-link:hover { gap: 1rem; }
+.service-number {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  font-family: var(--font-display); font-size: 5rem; font-weight: 700;
+  color: rgba(212,175,55,0.05); line-height: 1;
+  user-select: none;
+}
+
+/* =====================================================
+   BIENS À LA UNE
+   ===================================================== */
+#properties {
+  padding: 8rem 5%;
+  background: var(--black-2);
+  position: relative;
+}
+.properties-header {
+  max-width: 1200px; margin: 0 auto 3rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 2rem;
+}
+/* Filter tabs */
+.filter-tabs {
+  display: flex; gap: 0;
+  border: 1px solid rgba(212,175,55,0.3);
+}
+.filter-tab {
+  padding: 0.6rem 1.4rem;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  cursor: pointer; background: none; border: none; color: rgba(245,245,240,0.5);
+  transition: background 0.3s, color 0.3s;
+}
+.filter-tab.active, .filter-tab:hover { background: var(--gold); color: var(--black); }
+
+/* Property grid */
+.properties-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px;
+}
+.property-card {
+  background: var(--black-3);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(212,175,55,0.06);
+  transition: transform 0.4s var(--ease-out);
+}
+.property-card:hover { transform: translateY(-8px); }
+.property-card:hover .property-img img { transform: scale(1.08); }
+.property-card:hover .property-overlay { opacity: 1; }
+
+.property-img {
+  height: 240px; overflow: hidden; position: relative;
+}
+.property-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+.property-badge {
+  position: absolute; top: 1rem; left: 1rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  z-index: 2;
+}
+.badge-new { background: var(--gold); color: var(--black); }
+.badge-fav { background: var(--black); color: var(--gold); border: 1px solid var(--gold); }
+.property-type-badge {
+  position: absolute; top: 1rem; right: 1rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+  background: rgba(10,10,10,0.85); color: var(--white); z-index: 2;
+}
+.property-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,10,10,0.9) 100%);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 1rem; opacity: 0; transition: opacity 0.4s ease; z-index: 2;
+}
+.property-body { padding: 1.5rem; }
+.property-price {
+  font-family: var(--font-display);
+  font-size: 1.4rem; font-weight: 600;
+  color: var(--gold); margin-bottom: 0.4rem;
+}
+.property-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--white); margin-bottom: 0.5rem;
+}
+.property-location {
+  font-size: 0.72rem; color: rgba(245,245,240,0.5);
+  display: flex; align-items: center; gap: 0.4rem; margin-bottom: 1rem;
+}
+.property-meta {
+  display: flex; gap: 1.2rem; padding-top: 1rem;
+  border-top: 1px solid rgba(212,175,55,0.12);
+}
+.meta-item {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.72rem; color: rgba(245,245,240,0.55);
+}
+.meta-item svg { color: var(--gold); flex-shrink: 0; }
+.property-footer {
+  padding: 0 1.5rem 1.5rem;
+}
+
+/* =====================================================
+   WHY US
+   ===================================================== */
+#why-us {
+  padding: 8rem 5%;
+  position: relative;
+}
+.why-us-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: center;
+}
+.why-us-image {
+  position: relative;
+}
+.why-us-image-main {
+  width: 100%; aspect-ratio: 4/5;
+  object-fit: cover;
+  position: relative; z-index: 1;
+}
+.why-us-image-accent {
+  position: absolute;
+  width: 55%; aspect-ratio: 1;
+  object-fit: cover;
+  bottom: -2rem; right: -2rem;
+  z-index: 2;
+  border: 6px solid var(--black);
+}
+.why-us-image-gold-line {
+  position: absolute; top: 2rem; left: -2rem;
+  width: 1px; height: 60%; background: var(--gold); z-index: 0;
+}
+.why-us-image-gold-line-h {
+  position: absolute; top: -1rem; left: -2rem; right: 20%;
+  height: 1px; background: var(--gold); z-index: 0;
+}
+.why-us-content { }
+.advantages-list {
+  margin-top: 3rem;
+  display: flex; flex-direction: column; gap: 1.8rem;
+}
+.advantage {
+  display: flex; gap: 1.5rem; align-items: flex-start;
+}
+.advantage-icon {
+  flex-shrink: 0;
+  width: 48px; height: 48px;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid rgba(212,175,55,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.advantage h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 500;
+  color: var(--white); margin-bottom: 0.3rem;
+}
+.advantage p {
+  font-size: 0.82rem; line-height: 1.7;
+  color: rgba(245,245,240,0.55);
+}
+
+/* =====================================================
+   TESTIMONIALS
+   ===================================================== */
+#testimonials {
+  padding: 8rem 5%;
+  background: var(--black-2);
+  position: relative; overflow: hidden;
+}
+.testimonials-header {
+  max-width: 1200px; margin: 0 auto 4rem;
+}
+.testimonials-track {
+  max-width: 1200px; margin: 0 auto;
+  position: relative;
+}
+.testimonials-slider {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.testimonial-card {
+  background: var(--black-3);
+  padding: 2.5rem;
+  border: 1px solid rgba(212,175,55,0.1);
+  position: relative;
+}
+.testimonial-card::before {
+  content: '"';
+  font-family: var(--font-display);
+  font-size: 8rem; line-height: 1;
+  color: rgba(212,175,55,0.08);
+  position: absolute; top: 0.5rem; left: 1.5rem;
+  pointer-events: none;
+}
+.stars { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; }
+.star { color: var(--gold); font-size: 0.85rem; }
+.testimonial-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-style: italic; font-weight: 400;
+  line-height: 1.7; color: var(--white-dim); margin-bottom: 2rem;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: 1rem;
+}
+.testimonial-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--gold);
+}
+.author-name {
+  font-size: 0.85rem; font-weight: 500; color: var(--white); margin-bottom: 0.15rem;
+}
+.author-meta {
+  font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.8;
+}
+
+/* =====================================================
+   ESTIMATION CTA
+   ===================================================== */
+#estimation {
+  padding: 8rem 5%;
+  background: var(--black);
+  position: relative; overflow: hidden;
+}
+.estimation-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: center;
+  position: relative; z-index: 1;
+}
+.estimation-text .hero-slogan { text-align: left; }
+.estimation-text h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 400;
+  line-height: 1.1; color: var(--white); margin: 1rem 0 1.5rem;
+}
+.estimation-text h2 em { color: var(--gold); font-style: italic; }
+.estimation-text p {
+  font-size: 0.85rem; line-height: 1.9; color: rgba(245,245,240,0.6);
+}
+.estimation-form {
+  background: var(--black-2);
+  border: 1px solid rgba(212,175,55,0.2);
+  padding: 3rem;
+}
+.form-group { margin-bottom: 1.5rem; }
+.form-group label {
+  display: block;
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.6rem; font-weight: 500;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid rgba(212,175,55,0.15);
+  color: var(--white);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body); font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.3s;
+  -webkit-appearance: none;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--gold);
+}
+.form-group input::placeholder { color: rgba(245,245,240,0.25); }
+.form-group select option { background: var(--black-3); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* =====================================================
+   CONTACT / FOOTER
+   ===================================================== */
+#contact {
+  padding: 8rem 5% 0;
+  background: var(--black-2);
+  position: relative;
+}
+.contact-header {
+  max-width: 1200px; margin: 0 auto 4rem;
+}
+.contact-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; margin-bottom: 4rem;
+}
+.contact-info h3 {
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 400;
+  margin-bottom: 2rem; color: var(--white);
+}
+.contact-detail {
+  display: flex; gap: 1rem; align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.contact-detail-icon {
+  flex-shrink: 0; width: 40px; height: 40px;
+  border: 1px solid rgba(212,175,55,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.contact-detail-text strong {
+  display: block; font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem;
+}
+.contact-detail-text span {
+  font-size: 0.85rem; color: rgba(245,245,240,0.7);
+}
+.contact-social {
+  margin-top: 2rem; display: flex; gap: 1rem;
+}
+.social-btn {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(212,175,55,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); transition: background 0.3s, border-color 0.3s;
+}
+.social-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+/* Map placeholder */
+.map-container {
+  width: 100%; height: 280px;
+  background: var(--black-3);
+  border: 1px solid rgba(212,175,55,0.15);
+  overflow: hidden; position: relative;
+  margin-bottom: 2rem;
+}
+.map-container iframe {
+  width: 100%; height: 100%; border: 0; filter: invert(90%) hue-rotate(180deg) saturate(0.8);
+}
+
+/* Contact form */
+.contact-form h3 {
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 400;
+  margin-bottom: 2rem; color: var(--white);
+}
+.contact-form textarea {
+  width: 100%; background: var(--black);
+  border: 1px solid rgba(212,175,55,0.15);
+  color: var(--white); padding: 0.9rem 1rem;
+  font-family: var(--font-body); font-size: 0.85rem;
+  outline: none; resize: vertical; min-height: 120px;
+  transition: border-color 0.3s;
+}
+.contact-form textarea:focus { border-color: var(--gold); }
+.contact-form textarea::placeholder { color: rgba(245,245,240,0.25); }
+
+/* Footer bottom */
+footer {
+  background: var(--black);
+  border-top: 1px solid rgba(212,175,55,0.15);
+  padding: 2rem 5%;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy {
+  font-size: 0.72rem; color: rgba(245,245,240,0.35);
+  letter-spacing: 0.05em;
+}
+.footer-links {
+  display: flex; gap: 2rem;
+}
+.footer-links a {
+  font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(245,245,240,0.35); transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* =====================================================
+   WHATSAPP STICKY
+   ===================================================== */
+.whatsapp-btn {
+  position: fixed; bottom: 2rem; right: 2rem;
+  z-index: 999;
+  width: 56px; height: 56px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.whatsapp-btn:hover { transform: scale(1.12); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+.whatsapp-btn svg { color: white; }
+
+/* Tooltip */
+.whatsapp-btn::before {
+  content: 'Contactez-nous';
+  position: absolute; right: 70px;
+  background: var(--black-2); color: var(--white);
+  font-size: 0.72rem; font-family: var(--font-body);
+  white-space: nowrap; padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(212,175,55,0.2);
+  opacity: 0; transform: translateX(8px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.whatsapp-btn:hover::before { opacity: 1; transform: translateX(0); }
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--black-2);
+  width: 100%; max-width: 900px;
+  max-height: 90vh; overflow-y: auto;
+  border: 1px solid rgba(212,175,55,0.2);
+  transform: translateY(40px);
+  transition: transform 0.4s var(--ease-out);
+  position: relative;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header {
+  position: relative;
+  height: 320px; overflow: hidden;
+}
+.modal-header img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.modal-header::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,10,10,0.8) 100%);
+}
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 36px; height: 36px;
+  background: rgba(0,0,0,0.6); border: 1px solid rgba(212,175,55,0.3);
+  color: var(--white); cursor: pointer; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; transition: background 0.3s;
+}
+.modal-close:hover { background: var(--gold); color: var(--black); }
+.modal-body { padding: 2.5rem; }
+.modal-price {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 600;
+  color: var(--gold); margin-bottom: 0.5rem;
+}
+.modal-name {
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 400;
+  color: var(--white); margin-bottom: 1rem;
+}
+.modal-desc {
+  font-size: 0.85rem; line-height: 1.9;
+  color: rgba(245,245,240,0.65); margin-bottom: 2rem;
+}
+.modal-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.modal-contact-form { border-top: 1px solid rgba(212,175,55,0.15); padding-top: 2rem; }
+.modal-contact-form h4 {
+  font-family: var(--font-display); font-size: 1.2rem; font-weight: 400;
+  color: var(--white); margin-bottom: 1.5rem;
+}
+
+/* =====================================================
+   NEWSLETTER POPUP
+   ===================================================== */
+.newsletter-popup {
+  position: fixed; bottom: 2rem; left: 2rem;
+  z-index: 998;
+  background: var(--black-2);
+  border: 1px solid rgba(212,175,55,0.3);
+  padding: 1.8rem;
+  width: 300px;
+  transform: translateX(-120%);
+  transition: transform 0.5s var(--ease-out);
+}
+.newsletter-popup.show { transform: translateX(0); }
+.newsletter-popup h4 {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 500;
+  color: var(--white); margin-bottom: 0.5rem;
+}
+.newsletter-popup p {
+  font-size: 0.75rem; color: rgba(245,245,240,0.55); margin-bottom: 1rem;
+}
+.newsletter-input-row {
+  display: flex;
+}
+.newsletter-input-row input {
+  flex: 1; background: var(--black); border: 1px solid rgba(212,175,55,0.2);
+  border-right: none; color: var(--white);
+  padding: 0.7rem 0.8rem; font-size: 0.8rem; font-family: var(--font-body);
+  outline: none;
+}
+.newsletter-input-row button {
+  background: var(--gold); color: var(--black);
+  border: none; padding: 0 1rem;
+  font-size: 0.7rem; font-weight: 600; cursor: pointer;
+  transition: background 0.3s;
+}
+.newsletter-input-row button:hover { background: var(--gold-light); }
+.newsletter-close {
+  position: absolute; top: 0.5rem; right: 0.8rem;
+  background: none; border: none; color: rgba(245,245,240,0.4);
+  font-size: 1.1rem; cursor: pointer;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 1024px) {
+  .properties-grid { grid-template-columns: repeat(2,1fr); }
+  .testimonials-slider { grid-template-columns: 1fr; }
+  .why-us-inner { grid-template-columns: 1fr; gap: 4rem; }
+  .why-us-image { display: none; }
+  .estimation-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .stat-item:nth-child(2)::after { display: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .properties-grid { grid-template-columns: 1fr; }
+  .hero-search-inner { grid-template-columns: 1fr; }
+  .search-field { border-right: none; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .search-btn { padding: 1rem; }
+  .hero-logo-large { width: 80px; height: 80px; }
+  .newsletter-popup { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round">
+        <!-- House shape -->
+        <polyline points="10,45 40,15 70,45"/>
+        <polyline points="15,42 40,18 65,42"/>
+        <line x1="40" y1="12" x2="40" y2="15"/>
+        <!-- Triangle motifs top -->
+        <polygon points="30,35 40,22 50,35" fill="rgba(212,175,55,0.15)"/>
+        <!-- Base -->
+        <line x1="12" y1="45" x2="68" y2="45"/>
+        <line x1="15" y1="48" x2="65" y2="48"/>
+        <!-- Bottom triangles -->
+        <polygon points="18,60 28,45 38,60" fill="rgba(212,175,55,0.15)"/>
+        <polygon points="32,60 42,45 52,60" fill="rgba(212,175,55,0.15)"/>
+        <polygon points="46,60 56,45 66,60" fill="rgba(212,175,55,0.15)"/>
+        <!-- Vertical pillars -->
+        <line x1="12" y1="45" x2="12" y2="65"/>
+        <line x1="68" y1="45" x2="68" y2="65"/>
+        <!-- Ground line -->
+        <line x1="8" y1="65" x2="72" y2="65"/>
+      </g>
+    </svg>
+    <span class="nav-logo-text">YIRILUX</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#properties">Nos Biens</a></li>
+    <li><a href="#why-us">À Propos</a></li>
+    <li><a href="#testimonials">Avis Clients</a></li>
+    <li><a href="#contact" class="nav-cta">Nous Contacter</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile" id="mobileMenu">
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#properties" onclick="closeMobile()">Nos Biens</a>
+  <a href="#why-us" onclick="closeMobile()">À Propos</a>
+  <a href="#testimonials" onclick="closeMobile()">Avis</a>
+  <a href="#estimation" onclick="closeMobile()">Estimation</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ========== HERO ========== -->
+<section id="hero">
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80')"></div>
+  </div>
+
+  <div class="hero-content">
+    <svg class="hero-logo-large" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#D4AF37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="10,65 60,20 110,65"/>
+        <polyline points="18,62 60,25 102,62"/>
+        <polyline points="26,59 60,30 94,59"/>
+        <polygon points="44,52 60,35 76,52" fill="rgba(212,175,55,0.2)"/>
+        <line x1="10" y1="65" x2="110" y2="65"/>
+        <line x1="13" y1="70" x2="107" y2="70"/>
+        <polygon points="16,90 30,68 44,90" fill="rgba(212,175,55,0.2)"/>
+        <polygon points="38,90 52,68 66,90" fill="rgba(212,175,55,0.2)"/>
+        <polygon points="60,90 74,68 88,90" fill="rgba(212,175,55,0.2)"/>
+        <polygon points="82,90 96,68 110,90" fill="rgba(212,175,55,0.15)"/>
+        <line x1="10" y1="65" x2="10" y2="95"/>
+        <line x1="110" y1="65" x2="110" y2="95"/>
+        <line x1="6" y1="95" x2="114" y2="95"/>
+      </g>
+    </svg>
+
+    <div class="hero-line"></div>
+    <p class="hero-slogan">Ouagadougou · Burkina Faso</p>
+    <h1 class="hero-title">
+      L'Immobilier
+      <span>Haut Standing</span>
+    </h1>
+    <p class="hero-slogan">Votre confort, notre métier</p>
+    <div class="hero-cta-group">
+      <a href="#properties" class="btn btn-gold">Découvrir nos biens ↓</a>
+      <a href="#estimation" class="btn btn-outline">Estimation gratuite</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Défiler</span>
+    <div class="scroll-mouse"></div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="hero-search">
+    <div class="hero-search-inner">
+      <div class="search-field">
+        <label>Type de bien</label>
+        <select>
+          <option>Villa / Maison</option>
+          <option>Appartement</option>
+          <option>Duplex</option>
+          <option>Terrain</option>
+          <option>Commerce</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Localisation</label>
+        <input type="text" placeholder="Quartier, zone...">
+      </div>
+      <div class="search-field">
+        <label>Budget (FCFA)</label>
+        <select>
+          <option>Moins de 50M</option>
+          <option>50M – 100M</option>
+          <option>100M – 250M</option>
+          <option>250M – 500M</option>
+          <option>Plus de 500M</option>
+        </select>
+      </div>
+      <button class="search-btn">Rechercher</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section id="stats">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="180">0</div>
+      <div class="stat-label">Biens vendus & loués</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number" data-target="12">0</div>
+      <div class="stat-label">Années d'expérience</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number" data-target="97">0</div>
+      <div class="stat-label">% Clients satisfaits</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number" data-target="45">0</div>
+      <div class="stat-label">Partenaires agréés</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section id="services">
+  <div class="geo-bg"></div>
+  <div class="services-header">
+    <div class="section-label reveal">Nos expertises</div>
+    <h2 class="section-title reveal">Des services <span>à la hauteur</span><br>de vos ambitions</h2>
+  </div>
+  <div class="services-grid">
+    <!-- Card 1 -->
+    <div class="service-card reveal">
+      <div class="service-number">01</div>
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <h3>Achat & Vente<br>de Biens</h3>
+      <p>Nous accompagnons chaque étape de votre transaction : estimation précise, marketing ciblé, négociation experte et sécurisation juridique complète.</p>
+      <a href="#contact" class="service-link">En savoir plus →</a>
+    </div>
+    <!-- Card 2 -->
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-number">02</div>
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+      </svg>
+      <h3>Location<br>Résidentielle</h3>
+      <p>De la recherche au bail signé, nous sélectionnons rigoureusement les biens et locataires pour des locations sereines et durables dans les meilleurs quartiers.</p>
+      <a href="#contact" class="service-link">En savoir plus →</a>
+    </div>
+    <!-- Card 3 -->
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-number">03</div>
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <h3>Conseil &<br>Gestion Patrimoine</h3>
+      <p>Investissez intelligemment. Notre équipe analyse le marché local pour identifier les opportunités à fort rendement et optimiser votre portefeuille immobilier.</p>
+      <a href="#contact" class="service-link">En savoir plus →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROPERTIES ========== -->
+<section id="properties">
+  <div class="geo-bg"></div>
+  <div class="properties-header">
+    <div>
+      <div class="section-label reveal">Sélection exclusive</div>
+      <h2 class="section-title reveal">Nos biens <span>à la une</span></h2>
+    </div>
+    <div class="filter-tabs reveal">
+      <button class="filter-tab active" data-filter="all">Tout</button>
+      <button class="filter-tab" data-filter="vente">Vente</button>
+      <button class="filter-tab" data-filter="location">Location</button>
+    </div>
+  </div>
+  <div class="properties-grid" id="propertiesGrid">
+
+    <!-- Property 1 -->
+    <div class="property-card reveal" data-type="vente" onclick="openModal(0)">
+      <div class="property-img">
+        <span class="property-badge badge-new">Nouveau</span>
+        <span class="property-type-badge">Vente</span>
+        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80" alt="Villa moderne Ouaga 2000" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">285 000 000 FCFA</div>
+        <div class="property-name">Villa Prestige – Ouaga 2000</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Secteur 53, Ouaga 2000
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>5 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>3 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>450 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+    <!-- Property 2 -->
+    <div class="property-card reveal reveal-delay-1" data-type="location" onclick="openModal(1)">
+      <div class="property-img">
+        <span class="property-badge badge-fav">Coup de cœur</span>
+        <span class="property-type-badge">Location</span>
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6f349c71?w=600&q=80" alt="Appartement luxe" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">450 000 FCFA / mois</div>
+        <div class="property-name">Appartement Premium – Zogona</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Zogona, Arrondissement 10
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>3 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>2 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>180 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+    <!-- Property 3 -->
+    <div class="property-card reveal reveal-delay-2" data-type="vente" onclick="openModal(2)">
+      <div class="property-img">
+        <span class="property-badge badge-new">Nouveau</span>
+        <span class="property-type-badge">Vente</span>
+        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80" alt="Villa avec piscine" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">175 000 000 FCFA</div>
+        <div class="property-name">Villa avec Piscine – Ouaga 2000</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Secteur 55, Ouaga 2000
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>4 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>3 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>320 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+    <!-- Property 4 -->
+    <div class="property-card reveal" data-type="location" onclick="openModal(3)">
+      <div class="property-img">
+        <span class="property-badge badge-fav">Coup de cœur</span>
+        <span class="property-type-badge">Location</span>
+        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80" alt="Penthouse" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">750 000 FCFA / mois</div>
+        <div class="property-name">Penthouse – Zone du Bois</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Zone du Bois, Ouagadougou
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>4 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>2 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>240 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+    <!-- Property 5 -->
+    <div class="property-card reveal reveal-delay-1" data-type="vente" onclick="openModal(4)">
+      <div class="property-img">
+        <span class="property-badge badge-new">Nouveau</span>
+        <span class="property-type-badge">Vente</span>
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Maison de standing" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">120 000 000 FCFA</div>
+        <div class="property-name">Maison de Standing – Pissy</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pissy, Secteur 28
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>4 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>2 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>280 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+    <!-- Property 6 -->
+    <div class="property-card reveal reveal-delay-2" data-type="location" onclick="openModal(5)">
+      <div class="property-img">
+        <span class="property-badge badge-fav">Coup de cœur</span>
+        <span class="property-type-badge">Location</span>
+        <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80" alt="Duplex contemporain" loading="lazy">
+        <div class="property-overlay"><span class="btn btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem">Voir le bien</span></div>
+      </div>
+      <div class="property-body">
+        <div class="property-price">300 000 FCFA / mois</div>
+        <div class="property-name">Duplex Contemporain – Gounghin</div>
+        <div class="property-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Gounghin, Secteur 17
+        </div>
+        <div class="property-meta">
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h18a2 2 0 010 4H2"/></svg>3 chambres</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6H6a2 2 0 00-2 2v10l1 1h14l1-1V14a2 2 0 00-2-2h-1V6a2 2 0 00-2-2H9z"/></svg>2 SDB</span>
+          <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>165 m²</span>
+        </div>
+      </div>
+      <div class="property-footer">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.65rem;padding:0.75rem">Voir le bien</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========== WHY US ========== -->
+<section id="why-us">
+  <div class="geo-bg"></div>
+  <div class="why-us-inner">
+    <div class="why-us-image reveal">
+      <div class="why-us-image-gold-line"></div>
+      <div class="why-us-image-gold-line-h"></div>
+      <img class="why-us-image-main" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80" alt="Agent immobilier Yirilux">
+      <img class="why-us-image-accent" src="https://images.unsplash.com/photo-1600607687939-ce8a6f349c71?w=400&q=80" alt="Intérieur haut standing">
+    </div>
+    <div class="why-us-content">
+      <div class="section-label reveal">Pourquoi Yirilux</div>
+      <h2 class="section-title reveal">L'excellence au service<br>de votre <span>patrimoine</span></h2>
+      <p class="reveal" style="margin-top:1.5rem;font-size:0.85rem;line-height:1.9;color:rgba(245,245,240,0.6)">Depuis plus d'une décennie, Yirilux façonne le marché immobilier premium de Ouagadougou avec une vision unique : allier la chaleur africaine à l'exigence internationale.</p>
+      <div class="advantages-list">
+        <div class="advantage reveal">
+          <div class="advantage-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h4>Expertise locale inégalée</h4>
+            <p>Une connaissance approfondie du marché burkinabè et des meilleures opportunités d'Ouagadougou.</p>
+          </div>
+        </div>
+        <div class="advantage reveal reveal-delay-1">
+          <div class="advantage-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div>
+            <h4>Accompagnement personnalisé</h4>
+            <p>Un consultant dédié à chaque client, disponible 7j/7 pour répondre à toutes vos questions.</p>
+          </div>
+        </div>
+        <div class="advantage reveal reveal-delay-2">
+          <div class="advantage-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2v7.31M14 9.3V2M17.79 7.21L14 11M21 14.9A9 9 0 1110 5.1"/></svg>
+          </div>
+          <div>
+            <h4>Réseau de partenaires qualifiés</h4>
+            <p>Notaires, architectes, banques partenaires — un écosystème complet à votre service.</p>
+          </div>
+        </div>
+        <div class="advantage reveal reveal-delay-3">
+          <div class="advantage-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div>
+            <h4>Transactions 100% sécurisées</h4>
+            <p>Vérification juridique rigoureuse de chaque titre foncier et contrat pour votre tranquillité.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section id="testimonials">
+  <div class="geo-bg"></div>
+  <div class="testimonials-header">
+    <div class="section-label reveal">Ce que disent nos clients</div>
+    <h2 class="section-title reveal">La confiance est notre<br><span>plus belle récompense</span></h2>
+  </div>
+  <div class="testimonials-track">
+    <div class="testimonials-slider">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Yirilux a transformé notre recherche de villa en une expérience fluide et agréable. Leur connaissance du marché ouagalais est vraiment impressionnante. Nous avons trouvé notre maison de rêve en trois semaines."</p>
+        <div class="testimonial-author">
+          <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&q=80" alt="Aminata K.">
+          <div>
+            <div class="author-name">Aminata Konaté</div>
+            <div class="author-meta">Achat · Villa Ouaga 2000</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Service premium du début à la fin. Leur équipe a géré toute la partie juridique avec une professionnalisme remarquable. Je recommande Yirilux à quiconque cherche à investir sérieusement dans l'immobilier burkinabè."</p>
+        <div class="testimonial-author">
+          <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Didier T.">
+          <div>
+            <div class="author-name">Didier Traoré</div>
+            <div class="author-meta">Investissement · Portefeuille locatif</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Notre appartement à Zogona est exactement ce que nous voulions. L'agent Yirilux nous a accompagnés avec patience et sincérité. C'est rare de trouver une agence aussi à l'écoute et transparente."</p>
+        <div class="testimonial-author">
+          <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&q=80" alt="Fatima O.">
+          <div>
+            <div class="author-name">Fatima Ouédraogo</div>
+            <div class="author-meta">Location · Appartement Zogona</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ESTIMATION CTA ========== -->
+<section id="estimation">
+  <div class="geo-bg"></div>
+  <div class="estimation-inner">
+    <div class="estimation-text">
+      <div class="section-label reveal">Service offert</div>
+      <h2 class="reveal">Connaissez la valeur réelle<br>de votre bien <em>gratuitement</em></h2>
+      <p class="reveal reveal-delay-1">Notre équipe d'experts analyse le marché en temps réel pour vous fournir une estimation précise et personnalisée de votre propriété en moins de 48 heures. Sans engagement.</p>
+      <div style="margin-top:2.5rem;display:flex;gap:2rem;flex-wrap:wrap;" class="reveal reveal-delay-2">
+        <div>
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--gold);font-weight:600">48h</div>
+          <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,245,240,0.5)">Délai de réponse</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--gold);font-weight:600">100%</div>
+          <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,245,240,0.5)">Gratuit & sans engagement</div>
+        </div>
+      </div>
+    </div>
+    <div class="estimation-form reveal">
+      <div style="font-family:var(--font-display);font-size:1.3rem;color:var(--white);margin-bottom:0.5rem">Demande d'estimation</div>
+      <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem">Gratuit & sans engagement</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom & Nom</label>
+          <input type="text" placeholder="Votre nom complet">
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" placeholder="+226 XX XX XX XX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Type de bien</label>
+        <select>
+          <option>Villa / Maison</option>
+          <option>Appartement</option>
+          <option>Duplex</option>
+          <option>Terrain</option>
+          <option>Immeuble</option>
+          <option>Commerce</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Localisation du bien</label>
+        <input type="text" placeholder="Quartier / Zone / Secteur">
+      </div>
+      <button class="btn btn-gold" style="width:100%;justify-content:center;font-size:0.75rem;padding:1rem" onclick="submitEstimation()">
+        Obtenir mon estimation gratuite →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section id="contact">
+  <div class="contact-header">
+    <div class="section-label reveal">Prenons contact</div>
+    <h2 class="section-title reveal">Nous sommes à<br><span>votre écoute</span></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Nos coordonnées</h3>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="contact-detail-text">
+          <strong>Adresse</strong>
+          <span>Avenue Kwame N'Krumah, Secteur 4,<br>Ouagadougou, Burkina Faso</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.18 19.79 19.79 0 01.88 3.46a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="contact-detail-text">
+          <strong>Téléphone</strong>
+          <span>+226 25 30 XX XX<br>+226 70 XX XX XX</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="contact-detail-text">
+          <strong>Email</strong>
+          <span>contact@yirilux.com<br>info@yirilux.bf</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="contact-detail-text">
+          <strong>Horaires</strong>
+          <span>Lun – Ven : 8h00 – 18h00<br>Sam : 9h00 – 14h00</span>
+        </div>
+      </div>
+      <div class="contact-social">
+        <!-- Facebook -->
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+        <!-- WhatsApp -->
+        <a href="https://wa.me/22670000000" class="social-btn" aria-label="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.076-1.115L4 20l1.115-3.924A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+        </a>
+        <!-- LinkedIn -->
+        <a href="#" class="social-btn" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container" style="margin-top:2rem">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=-1.5648%2C12.3469%2C-1.5248%2C12.3769&layer=mapnik&marker=12.3638%2C-1.5448"
+          title="Carte Yirilux Ouagadougou"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+    <div class="contact-form reveal reveal-delay-1">
+      <h3>Envoyez-nous un message</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" placeholder="Votre prénom">
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" placeholder="Votre nom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="votre@email.com">
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" placeholder="+226 XX XX XX XX">
+      </div>
+      <div class="form-group">
+        <label>Sujet</label>
+        <select>
+          <option>Demande d'information</option>
+          <option>Visite de bien</option>
+          <option>Mise en vente</option>
+          <option>Estimation gratuite</option>
+          <option>Partenariat</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Décrivez votre projet immobilier..."></textarea>
+      </div>
+      <button class="btn btn-gold" style="width:100%;justify-content:center;font-size:0.75rem;padding:1rem" onclick="submitContact()">
+        Envoyer le message →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer bottom -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:0.8rem;">
+      <svg width="28" height="28" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round">
+          <polyline points="10,45 40,15 70,45"/>
+          <line x1="12" y1="45" x2="68" y2="45"/>
+          <polygon points="18,60 28,45 38,60" fill="rgba(212,175,55,0.2)"/>
+          <polygon points="32,60 42,45 52,60" fill="rgba(212,175,55,0.2)"/>
+          <polygon points="46,60 56,45 66,60" fill="rgba(212,175,55,0.2)"/>
+          <line x1="8" y1="65" x2="72" y2="65"/>
+        </g>
+      </svg>
+      <span style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold);font-weight:600;letter-spacing:0.1em">YIRILUX</span>
+    </div>
+    <p class="footer-copy">© 2025 Yirilux Immobilier. Tous droits réservés. Ouagadougou, Burkina Faso.</p>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">Plan du site</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/22670000000" class="whatsapp-btn" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.963 7.963 0 01-4.076-1.115L4 20l1.115-3.924A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+</a>
+
+<!-- Newsletter popup -->
+<div class="newsletter-popup" id="newsletterPopup">
+  <button class="newsletter-close" onclick="closeNewsletter()">×</button>
+  <h4>Restez informé</h4>
+  <p>Recevez nos nouvelles offres exclusives en avant-première directement dans votre boîte mail.</p>
+  <div class="newsletter-input-row">
+    <input type="email" placeholder="votre@email.com" id="newsletterEmail">
+    <button onclick="submitNewsletter()">OK</button>
+  </div>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <div id="modalPrice" class="modal-price"></div>
+      <div id="modalName" class="modal-name"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <p id="modalDesc" class="modal-desc"></p>
+      <div class="modal-contact-form">
+        <h4>Demander une visite</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Votre nom</label>
+            <input type="text" placeholder="Prénom & Nom">
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" placeholder="+226 XX XX XX XX">
+          </div>
+        </div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center;font-size:0.75rem;padding:1rem" onclick="submitVisit()">
+          Demander une visite →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+// ---- DATA ----
+const properties = [
+  {
+    img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80',
+    price: '285 000 000 FCFA',
+    name: 'Villa Prestige – Ouaga 2000',
+    location: 'Secteur 53, Ouaga 2000',
+    meta: [{ icon: 'bed', label: '5 chambres' }, { icon: 'bath', label: '3 Salles de bain' }, { icon: 'area', label: '450 m²' }, { icon: 'pool', label: 'Piscine' }],
+    desc: 'Somptueux villa contemporaine avec finitions haut de gamme. Baie vitrées panoramiques, cuisine équipée allemande, piscine à débordement, jardin paysager, garage double. Cadre sécurisé dans la résidence la plus prisée d\'Ouagadougou.'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1600607687939-ce8a6f349c71?w=900&q=80',
+    price: '450 000 FCFA / mois',
+    name: 'Appartement Premium – Zogona',
+    location: 'Zogona, Arrondissement 10',
+    meta: [{ icon: 'bed', label: '3 chambres' }, { icon: 'bath', label: '2 Salles de bain' }, { icon: 'area', label: '180 m²' }, { icon: 'parking', label: 'Parking sécurisé' }],
+    desc: 'Appartement en étage avec terrasse, vue dégagée. Séjour lumineux double exposition, cuisine américaine équipée, climatisation centralisée, parking sous-sol. Résidence récente avec gardiennage 24h/24.'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80',
+    price: '175 000 000 FCFA',
+    name: 'Villa avec Piscine – Ouaga 2000',
+    location: 'Secteur 55, Ouaga 2000',
+    meta: [{ icon: 'bed', label: '4 chambres' }, { icon: 'bath', label: '3 Salles de bain' }, { icon: 'area', label: '320 m²' }, { icon: 'pool', label: 'Piscine + Jardin' }],
+    desc: 'Villa moderne dotée d\'une architecture élégante mêlant pierres naturelles et verre. Piscine privée, salon de jardin, pergola. Quartier calme et sécurisé, à deux minutes des grandes artères d\'Ouaga 2000.'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80',
+    price: '750 000 FCFA / mois',
+    name: 'Penthouse – Zone du Bois',
+    location: 'Zone du Bois, Ouagadougou',
+    meta: [{ icon: 'bed', label: '4 chambres' }, { icon: 'bath', label: '2 Salles de bain' }, { icon: 'area', label: '240 m²' }, { icon: 'view', label: 'Vue panoramique' }],
+    desc: 'Penthouse exceptionnel au dernier étage offrant une vue à 360° sur la ville. Grande terrasse aménagée, espace de réception privatif. Finitions de luxe, domotique intégrée. Accès sécurisé ascenseur privé.'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80',
+    price: '120 000 000 FCFA',
+    name: 'Maison de Standing – Pissy',
+    location: 'Pissy, Secteur 28',
+    meta: [{ icon: 'bed', label: '4 chambres' }, { icon: 'bath', label: '2 Salles de bain' }, { icon: 'area', label: '280 m²' }, { icon: 'garden', label: 'Grand jardin' }],
+    desc: 'Belle propriété familiale sur terrain de 800m². Architecture sobre et élégante, séjour cathédrale, cuisine semi-ouverte. Jardin arboré avec terrasse couverte. Quartier résidentiel calme avec école et commerces à proximité.'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=900&q=80',
+    price: '300 000 FCFA / mois',
+    name: 'Duplex Contemporain – Gounghin',
+    location: 'Gounghin, Secteur 17',
+    meta: [{ icon: 'bed', label: '3 chambres' }, { icon: 'bath', label: '2 Salles de bain' }, { icon: 'area', label: '165 m²' }, { icon: 'parking', label: 'Parking' }],
+    desc: 'Duplex sur deux niveaux avec escalier en béton ciré. Cuisine ouverte, mezzanine bureau, terrasse couverte au 1er étage. Bien entretenu, idéal pour couple ou petite famille. Proche commerces et axes principaux.'
+  }
+];
+
+// ---- NAVBAR SCROLL ----
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ---- HERO SLIDER ----
+const slides = document.querySelectorAll('.hero-slide');
+let current = 0;
+setInterval(() => {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+}, 5000);
+
+// ---- HAMBURGER ----
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+function closeMobile() {
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ---- SCROLL REVEAL ----
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ---- COUNTER ANIMATION ----
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 1800;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target) + (progress >= 1 ? suffix : '');
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const statNumbers = document.querySelectorAll('[data-target]');
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.animated) {
+      e.target.dataset.animated = 'true';
+      const target = parseInt(e.target.dataset.target);
+      const suffix = e.target.dataset.target === '97' ? '+' : '+';
+      animateCounter(e.target, target, suffix);
+    }
+  });
+}, { threshold: 0.5 });
+statNumbers.forEach(el => statObserver.observe(el));
+
+// ---- FILTER TABS ----
+const filterTabs = document.querySelectorAll('.filter-tab');
+const cards = document.querySelectorAll('.property-card');
+filterTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    filterTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    cards.forEach(card => {
+      if (filter === 'all' || card.dataset.type === filter) {
+        card.style.display = '';
+        card.style.animation = 'fadeIn 0.4s ease';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ---- MODAL ----
+function openModal(idx) {
+  const p = properties[idx];
+  document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalPrice').textContent = p.price;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  const metaEl = document.getElementById('modalMeta');
+  metaEl.innerHTML = p.meta.map(m => `<span class="meta-item" style="font-size:0.8rem;color:rgba(245,245,240,0.7)">◆ ${m.label}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+// ---- FORMS ----
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed;top:100px;left:50%;transform:translateX(-50%);
+    background:var(--gold);color:var(--black);
+    padding:1rem 2rem;z-index:9999;
+    font-family:var(--font-body);font-size:0.8rem;font-weight:500;letter-spacing:0.1em;
+    border-radius:0;box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.5s'; setTimeout(()=>toast.remove(),500); }, 3000);
+}
+function submitEstimation() { showToast('✓ Demande envoyée ! Nous vous contactons sous 48h.'); }
+function submitContact() { showToast('✓ Message envoyé ! Nous vous répondons rapidement.'); }
+function submitVisit() { showToast('✓ Visite demandée ! Notre agent vous appellera très bientôt.'); closeModal(); }
+function submitNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (email) { showToast('✓ Inscription confirmée !'); closeNewsletter(); }
+}
+
+// ---- NEWSLETTER ----
+function closeNewsletter() {
+  document.getElementById('newsletterPopup').classList.remove('show');
+  localStorage.setItem('newsletter_dismissed', '1');
+}
+setTimeout(() => {
+  if (!localStorage.getItem('newsletter_dismissed')) {
+    document.getElementById('newsletterPopup').classList.add('show');
+  }
+}, 8000);
+
+// ---- KEYBOARD ESC ----
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeMobile(); } });
+
+// CSS for fade animation
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

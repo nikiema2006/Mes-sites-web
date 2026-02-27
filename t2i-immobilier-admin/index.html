@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T2i Admin – Tableau de bord</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --orange: #E8650A;
+  --orange-dim: rgba(232,101,10,0.12);
+  --green: #3D7A34;
+  --green-dim: rgba(61,122,52,0.12);
+  --red: #E84545;
+  --red-dim: rgba(232,69,69,0.12);
+  --blue: #3A7BD5;
+  --blue-dim: rgba(58,123,213,0.12);
+  --sidebar: #0F1923;
+  --sidebar-hover: #1A2A38;
+  --bg: #F0EEE9;
+  --card: #FFFFFF;
+  --border: #E5E2DA;
+  --text: #1C1C1C;
+  --muted: #7A7670;
+  --sidebar-text: rgba(255,255,255,0.55);
+  --sidebar-active: rgba(255,255,255,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:14px; }
+body { font-family:'Instrument Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; overflow-x:hidden; }
+
+/* ===== LOGIN ===== */
+#loginScreen {
+  position:fixed; inset:0; z-index:9999;
+  background:linear-gradient(135deg, #0F1923 0%, #1a2f1a 60%, #2A1500 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.login-box {
+  width:420px; max-width:90vw;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:3rem 2.5rem;
+  backdrop-filter:blur(20px);
+  animation:fadeUp 0.6s ease both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+.login-logo {
+  font-family:'Syne',sans-serif;
+  font-size:2rem; font-weight:800;
+  margin-bottom:0.3rem;
+}
+.login-logo span:first-child { color:var(--orange); }
+.login-logo span:last-child { color:#5CB85C; }
+.login-sub { color:rgba(255,255,255,0.4); font-size:0.82rem; margin-bottom:2.5rem; letter-spacing:0.05em; }
+.login-label { color:rgba(255,255,255,0.5); font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px; }
+.login-input {
+  width:100%; padding:0.85rem 1.1rem;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;
+  color:white; font-size:0.9rem;
+  font-family:'Instrument Sans',sans-serif;
+  outline:none; margin-bottom:1rem;
+  transition:border-color 0.2s;
+}
+.login-input:focus { border-color:var(--orange); }
+.login-input::placeholder { color:rgba(255,255,255,0.25); }
+.login-btn {
+  width:100%; padding:0.95rem;
+  background:var(--orange); color:white;
+  border:none; border-radius:12px;
+  font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700;
+  cursor:pointer; transition:all 0.3s; margin-top:0.5rem;
+  letter-spacing:0.02em;
+}
+.login-btn:hover { background:#FF7722; transform:translateY(-1px); box-shadow:0 8px 24px rgba(232,101,10,0.35); }
+.login-hint { color:rgba(255,255,255,0.25); font-size:0.75rem; text-align:center; margin-top:1.2rem; }
+.login-error { background:rgba(232,69,69,0.15); border:1px solid rgba(232,69,69,0.3); color:#FF7070; font-size:0.82rem; padding:0.7rem 1rem; border-radius:10px; margin-bottom:1rem; display:none; }
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  width:240px; min-height:100vh;
+  background:var(--sidebar);
+  display:flex; flex-direction:column;
+  position:fixed; top:0; left:0; bottom:0;
+  z-index:100; transition:width 0.3s ease;
+  overflow:hidden;
+}
+#sidebar.collapsed { width:68px; }
+.sidebar-head {
+  padding:1.4rem 1.2rem;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:10px;
+  min-height:64px;
+}
+.sidebar-logo {
+  font-family:'Syne',sans-serif;
+  font-size:1.1rem; font-weight:800;
+  white-space:nowrap; overflow:hidden;
+  transition:opacity 0.2s;
+}
+.sidebar-logo span:first-child { color:var(--orange); }
+.sidebar-logo span:last-child { color:#5CB85C; }
+#sidebar.collapsed .sidebar-logo { opacity:0; width:0; }
+.sidebar-toggle {
+  margin-left:auto; background:none; border:none;
+  color:rgba(255,255,255,0.4); cursor:pointer; font-size:1rem;
+  width:28px; height:28px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; flex-shrink:0;
+}
+.sidebar-toggle:hover { background:rgba(255,255,255,0.08); color:white; }
+#sidebar.collapsed .sidebar-toggle { margin-left:0; }
+
+.sidebar-nav { padding:0.8rem 0; flex:1; overflow-y:auto; }
+.nav-section-label {
+  font-size:0.68rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.12em; color:rgba(255,255,255,0.2);
+  padding:0.8rem 1.2rem 0.4rem;
+  white-space:nowrap; overflow:hidden;
+  transition:opacity 0.2s;
+}
+#sidebar.collapsed .nav-section-label { opacity:0; }
+.nav-item {
+  display:flex; align-items:center; gap:12px;
+  padding:0.7rem 1.2rem;
+  color:var(--sidebar-text);
+  cursor:pointer; border-radius:0;
+  transition:all 0.2s;
+  border-left:3px solid transparent;
+  white-space:nowrap; overflow:hidden;
+  position:relative;
+}
+.nav-item:hover { background:var(--sidebar-hover); color:rgba(255,255,255,0.85); }
+.nav-item.active { background:var(--sidebar-active); color:white; border-left-color:var(--orange); }
+.nav-item .nav-icon { font-size:0.95rem; width:20px; text-align:center; flex-shrink:0; }
+.nav-item .nav-label { font-size:0.88rem; font-weight:500; transition:opacity 0.2s; }
+#sidebar.collapsed .nav-label { opacity:0; width:0; }
+.nav-badge {
+  margin-left:auto; background:var(--orange); color:white;
+  font-size:0.65rem; font-weight:700; border-radius:20px;
+  padding:1px 7px; flex-shrink:0;
+  transition:opacity 0.2s;
+}
+#sidebar.collapsed .nav-badge { opacity:0; }
+.nav-tooltip {
+  position:absolute; left:68px; background:#1A2A38;
+  color:white; padding:0.4rem 0.8rem; border-radius:8px;
+  font-size:0.8rem; white-space:nowrap;
+  pointer-events:none; opacity:0; transition:opacity 0.2s;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+#sidebar.collapsed .nav-item:hover .nav-tooltip { opacity:1; }
+
+.sidebar-footer {
+  padding:1rem 1.2rem;
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:10px;
+}
+.admin-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#FF8C42);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem;
+  color:white; flex-shrink:0;
+}
+.admin-info { overflow:hidden; transition:opacity 0.2s; }
+#sidebar.collapsed .admin-info { opacity:0; width:0; }
+.admin-name { font-size:0.82rem; font-weight:600; color:white; white-space:nowrap; }
+.admin-role { font-size:0.72rem; color:rgba(255,255,255,0.35); white-space:nowrap; }
+.logout-btn {
+  margin-left:auto; background:none; border:none;
+  color:rgba(255,255,255,0.3); cursor:pointer;
+  font-size:0.85rem; transition:color 0.2s; flex-shrink:0;
+}
+.logout-btn:hover { color:var(--red); }
+#sidebar.collapsed .logout-btn { display:none; }
+
+/* ===== MAIN ===== */
+#main {
+  margin-left:240px; flex:1; min-height:100vh;
+  transition:margin-left 0.3s ease;
+}
+#main.collapsed { margin-left:68px; }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height:64px; background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center;
+  padding:0 2rem; gap:1rem;
+  position:sticky; top:0; z-index:50;
+}
+.topbar-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; flex:1; }
+.topbar-search {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:10px; padding:0.5rem 1rem;
+  width:260px;
+}
+.topbar-search input {
+  background:none; border:none; outline:none;
+  font-family:'Instrument Sans',sans-serif; font-size:0.85rem;
+  color:var(--text); width:100%;
+}
+.topbar-search input::placeholder { color:var(--muted); }
+.topbar-search i { color:var(--muted); font-size:0.85rem; }
+.topbar-actions { display:flex; align-items:center; gap:0.8rem; }
+.topbar-btn {
+  width:38px; height:38px; border-radius:10px;
+  background:var(--bg); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--muted); font-size:0.9rem;
+  transition:all 0.2s; position:relative;
+}
+.topbar-btn:hover { background:var(--orange-dim); color:var(--orange); border-color:var(--orange); }
+.notif-dot {
+  position:absolute; top:6px; right:6px;
+  width:7px; height:7px; border-radius:50%;
+  background:var(--orange); border:2px solid var(--card);
+}
+.topbar-date { font-size:0.78rem; color:var(--muted); white-space:nowrap; }
+
+/* ===== PAGES ===== */
+.page { display:none; padding:2rem; animation:fadeIn 0.3s ease; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+/* ===== DASHBOARD ===== */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; margin-bottom:1.5rem; }
+.kpi-card {
+  background:var(--card); border-radius:16px;
+  padding:1.4rem 1.6rem; border:1px solid var(--border);
+  display:flex; align-items:center; gap:1rem;
+  transition:all 0.2s; cursor:default;
+}
+.kpi-card:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(0,0,0,0.08); }
+.kpi-icon {
+  width:52px; height:52px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; flex-shrink:0;
+}
+.kpi-body { flex:1; min-width:0; }
+.kpi-val { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; line-height:1; }
+.kpi-label { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+.kpi-trend { font-size:0.72rem; font-weight:600; margin-top:6px; display:flex; align-items:center; gap:4px; }
+.trend-up { color:#22A96E; }
+.trend-down { color:var(--red); }
+
+.dash-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:1.2rem; margin-bottom:1.2rem; }
+.dash-grid2 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2rem; }
+.card {
+  background:var(--card); border-radius:16px;
+  border:1px solid var(--border); overflow:hidden;
+}
+.card-head {
+  padding:1.2rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.card-title { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; }
+.card-action { font-size:0.78rem; color:var(--orange); cursor:pointer; font-weight:600; }
+.card-action:hover { text-decoration:underline; }
+.card-body { padding:1.5rem; }
+
+.chart-wrap { position:relative; height:220px; }
+
+/* Activity feed */
+.activity-list { display:flex; flex-direction:column; gap:0; }
+.activity-item {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:0.9rem 1.5rem; border-bottom:1px solid var(--border);
+  transition:background 0.2s;
+}
+.activity-item:last-child { border-bottom:none; }
+.activity-item:hover { background:var(--bg); }
+.act-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.act-body { flex:1; min-width:0; }
+.act-text { font-size:0.83rem; line-height:1.4; }
+.act-text strong { font-weight:600; }
+.act-time { font-size:0.72rem; color:var(--muted); margin-top:2px; }
+
+/* Donut */
+.donut-wrap { display:flex; align-items:center; gap:1.5rem; }
+.donut-chart { width:100px; height:100px; }
+.donut-legend { flex:1; display:flex; flex-direction:column; gap:0.6rem; }
+.donut-item { display:flex; align-items:center; gap:8px; font-size:0.8rem; }
+.donut-color { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.donut-pct { margin-left:auto; font-weight:700; font-size:0.82rem; }
+
+/* Recent table */
+.data-table { width:100%; border-collapse:collapse; }
+.data-table th {
+  text-align:left; font-size:0.72rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--muted); padding:0.7rem 1rem;
+  border-bottom:2px solid var(--border);
+  background:var(--bg);
+}
+.data-table td {
+  padding:0.85rem 1rem; font-size:0.83rem;
+  border-bottom:1px solid var(--border); vertical-align:middle;
+}
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--bg); }
+.badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 10px; border-radius:20px;
+  font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
+}
+.badge-orange { background:var(--orange-dim); color:var(--orange); }
+.badge-green { background:var(--green-dim); color:var(--green); }
+.badge-red { background:var(--red-dim); color:var(--red); }
+.badge-blue { background:var(--blue-dim); color:var(--blue); }
+.badge-gray { background:#F0EEE9; color:var(--muted); }
+
+/* ===== PAGES INNER ===== */
+.page-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:1.8rem;
+}
+.page-header h1 { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; }
+.page-header p { color:var(--muted); font-size:0.85rem; margin-top:2px; }
+.btn {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:0.65rem 1.3rem; border-radius:10px;
+  font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700;
+  cursor:pointer; border:none; transition:all 0.2s; text-decoration:none;
+}
+.btn-primary { background:var(--orange); color:white; }
+.btn-primary:hover { background:#FF7722; transform:translateY(-1px); box-shadow:0 6px 20px rgba(232,101,10,0.3); }
+.btn-danger { background:var(--red-dim); color:var(--red); }
+.btn-danger:hover { background:var(--red); color:white; }
+.btn-ghost { background:var(--bg); color:var(--text); border:1px solid var(--border); }
+.btn-ghost:hover { border-color:var(--orange); color:var(--orange); }
+.btn-green { background:var(--green-dim); color:var(--green); }
+.btn-green:hover { background:var(--green); color:white; }
+
+/* Filters bar */
+.filters-bar {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1rem 1.2rem;
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:1.2rem; flex-wrap:wrap;
+}
+.filter-select {
+  padding:0.5rem 0.8rem; border-radius:8px;
+  border:1px solid var(--border); background:var(--bg);
+  font-family:'Instrument Sans',sans-serif; font-size:0.82rem;
+  color:var(--text); outline:none; cursor:pointer;
+}
+.filter-search {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:8px; padding:0.5rem 0.9rem; flex:1; max-width:280px;
+}
+.filter-search input {
+  background:none; border:none; outline:none;
+  font-family:'Instrument Sans',sans-serif; font-size:0.82rem;
+  color:var(--text); width:100%;
+}
+.filter-search i { color:var(--muted); }
+
+/* Properties grid */
+.props-admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.2rem; }
+.prop-admin-card {
+  background:var(--card); border-radius:16px;
+  border:1px solid var(--border); overflow:hidden;
+  transition:all 0.2s;
+}
+.prop-admin-card:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(0,0,0,0.08); }
+.prop-admin-img {
+  height:160px; display:flex; align-items:center; justify-content:center;
+  position:relative; font-size:3rem; opacity:0.5;
+}
+.prop-admin-body { padding:1.1rem; }
+.prop-admin-body h4 { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; margin-bottom:4px; }
+.prop-admin-body .loc { font-size:0.78rem; color:var(--muted); margin-bottom:0.8rem; }
+.prop-admin-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:0.8rem; border-top:1px solid var(--border);
+  margin-top:0.5rem;
+}
+.prop-price-sm { font-family:'Syne',sans-serif; font-size:0.92rem; font-weight:700; color:var(--orange); }
+.prop-actions { display:flex; gap:6px; }
+.action-btn {
+  width:30px; height:30px; border-radius:8px; border:none;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; cursor:pointer; transition:all 0.2s;
+}
+.edit-btn { background:var(--blue-dim); color:var(--blue); }
+.edit-btn:hover { background:var(--blue); color:white; }
+.del-btn { background:var(--red-dim); color:var(--red); }
+.del-btn:hover { background:var(--red); color:white; }
+.view-btn { background:var(--green-dim); color:var(--green); }
+.view-btn:hover { background:var(--green); color:white; }
+
+/* Messages table */
+.msg-row td:first-child { font-weight:600; }
+.msg-unread td:first-child { color:var(--orange); }
+.msg-preview { max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--muted); font-size:0.8rem; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(4px); z-index:500;
+  display:none; align-items:center; justify-content:center;
+  padding:1rem;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--card); border-radius:20px;
+  width:100%; max-width:580px; max-height:90vh;
+  overflow-y:auto; animation:fadeUp 0.3s ease;
+  border:1px solid var(--border);
+}
+.modal-head {
+  padding:1.5rem 1.8rem 1rem;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; background:var(--card); z-index:1;
+}
+.modal-head h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+.modal-close {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--bg); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:0.9rem; color:var(--muted);
+  transition:all 0.2s;
+}
+.modal-close:hover { background:var(--red-dim); color:var(--red); border-color:var(--red); }
+.modal-body { padding:1.5rem 1.8rem; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.form-group { display:flex; flex-direction:column; gap:5px; }
+.form-group.full { grid-column:1/-1; }
+.form-group label { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); }
+.form-control {
+  padding:0.7rem 0.9rem; border-radius:10px;
+  border:1.5px solid var(--border);
+  font-family:'Instrument Sans',sans-serif; font-size:0.88rem;
+  color:var(--text); background:var(--bg); outline:none;
+  transition:border-color 0.2s;
+}
+.form-control:focus { border-color:var(--orange); background:white; }
+textarea.form-control { resize:vertical; min-height:90px; }
+.modal-foot {
+  padding:1rem 1.8rem 1.5rem;
+  display:flex; gap:0.8rem; justify-content:flex-end;
+}
+
+/* ===== SETTINGS ===== */
+.settings-grid { display:grid; grid-template-columns:220px 1fr; gap:1.5rem; align-items:start; }
+.settings-nav { background:var(--card); border-radius:16px; border:1px solid var(--border); overflow:hidden; }
+.settings-nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:0.9rem 1.2rem; cursor:pointer; font-size:0.88rem;
+  border-left:3px solid transparent; color:var(--muted);
+  transition:all 0.2s;
+}
+.settings-nav-item:hover { background:var(--bg); color:var(--text); }
+.settings-nav-item.active { border-left-color:var(--orange); background:var(--orange-dim); color:var(--orange); font-weight:600; }
+.settings-panel { background:var(--card); border-radius:16px; border:1px solid var(--border); }
+.settings-section { padding:1.5rem; border-bottom:1px solid var(--border); }
+.settings-section:last-child { border-bottom:none; }
+.settings-section h3 { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; margin-bottom:0.3rem; }
+.settings-section p { color:var(--muted); font-size:0.82rem; margin-bottom:1.2rem; }
+.toggle-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0.7rem 0; border-bottom:1px solid var(--border);
+}
+.toggle-row:last-child { border-bottom:none; }
+.toggle-label { font-size:0.85rem; }
+.toggle-desc { font-size:0.77rem; color:var(--muted); }
+.toggle {
+  width:44px; height:24px; background:var(--border);
+  border-radius:20px; cursor:pointer; position:relative;
+  transition:background 0.3s;
+}
+.toggle.on { background:var(--green); }
+.toggle::after {
+  content:''; position:absolute;
+  top:3px; left:3px;
+  width:18px; height:18px; border-radius:50%;
+  background:white; transition:transform 0.3s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+.toggle.on::after { transform:translateX(20px); }
+
+/* ===== NOTIFICATIONS PANEL ===== */
+.notif-panel {
+  position:fixed; top:64px; right:0; width:340px;
+  background:var(--card); border-left:1px solid var(--border);
+  height:calc(100vh - 64px); overflow-y:auto;
+  z-index:200; transform:translateX(100%);
+  transition:transform 0.3s ease;
+  box-shadow:-8px 0 30px rgba(0,0,0,0.08);
+}
+.notif-panel.open { transform:translateX(0); }
+.notif-panel-head {
+  padding:1.2rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; background:var(--card);
+}
+.notif-panel-head h4 { font-family:'Syne',sans-serif; font-weight:700; }
+.notif-item {
+  padding:1rem 1.5rem; border-bottom:1px solid var(--border);
+  cursor:pointer; transition:background 0.2s;
+}
+.notif-item:hover { background:var(--bg); }
+.notif-item.unread { border-left:3px solid var(--orange); }
+.notif-item.unread:not(:hover) { background:var(--orange-dim); }
+.notif-title { font-size:0.83rem; font-weight:600; margin-bottom:2px; }
+.notif-desc { font-size:0.78rem; color:var(--muted); line-height:1.4; }
+.notif-time { font-size:0.72rem; color:var(--muted); margin-top:4px; }
+
+/* ===== TOAST ===== */
+.toast-wrap { position:fixed; bottom:1.5rem; right:1.5rem; z-index:9000; display:flex; flex-direction:column; gap:0.6rem; }
+.toast-msg {
+  background:var(--sidebar); color:white;
+  padding:0.8rem 1.2rem; border-radius:12px;
+  font-size:0.85rem; display:flex; align-items:center; gap:10px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.2);
+  animation:slideIn 0.3s ease;
+  border-left:4px solid var(--orange);
+}
+@keyframes slideIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:none} }
+
+/* ===== CHARTS - mini ===== */
+.mini-chart-wrap { height:60px; }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align:center; padding:4rem 2rem; color:var(--muted); }
+.empty-state i { font-size:3rem; opacity:0.3; margin-bottom:1rem; display:block; }
+.empty-state h4 { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:0.5rem; color:var(--text); }
+
+/* ===== ESTIMATION CARDS ===== */
+.estim-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.2rem; }
+.estim-card {
+  background:var(--card); border-radius:16px; border:1px solid var(--border);
+  padding:1.4rem; transition:all 0.2s;
+}
+.estim-card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.07); }
+.estim-card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+.estim-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; }
+.estim-info { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem; }
+.estim-info-item { font-size:0.78rem; }
+.estim-info-label { color:var(--muted); }
+.estim-info-val { font-weight:600; color:var(--text); }
+.estim-actions { display:flex; gap:0.5rem; padding-top:0.8rem; border-top:1px solid var(--border); }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1200px) {
+  .kpi-grid { grid-template-columns:repeat(2,1fr); }
+  .dash-grid { grid-template-columns:1fr; }
+  .dash-grid2 { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:768px) {
+  #sidebar { width:68px; }
+  #sidebar.collapsed { width:0; }
+  #main { margin-left:68px; }
+  #main.collapsed { margin-left:0; }
+  .kpi-grid { grid-template-columns:1fr 1fr; }
+  .dash-grid2 { grid-template-columns:1fr; }
+  .settings-grid { grid-template-columns:1fr; }
+}
+
+/* Progress bar */
+.progress { background:var(--bg); border-radius:20px; height:6px; overflow:hidden; margin-top:4px; }
+.progress-fill { height:100%; border-radius:20px; transition:width 0.8s ease; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo"><span>T2i</span> <span>Admin</span></div>
+    <div class="login-sub">PANNEAU D'ADMINISTRATION IMMOBILIER</div>
+    <div class="login-error" id="loginError">Identifiants incorrects. Réessayez.</div>
+    <label class="login-label">Identifiant</label>
+    <input type="text" class="login-input" id="loginUser" placeholder="admin" value="admin">
+    <label class="login-label">Mot de passe</label>
+    <input type="password" class="login-input" id="loginPass" placeholder="••••••••" value="t2i2024">
+    <button class="login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> &nbsp;Se connecter</button>
+    <p class="login-hint">Identifiants par défaut : admin / t2i2024</p>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div id="sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-logo"><span>T2i</span> <span>Admin</span></div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Réduire">
+      <i class="fas fa-bars" id="toggleIcon"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">PRINCIPAL</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">
+      <i class="fas fa-chart-pie nav-icon"></i>
+      <span class="nav-label">Tableau de bord</span>
+      <span class="nav-tooltip">Tableau de bord</span>
+    </div>
+
+    <div class="nav-section-label">GESTION</div>
+    <div class="nav-item" onclick="showPage('biens',this)">
+      <i class="fas fa-home nav-icon"></i>
+      <span class="nav-label">Biens immobiliers</span>
+      <span class="nav-tooltip">Biens immobiliers</span>
+    </div>
+    <div class="nav-item" onclick="showPage('messages',this)">
+      <i class="fas fa-envelope nav-icon"></i>
+      <span class="nav-label">Messages</span>
+      <span class="nav-badge" id="msgBadge">5</span>
+      <span class="nav-tooltip">Messages</span>
+    </div>
+    <div class="nav-item" onclick="showPage('estimations',this)">
+      <i class="fas fa-calculator nav-icon"></i>
+      <span class="nav-label">Estimations</span>
+      <span class="nav-badge" id="estimBadge">3</span>
+      <span class="nav-tooltip">Estimations</span>
+    </div>
+    <div class="nav-item" onclick="showPage('partenaires',this)">
+      <i class="fas fa-handshake nav-icon"></i>
+      <span class="nav-label">Partenaires</span>
+      <span class="nav-tooltip">Partenaires</span>
+    </div>
+    <div class="nav-item" onclick="showPage('faq',this)">
+      <i class="fas fa-question-circle nav-icon"></i>
+      <span class="nav-label">FAQ</span>
+      <span class="nav-tooltip">FAQ</span>
+    </div>
+    <div class="nav-item" onclick="showPage('temoignages',this)">
+      <i class="fas fa-star nav-icon"></i>
+      <span class="nav-label">Témoignages</span>
+      <span class="nav-tooltip">Témoignages</span>
+    </div>
+
+    <div class="nav-section-label">SYSTÈME</div>
+    <div class="nav-item" onclick="showPage('settings',this)">
+      <i class="fas fa-cog nav-icon"></i>
+      <span class="nav-label">Paramètres</span>
+      <span class="nav-tooltip">Paramètres</span>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="admin-avatar">AD</div>
+    <div class="admin-info">
+      <div class="admin-name">Administrateur</div>
+      <div class="admin-role">Super Admin</div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div id="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Tableau de bord</div>
+    <div class="topbar-search">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Rechercher...">
+    </div>
+    <div class="topbar-actions">
+      <div class="topbar-btn" onclick="toggleNotif()" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topbar-btn" title="Voir le site" onclick="window.open('t2i-immobilier.html')">
+        <i class="fas fa-external-link-alt"></i>
+      </div>
+      <div class="topbar-date" id="topbarDate"></div>
+    </div>
+  </div>
+
+  <!-- ====== DASHBOARD ====== -->
+  <div class="page active" id="page-dashboard">
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--orange-dim);color:var(--orange)"><i class="fas fa-home"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color:var(--orange)">24</div>
+          <div class="kpi-label">Biens actifs</div>
+          <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +3 ce mois</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--green-dim);color:var(--green)"><i class="fas fa-check-circle"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color:var(--green)">8</div>
+          <div class="kpi-label">Transactions conclues</div>
+          <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +2 ce mois</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--blue-dim);color:var(--blue)"><i class="fas fa-envelope"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color:var(--blue)">5</div>
+          <div class="kpi-label">Messages non lus</div>
+          <div class="kpi-trend trend-down"><i class="fas fa-arrow-down"></i> -1 vs hier</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--red-dim);color:var(--red)"><i class="fas fa-calculator"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color:var(--red)">3</div>
+          <div class="kpi-label">Estimations en attente</div>
+          <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +3 nouveaux</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Activité mensuelle – Transactions</span>
+          <span class="card-action" onclick="showPage('biens',document.querySelector('[onclick*=biens]'))">Voir tout</span>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="chartLine"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Répartition des biens</span>
+        </div>
+        <div class="card-body">
+          <div class="donut-wrap">
+            <canvas class="donut-chart" id="chartDonut"></canvas>
+            <div class="donut-legend">
+              <div class="donut-item"><div class="donut-color" style="background:var(--orange)"></div>Villas à vendre<span class="donut-pct">42%</span></div>
+              <div class="donut-item"><div class="donut-color" style="background:var(--green)"></div>Villas en location<span class="donut-pct">31%</span></div>
+              <div class="donut-item"><div class="donut-color" style="background:var(--blue)"></div>Parcelles<span class="donut-pct">27%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-grid2">
+      <div class="card">
+        <div class="card-head"><span class="card-title">Derniers messages</span><span class="card-action" onclick="showPage('messages',document.querySelectorAll('.nav-item')[2])">Voir tout</span></div>
+        <div class="activity-list">
+          <div class="activity-item"><div class="act-dot" style="background:var(--orange)"></div><div class="act-body"><div class="act-text"><strong>Idrissa Sawadogo</strong> — Demande de visite villa Zone du Bois</div><div class="act-time">Il y a 12 min</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--blue)"></div><div class="act-body"><div class="act-text"><strong>Amina Kaboré</strong> — Question sur parcelle secteur 22</div><div class="act-time">Il y a 1h</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--green)"></div><div class="act-body"><div class="act-text"><strong>Jean-Marc Ouédraogo</strong> — Intéressé par villa Ouaga 2000</div><div class="act-time">Il y a 3h</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--muted)"></div><div class="act-body"><div class="act-text"><strong>Fatoumata Coulibaly</strong> — Estimation bien Karpala</div><div class="act-time">Hier, 16h40</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Estimations récentes</span><span class="card-action" onclick="showPage('estimations',document.querySelectorAll('.nav-item')[3])">Voir tout</span></div>
+        <div class="activity-list">
+          <div class="activity-item"><div class="act-dot" style="background:var(--red)"></div><div class="act-body"><div class="act-text"><strong>Bintou Traoré</strong> — Villa meublée, 400m², Pissy</div><div class="act-time">Il y a 30 min • <span style="color:var(--red);font-weight:600">En attente</span></div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--orange)"></div><div class="act-body"><div class="act-text"><strong>Hamidou Zongo</strong> — Parcelle 600m², Sect. 30</div><div class="act-time">Il y a 2h • <span style="color:var(--orange);font-weight:600">En cours</span></div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--green)"></div><div class="act-body"><div class="act-text"><strong>Salif Dianda</strong> — Villa 3ch, Zone du Bois</div><div class="act-time">Hier • <span style="color:var(--green);font-weight:600">Terminée</span></div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Performance du mois</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:1.1rem;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px;"><span>Villas vendues</span><strong>5/8</strong></div>
+            <div class="progress"><div class="progress-fill" style="width:62%;background:var(--orange)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px;"><span>Locations signées</span><strong>3/5</strong></div>
+            <div class="progress"><div class="progress-fill" style="width:60%;background:var(--green)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px;"><span>Parcelles vendues</span><strong>2/6</strong></div>
+            <div class="progress"><div class="progress-fill" style="width:33%;background:var(--blue)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:4px;"><span>Objectif mensuel</span><strong>72%</strong></div>
+            <div class="progress"><div class="progress-fill" style="width:72%;background:linear-gradient(90deg,var(--orange),var(--green))"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== BIENS ====== -->
+  <div class="page" id="page-biens">
+    <div class="page-header">
+      <div>
+        <h1>Biens Immobiliers</h1>
+        <p>Gérez l'ensemble de votre portefeuille de propriétés</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modalBien')"><i class="fas fa-plus"></i> Ajouter un bien</button>
+    </div>
+    <div class="filters-bar">
+      <div class="filter-search"><i class="fas fa-search"></i><input type="text" placeholder="Rechercher un bien..." oninput="filterBiens(this.value)"></div>
+      <select class="filter-select" id="filterType" onchange="filterBiens()">
+        <option value="">Tous les types</option>
+        <option value="vente">Vente</option>
+        <option value="location">Location</option>
+        <option value="parcelle">Parcelle</option>
+      </select>
+      <select class="filter-select" id="filterStatus" onchange="filterBiens()">
+        <option value="">Tous les statuts</option>
+        <option value="disponible">Disponible</option>
+        <option value="reserve">Réservé</option>
+        <option value="vendu">Vendu/Loué</option>
+      </select>
+      <button class="btn btn-ghost" style="margin-left:auto" onclick="renderBiensGrid()"><i class="fas fa-sync"></i> Actualiser</button>
+    </div>
+    <div class="props-admin-grid" id="biensGrid"></div>
+  </div>
+
+  <!-- ====== MESSAGES ====== -->
+  <div class="page" id="page-messages">
+    <div class="page-header">
+      <div>
+        <h1>Messages</h1>
+        <p>Messages reçus via le formulaire de contact du site</p>
+      </div>
+      <div style="display:flex;gap:0.7rem">
+        <button class="btn btn-ghost"><i class="fas fa-filter"></i> Filtrer</button>
+        <button class="btn btn-green" onclick="markAllRead()"><i class="fas fa-check-double"></i> Tout marquer lu</button>
+      </div>
+    </div>
+    <div class="card">
+      <table class="data-table" id="msgsTable">
+        <thead>
+          <tr>
+            <th style="width:30px"><input type="checkbox" onchange="toggleAllCheck(this)"></th>
+            <th>Expéditeur</th><th>Sujet</th><th>Message</th>
+            <th>Date</th><th>Statut</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="msgsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== ESTIMATIONS ====== -->
+  <div class="page" id="page-estimations">
+    <div class="page-header">
+      <div>
+        <h1>Demandes d'Estimation</h1>
+        <p>Gérez les estimations de biens immobiliers demandées en ligne</p>
+      </div>
+      <div style="display:flex;gap:0.7rem">
+        <button class="btn btn-ghost"><i class="fas fa-download"></i> Exporter</button>
+      </div>
+    </div>
+    <div class="filters-bar">
+      <select class="filter-select">
+        <option>Tous les statuts</option>
+        <option>En attente</option>
+        <option>En cours</option>
+        <option>Terminée</option>
+      </select>
+      <select class="filter-select">
+        <option>Tous les types</option>
+        <option>Villa meublée</option>
+        <option>Parcelle</option>
+        <option>Terrain nu</option>
+      </select>
+    </div>
+    <div class="estim-grid" id="estimGrid"></div>
+  </div>
+
+  <!-- ====== PARTENAIRES ====== -->
+  <div class="page" id="page-partenaires">
+    <div class="page-header">
+      <div><h1>Partenaires</h1><p>Gérez les partenaires affichés sur le site</p></div>
+      <button class="btn btn-primary" onclick="openModal('modalPartner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Nom du partenaire</th><th>Catégorie</th><th>Site web</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="partnersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== FAQ ====== -->
+  <div class="page" id="page-faq">
+    <div class="page-header">
+      <div><h1>FAQ</h1><p>Gérez les questions fréquemment posées du site</p></div>
+      <button class="btn btn-primary" onclick="openModal('modalFaq')"><i class="fas fa-plus"></i> Ajouter une question</button>
+    </div>
+    <div id="faqList" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+  </div>
+
+  <!-- ====== TÉMOIGNAGES ====== -->
+  <div class="page" id="page-temoignages">
+    <div class="page-header">
+      <div><h1>Témoignages</h1><p>Gérez les avis clients affichés sur le site</p></div>
+      <button class="btn btn-primary" onclick="openModal('modalTesti')"><i class="fas fa-plus"></i> Ajouter un témoignage</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;" id="testiGrid"></div>
+  </div>
+
+  <!-- ====== SETTINGS ====== -->
+  <div class="page" id="page-settings">
+    <div class="page-header"><div><h1>Paramètres</h1><p>Configuration générale du site et de l'administration</p></div></div>
+    <div class="settings-grid">
+      <div class="settings-nav">
+        <div class="settings-nav-item active" onclick="showSettingsPanel('general',this)"><i class="fas fa-globe"></i> Général</div>
+        <div class="settings-nav-item" onclick="showSettingsPanel('contact',this)"><i class="fas fa-phone"></i> Coordonnées</div>
+        <div class="settings-nav-item" onclick="showSettingsPanel('notifications',this)"><i class="fas fa-bell"></i> Notifications</div>
+        <div class="settings-nav-item" onclick="showSettingsPanel('securite',this)"><i class="fas fa-lock"></i> Sécurité</div>
+        <div class="settings-nav-item" onclick="showSettingsPanel('apparence',this)"><i class="fas fa-paint-brush"></i> Apparence</div>
+      </div>
+      <div class="settings-panel">
+        <!-- General -->
+        <div id="sp-general">
+          <div class="settings-section">
+            <h3>Informations de l'agence</h3>
+            <p>Ces informations apparaîtront sur le site public.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Nom de l'agence</label><input class="form-control" value="T2i Immobilier"></div>
+              <div class="form-group"><label>Slogan</label><input class="form-control" value="Le partenariat sûr dans l'immobilier"></div>
+              <div class="form-group full"><label>Description</label><textarea class="form-control">Votre agence immobilière de référence à Ouagadougou. Vente, location et transactions en gros.</textarea></div>
+              <div class="form-group full"><label>Site web</label><input class="form-control" value="t2iimmobilier.com"></div>
+            </div>
+            <div style="margin-top:1rem"><button class="btn btn-primary" onclick="showToast('Informations sauvegardées ✓','green')"><i class="fas fa-save"></i> Sauvegarder</button></div>
+          </div>
+        </div>
+        <!-- Contact -->
+        <div id="sp-contact" style="display:none">
+          <div class="settings-section">
+            <h3>Coordonnées de contact</h3>
+            <p>Informations affichées dans le footer et la section contact.</p>
+            <div class="form-grid">
+              <div class="form-group full"><label>Adresse complète</label><input class="form-control" value="Immeuble Zidnaba, Avenue de la Grande Mosquée, face au projet ZACA, Ouagadougou"></div>
+              <div class="form-group"><label>Téléphone 1</label><input class="form-control" value="(+226) 25 33 07 05"></div>
+              <div class="form-group"><label>Téléphone 2</label><input class="form-control" value="(+226) 70 78 11 11"></div>
+              <div class="form-group"><label>Téléphone 3</label><input class="form-control" value="(+226) 76 74 41 41"></div>
+              <div class="form-group"><label>Email de contact</label><input class="form-control" placeholder="contact@t2iimmobilier.com"></div>
+              <div class="form-group"><label>Horaires (Lun-Ven)</label><input class="form-control" value="8h00 – 17h30"></div>
+              <div class="form-group"><label>Horaires (Samedi)</label><input class="form-control" value="9h00 – 13h00"></div>
+            </div>
+            <div style="margin-top:1rem"><button class="btn btn-primary" onclick="showToast('Coordonnées sauvegardées ✓','green')"><i class="fas fa-save"></i> Sauvegarder</button></div>
+          </div>
+        </div>
+        <!-- Notifications -->
+        <div id="sp-notifications" style="display:none">
+          <div class="settings-section">
+            <h3>Notifications email</h3>
+            <p>Choisissez quand recevoir des notifications par email.</p>
+            <div class="toggle-row"><div><div class="toggle-label">Nouveau message de contact</div><div class="toggle-desc">Email immédiat dès qu'un visiteur envoie un message</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Nouvelle demande d'estimation</div><div class="toggle-desc">Notifié quand une estimation est demandée en ligne</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Résumé quotidien</div><div class="toggle-desc">Rapport d'activité chaque matin à 8h</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Alerte bien expiré</div><div class="toggle-desc">Notifié quand un bien dépasse 90 jours sans vente</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+        <!-- Sécurité -->
+        <div id="sp-securite" style="display:none">
+          <div class="settings-section">
+            <h3>Changer le mot de passe</h3>
+            <p>Mettez à jour votre mot de passe administrateur.</p>
+            <div class="form-grid">
+              <div class="form-group full"><label>Mot de passe actuel</label><input type="password" class="form-control" placeholder="••••••••"></div>
+              <div class="form-group"><label>Nouveau mot de passe</label><input type="password" class="form-control" placeholder="••••••••"></div>
+              <div class="form-group"><label>Confirmer le mot de passe</label><input type="password" class="form-control" placeholder="••••••••"></div>
+            </div>
+            <div style="margin-top:1rem"><button class="btn btn-primary" onclick="showToast('Mot de passe mis à jour ✓','green')"><i class="fas fa-lock"></i> Mettre à jour</button></div>
+          </div>
+          <div class="settings-section">
+            <h3>Sessions actives</h3>
+            <p>Gérez les sessions de connexion ouvertes.</p>
+            <div class="toggle-row"><div><div class="toggle-label">Session actuelle – Chrome / Windows</div><div class="toggle-desc">Ouagadougou · Dernière activité : maintenant</div></div><span class="badge badge-green">Actif</span></div>
+          </div>
+        </div>
+        <!-- Apparence -->
+        <div id="sp-apparence" style="display:none">
+          <div class="settings-section">
+            <h3>Couleurs du site</h3>
+            <p>Personnalisez les couleurs principales du site public.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Couleur principale (orange)</label><input type="color" class="form-control" value="#E8650A" style="height:44px;padding:4px;cursor:pointer"></div>
+              <div class="form-group"><label>Couleur secondaire (vert)</label><input type="color" class="form-control" value="#3D7A34" style="height:44px;padding:4px;cursor:pointer"></div>
+            </div>
+            <div style="margin-top:1rem"><button class="btn btn-primary" onclick="showToast('Couleurs appliquées ✓','green')"><i class="fas fa-palette"></i> Appliquer</button></div>
+          </div>
+          <div class="settings-section">
+            <h3>Sections visibles</h3>
+            <p>Affichez ou masquez des sections du site public.</p>
+            <div class="toggle-row"><div><div class="toggle-label">Section Témoignages</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Section Partenaires</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Section FAQ</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Bouton WhatsApp flottant</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NOTIFICATIONS PANEL ===== -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-head">
+    <h4>Notifications</h4>
+    <button class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem" onclick="toggleNotif()">Fermer</button>
+  </div>
+  <div class="notif-item unread"><div class="notif-title">Nouveau message reçu</div><div class="notif-desc">Idrissa Sawadogo vous a envoyé un message concernant la villa Zone du Bois</div><div class="notif-time">Il y a 12 min</div></div>
+  <div class="notif-item unread"><div class="notif-title">Nouvelle estimation demandée</div><div class="notif-desc">Bintou Traoré souhaite une estimation pour sa villa à Pissy</div><div class="notif-time">Il y a 30 min</div></div>
+  <div class="notif-item unread"><div class="notif-title">Message de contact</div><div class="notif-desc">Amina Kaboré a une question sur la parcelle secteur 22</div><div class="notif-time">Il y a 1h</div></div>
+  <div class="notif-item"><div class="notif-title">Bien mis à jour</div><div class="notif-desc">La villa Ouaga 2000 a été marquée comme "Réservée"</div><div class="notif-time">Il y a 3h</div></div>
+  <div class="notif-item"><div class="notif-title">Estimation terminée</div><div class="notif-desc">Estimation de Salif Dianda envoyée avec succès</div><div class="notif-time">Hier, 17h00</div></div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- BIEN -->
+<div class="modal-overlay" id="modalBien">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalBienTitle">Ajouter un bien</h3><button class="modal-close" onclick="closeModal('modalBien')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>Titre du bien</label><input class="form-control" placeholder="Ex: Villa 4 chambres meublée – Zone du Bois" id="bienTitre"></div>
+        <div class="form-group"><label>Type de transaction</label>
+          <select class="form-control" id="bienType">
+            <option value="vente">Vente</option>
+            <option value="location">Location</option>
+            <option value="parcelle">Parcelle</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Catégorie</label>
+          <select class="form-control" id="bienCat">
+            <option>Villa meublée</option>
+            <option>Parcelle viabilisée</option>
+            <option>Terrain nu</option>
+            <option>Appartement</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Prix (FCFA)</label><input class="form-control" placeholder="Ex: 65 000 000" id="bienPrix"></div>
+        <div class="form-group"><label>Superficie (m²)</label><input class="form-control" placeholder="Ex: 300" id="bienSuper"></div>
+        <div class="form-group"><label>Chambres</label><input class="form-control" type="number" placeholder="0" id="bienChambres" min="0"></div>
+        <div class="form-group"><label>Salles de bain</label><input class="form-control" type="number" placeholder="0" id="bienBains" min="0"></div>
+        <div class="form-group full"><label>Localisation</label><input class="form-control" placeholder="Secteur, quartier, commune..." id="bienLoc"></div>
+        <div class="form-group"><label>Statut</label>
+          <select class="form-control" id="bienStatus">
+            <option value="disponible">Disponible</option>
+            <option value="reserve">Réservé</option>
+            <option value="vendu">Vendu/Loué</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Description</label><textarea class="form-control" placeholder="Description détaillée du bien..." id="bienDesc"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modalBien')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveBien()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER -->
+<div class="modal-overlay" id="modalPartner">
+  <div class="modal">
+    <div class="modal-head"><h3>Ajouter un partenaire</h3><button class="modal-close" onclick="closeModal('modalPartner')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>Nom du partenaire</label><input class="form-control" placeholder="Ex: Banque Atlantique" id="pName"></div>
+        <div class="form-group"><label>Catégorie</label>
+          <select class="form-control" id="pCat">
+            <option>Banque / Finance</option>
+            <option>Notaire / Juridique</option>
+            <option>Institution publique</option>
+            <option>Promoteur immobilier</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Site web</label><input class="form-control" placeholder="https://..." id="pWeb"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modalPartner')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePartner()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="modal-overlay" id="modalFaq">
+  <div class="modal">
+    <div class="modal-head"><h3>Ajouter une question FAQ</h3><button class="modal-close" onclick="closeModal('modalFaq')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:1rem"><label>Question</label><input class="form-control" placeholder="Ex: Quels documents sont nécessaires ?" id="faqQ"></div>
+      <div class="form-group"><label>Réponse</label><textarea class="form-control" placeholder="Réponse détaillée..." id="faqA" style="min-height:120px"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modalFaq')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveFaq()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TESTI -->
+<div class="modal-overlay" id="modalTesti">
+  <div class="modal">
+    <div class="modal-head"><h3>Ajouter un témoignage</h3><button class="modal-close" onclick="closeModal('modalTesti')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Nom du client</label><input class="form-control" placeholder="Nom complet" id="tName"></div>
+        <div class="form-group"><label>Rôle / Localisation</label><input class="form-control" placeholder="Ex: Acheteur, Secteur 15" id="tRole"></div>
+        <div class="form-group"><label>Note (sur 5)</label>
+          <select class="form-control" id="tNote">
+            <option>5</option><option>4</option><option>3</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Témoignage</label><textarea class="form-control" placeholder="Témoignage du client..." id="tText" style="min-height:100px"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modalTesti')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveTesti()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW MSG MODAL -->
+<div class="modal-overlay" id="modalMsg">
+  <div class="modal">
+    <div class="modal-head"><h3>Détails du message</h3><button class="modal-close" onclick="closeModal('modalMsg')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body" id="modalMsgBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modalMsg')">Fermer</button>
+      <a class="btn btn-green" id="replyBtn" href="#"><i class="fas fa-reply"></i> Répondre</a>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ====== STATE ======
+let biens = [
+  { id:1, titre:'Villa 4 Chambres Meublée – Zone du Bois', type:'vente', cat:'Villa meublée', prix:'65 000 000 FCFA', super:'300', chambres:4, bains:3, loc:'Zone du Bois, Ouagadougou', status:'disponible', color:'#E8650A' },
+  { id:2, titre:'Villa Standing 3 Chambres – Ouaga 2000', type:'location', cat:'Villa meublée', prix:'250 000 FCFA/mois', super:'220', chambres:3, bains:2, loc:'Ouaga 2000, Ouagadougou', status:'reserve', color:'#3D7A34' },
+  { id:3, titre:'Parcelle 600m² – Secteur 30', type:'parcelle', cat:'Parcelle viabilisée', prix:'18 000 000 FCFA', super:'600', chambres:0, bains:0, loc:'Secteur 30, Ouagadougou', status:'disponible', color:'#3A7BD5' },
+  { id:4, titre:'Villa Luxe 5 Chambres – Karpala', type:'vente', cat:'Villa meublée', prix:'120 000 000 FCFA', super:'450', chambres:5, bains:4, loc:'Karpala, Ouagadougou', status:'disponible', color:'#E8650A' },
+  { id:5, titre:'Villa 3 Chambres Climatisée – Pissy', type:'location', cat:'Villa meublée', prix:'180 000 FCFA/mois', super:'180', chambres:3, bains:2, loc:'Pissy, Ouagadougou', status:'vendu', color:'#3D7A34' },
+  { id:6, titre:'Lot 3 Parcelles – Secteur 22', type:'parcelle', cat:'Lot de parcelles', prix:'45 000 000 FCFA', super:'1200', chambres:0, bains:0, loc:'Secteur 22, Ouagadougou', status:'disponible', color:'#3A7BD5' },
+];
+let messages = [
+  { id:1, nom:'Idrissa Sawadogo', phone:'+226 70 11 22 33', sujet:'Demande de visite', msg:'Bonjour, je suis intéressé par la villa Zone du Bois. Pouvez-vous m\'organiser une visite cette semaine ?', date:'26/02/2025 08:35', lu:false },
+  { id:2, nom:'Amina Kaboré', phone:'+226 76 55 44 33', sujet:'Question – Parcelle secteur 22', msg:'Bonjour, j\'ai une question concernant la parcelle du secteur 22. Est-ce qu\'elle est toujours disponible ?', date:'26/02/2025 07:12', lu:false },
+  { id:3, nom:'Jean-Marc Ouédraogo', phone:'+226 25 98 77 66', sujet:'Intérêt villa Ouaga 2000', msg:'Je suis très intéressé par la villa de Ouaga 2000. Quelles sont les conditions de location ?', date:'25/02/2025 16:40', lu:false },
+  { id:4, nom:'Fatoumata Coulibaly', phone:'+226 70 33 44 55', sujet:'Estimation bien', msg:'Bonjour, je souhaite estimer la valeur de mon bien à Karpala avant de le mettre en vente.', date:'25/02/2025 14:20', lu:false },
+  { id:5, nom:'Salif Dianda', phone:'+226 76 22 11 99', sujet:'Achat parcelle en gros', msg:'Bonjour, je cherche à acquérir plusieurs parcelles dans le cadre d\'un projet de promotion immobilière.', date:'24/02/2025 10:05', lu:true },
+  { id:6, nom:'Rokiatou Traoré', phone:'+226 70 88 77 66', sujet:'Renseignement général', msg:'Bonjour, quels sont vos frais d\'agence pour une vente ?', date:'23/02/2025 09:30', lu:true },
+];
+let estimations = [
+  { id:1, nom:'Bintou Traoré', phone:'+226 70 12 34 56', type:'Villa meublée', loc:'Pissy, Ouagadougou', super:'400', objectif:'Vente', desc:'4 chambres, 2 SDB, climatisée, jardin', status:'attente', date:'26/02/2025' },
+  { id:2, nom:'Hamidou Zongo', phone:'+226 76 98 76 54', type:'Parcelle', loc:'Secteur 30, Ouagadougou', super:'600', objectif:'Évaluation patrimoine', desc:'Terrain nu, titre foncier disponible', status:'cours', date:'26/02/2025' },
+  { id:3, nom:'Salif Dianda', phone:'+226 25 44 33 22', type:'Villa meublée', loc:'Zone du Bois, Ouagadougou', super:'250', objectif:'Vente', desc:'3 chambres, bien entretenu, clôture', status:'terminee', date:'25/02/2025' },
+  { id:4, nom:'Mariam Ouédraogo', phone:'+226 70 55 66 77', type:'Terrain nu', loc:'Secteur 18, Ouagadougou', super:'800', objectif:'Location', desc:'Terrain plat, accès route bitumée', status:'attente', date:'24/02/2025' },
+];
+let partners = [
+  { id:1, nom:'Banque Atlantique', cat:'Banque / Finance', web:'banqueatlantique.net', actif:true },
+  { id:2, nom:'ECOBANK Burkina Faso', cat:'Banque / Finance', web:'ecobank.com', actif:true },
+  { id:3, nom:'SONATUR', cat:'Institution publique', web:'sonatur.bf', actif:true },
+  { id:4, nom:'Notaires Associés BF', cat:'Notaire / Juridique', web:'', actif:true },
+  { id:5, nom:'BIB Burkina', cat:'Banque / Finance', web:'bib.bf', actif:false },
+];
+let faqs = [
+  { id:1, q:'Quels documents sont nécessaires pour louer une villa ?', a:'Pour louer une villa chez T2i, vous aurez besoin d\'une pièce d\'identité valide, d\'une preuve de revenus, d\'un dépôt de garantie et d\'une caution si nécessaire.' },
+  { id:2, q:'Comment se déroule le processus d\'achat d\'une parcelle ?', a:'L\'achat passe par : identification du bien, vérification des titres fonciers, compromis de vente, passage chez le notaire, et transfert officiel de propriété.' },
+  { id:3, q:'Proposez-vous des biens en gros pour les investisseurs ?', a:'Oui ! T2i dispose d\'un portefeuille dédié aux investisseurs avec des lots de parcelles et des conditions avantageuses.' },
+  { id:4, q:'L\'estimation de mon bien est-elle vraiment gratuite ?', a:'Oui, notre service d\'estimation est 100% gratuit et sans engagement. Réponse sous 24h.' },
+];
+let testis = [
+  { id:1, nom:'Koné Oumarou', role:'Acheteur, Secteur 15', note:5, text:'T2i Immobilier m\'a aidé à trouver ma villa meublée en moins de deux semaines. Processus clair et sans mauvaise surprise. Je recommande vivement !' },
+  { id:2, nom:'Fatimata Diallo', role:'Investisseure, Ouagadougou', note:5, text:'J\'ai investi dans plusieurs parcelles grâce à T2i. Leur connaissance du marché local est impressionnante. Merci à toute l\'équipe.' },
+  { id:3, nom:'Marc Traoré', role:'Locataire, Zone du Bois', note:5, text:'En tant qu\'expatrié, j\'avais besoin d\'une agence fiable pour louer rapidement. T2i a géré tout à distance avec professionnalisme.' },
+];
+
+let editingBienId = null;
+
+// ====== LOGIN ======
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if(u==='admin' && p==='t2i2024') {
+    document.getElementById('loginScreen').style.display='none';
+    initDashboard();
+  } else {
+    document.getElementById('loginError').style.display='block';
+    setTimeout(()=>document.getElementById('loginError').style.display='none',3000);
+  }
+}
+document.getElementById('loginPass').addEventListener('keypress', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('loginUser').addEventListener('keypress', e=>{ if(e.key==='Enter') document.getElementById('loginPass').focus(); });
+
+function doLogout() {
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+// ====== SIDEBAR ======
+let collapsed = false;
+function toggleSidebar() {
+  collapsed = !collapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed', collapsed);
+  document.getElementById('main').classList.toggle('collapsed', collapsed);
+}
+
+// ====== NAVIGATION ======
+const pageNames = {
+  dashboard:'Tableau de bord', biens:'Biens Immobiliers', messages:'Messages',
+  estimations:'Estimations', partenaires:'Partenaires', faq:'FAQ',
+  temoignages:'Témoignages', settings:'Paramètres'
+};
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = pageNames[id]||id;
+  // Render page data
+  if(id==='biens') renderBiensGrid();
+  if(id==='messages') renderMessages();
+  if(id==='estimations') renderEstimations();
+  if(id==='partenaires') renderPartners();
+  if(id==='faq') renderFaqs();
+  if(id==='temoignages') renderTestis();
+}
+
+// ====== DATE ======
+function updateDate() {
+  const now = new Date();
+  const opts = { weekday:'short', day:'numeric', month:'short', year:'numeric' };
+  document.getElementById('topbarDate').textContent = now.toLocaleDateString('fr-FR', opts);
+}
+updateDate();
+setInterval(updateDate, 60000);
+
+// ====== CHARTS ======
+function initDashboard() {
+  // Line chart
+  const ctx = document.getElementById('chartLine').getContext('2d');
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'],
+      datasets:[
+        { label:'Ventes', data:[3,5,4,6,8,5,7,9,6,8,10,8], borderColor:'#E8650A', backgroundColor:'rgba(232,101,10,0.08)', tension:0.4, fill:true, pointBackgroundColor:'#E8650A', pointRadius:4 },
+        { label:'Locations', data:[2,3,4,3,5,4,6,5,7,6,8,6], borderColor:'#3D7A34', backgroundColor:'rgba(61,122,52,0.06)', tension:0.4, fill:true, pointBackgroundColor:'#3D7A34', pointRadius:4 },
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ labels:{ font:{ family:'Instrument Sans', size:11 }, color:'#7A7670' } } }, scales:{ x:{ grid:{ display:false }, ticks:{ font:{ family:'Instrument Sans', size:11 }, color:'#7A7670' } }, y:{ grid:{ color:'#F0EEE9' }, ticks:{ font:{ family:'Instrument Sans', size:11 }, color:'#7A7670' } } } }
+  });
+  // Donut
+  const ctx2 = document.getElementById('chartDonut').getContext('2d');
+  new Chart(ctx2, {
+    type:'doughnut',
+    data:{
+      labels:['Vente','Location','Parcelle'],
+      datasets:[{ data:[42,31,27], backgroundColor:['#E8650A','#3D7A34','#3A7BD5'], borderWidth:0, hoverOffset:6 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'72%', plugins:{ legend:{ display:false } } }
+  });
+}
+
+// ====== BIENS ======
+function renderBiensGrid(data) {
+  const grid = document.getElementById('biensGrid');
+  const items = data || biens;
+  if(!items.length) { grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-home"></i><h4>Aucun bien trouvé</h4><p>Ajoutez votre premier bien immobilier.</p></div>`; return; }
+  const statusLabel = { disponible:'Disponible', reserve:'Réservé', vendu:'Vendu/Loué' };
+  const statusBadge = { disponible:'badge-green', reserve:'badge-orange', vendu:'badge-gray' };
+  const typeBadge = { vente:'badge-orange', location:'badge-green', parcelle:'badge-blue' };
+  const typeLabel = { vente:'Vente', location:'Location', parcelle:'Parcelle' };
+  grid.innerHTML = items.map(b => `
+    <div class="prop-admin-card">
+      <div class="prop-admin-img" style="background:linear-gradient(135deg,${b.color}18,${b.color}30)">
+        <i class="fas ${b.type==='parcelle'?'fa-map-marked-alt':'fa-home'}" style="color:${b.color};font-size:3rem;opacity:0.4"></i>
+        <div style="position:absolute;top:10px;left:10px"><span class="badge ${typeBadge[b.type]}">${typeLabel[b.type]}</span></div>
+        <div style="position:absolute;top:10px;right:10px"><span class="badge ${statusBadge[b.status]}">${statusLabel[b.status]}</span></div>
+      </div>
+      <div class="prop-admin-body">
+        <h4>${b.titre}</h4>
+        <div class="loc"><i class="fas fa-map-marker-alt" style="color:var(--orange)"></i> ${b.loc}</div>
+        <div style="display:flex;gap:10px;font-size:0.77rem;color:var(--muted)">
+          ${b.chambres>0?`<span><i class="fas fa-bed"></i> ${b.chambres} ch.</span>`:''}
+          ${b.bains>0?`<span><i class="fas fa-bath"></i> ${b.bains} sdb</span>`:''}
+          <span><i class="fas fa-ruler-combined"></i> ${b.super}m²</span>
+        </div>
+        <div class="prop-admin-footer">
+          <div class="prop-price-sm">${b.prix}</div>
+          <div class="prop-actions">
+            <button class="action-btn view-btn" title="Aperçu"><i class="fas fa-eye"></i></button>
+            <button class="action-btn edit-btn" onclick="editBien(${b.id})" title="Modifier"><i class="fas fa-edit"></i></button>
+            <button class="action-btn del-btn" onclick="deleteBien(${b.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterBiens(q) {
+  const query = (typeof q==='string' ? q : document.querySelector('.filter-search input')?.value||'').toLowerCase();
+  const type = document.getElementById('filterType')?.value||'';
+  const status = document.getElementById('filterStatus')?.value||'';
+  const filtered = biens.filter(b =>
+    (!query || b.titre.toLowerCase().includes(query) || b.loc.toLowerCase().includes(query)) &&
+    (!type || b.type===type) &&
+    (!status || b.status===status)
+  );
+  renderBiensGrid(filtered);
+}
+
+function editBien(id) {
+  const b = biens.find(x=>x.id===id);
+  if(!b) return;
+  editingBienId = id;
+  document.getElementById('bienTitre').value = b.titre;
+  document.getElementById('bienType').value = b.type;
+  document.getElementById('bienPrix').value = b.prix;
+  document.getElementById('bienSuper').value = b.super;
+  document.getElementById('bienChambres').value = b.chambres;
+  document.getElementById('bienBains').value = b.bains;
+  document.getElementById('bienLoc').value = b.loc;
+  document.getElementById('bienStatus').value = b.status;
+  document.getElementById('modalBienTitle').textContent = 'Modifier le bien';
+  openModal('modalBien');
+}
+
+function saveBien() {
+  const titre = document.getElementById('bienTitre').value.trim();
+  const prix = document.getElementById('bienPrix').value.trim();
+  const loc = document.getElementById('bienLoc').value.trim();
+  if(!titre || !prix || !loc) { showToast('Veuillez remplir les champs obligatoires','red'); return; }
+  const typeVal = document.getElementById('bienType').value;
+  const colors = { vente:'#E8650A', location:'#3D7A34', parcelle:'#3A7BD5' };
+  if(editingBienId) {
+    const idx = biens.findIndex(b=>b.id===editingBienId);
+    biens[idx] = { ...biens[idx], titre, type:typeVal, cat:document.getElementById('bienCat').value, prix, super:document.getElementById('bienSuper').value, chambres:+document.getElementById('bienChambres').value, bains:+document.getElementById('bienBains').value, loc, status:document.getElementById('bienStatus').value, color:colors[typeVal] };
+    showToast('Bien modifié avec succès ✓','green');
+  } else {
+    biens.unshift({ id:Date.now(), titre, type:typeVal, cat:document.getElementById('bienCat').value, prix, super:document.getElementById('bienSuper').value, chambres:+document.getElementById('bienChambres').value, bains:+document.getElementById('bienBains').value, loc, status:document.getElementById('bienStatus').value, color:colors[typeVal] });
+    showToast('Bien ajouté avec succès ✓','green');
+  }
+  closeModal('modalBien'); renderBiensGrid(); editingBienId=null;
+  document.getElementById('modalBienTitle').textContent='Ajouter un bien';
+  ['bienTitre','bienPrix','bienSuper','bienChambres','bienBains','bienLoc','bienDesc'].forEach(id=>document.getElementById(id).value='');
+}
+
+function deleteBien(id) {
+  if(!confirm('Supprimer ce bien définitivement ?')) return;
+  biens = biens.filter(b=>b.id!==id);
+  renderBiensGrid(); showToast('Bien supprimé','red');
+}
+
+// ====== MESSAGES ======
+function renderMessages() {
+  const tbody = document.getElementById('msgsBody');
+  tbody.innerHTML = messages.map(m => `
+    <tr class="${m.lu?'':'msg-unread'}">
+      <td><input type="checkbox"></td>
+      <td style="font-weight:${m.lu?'400':'700'}">${m.nom}<br><span style="font-size:0.75rem;color:var(--muted);font-weight:400">${m.phone}</span></td>
+      <td style="font-weight:${m.lu?'400':'600'}">${m.sujet}</td>
+      <td class="msg-preview">${m.msg}</td>
+      <td style="color:var(--muted);font-size:0.8rem">${m.date}</td>
+      <td><span class="badge ${m.lu?'badge-gray':'badge-orange'}">${m.lu?'Lu':'Non lu'}</span></td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="action-btn view-btn" onclick="viewMsg(${m.id})" title="Voir"><i class="fas fa-eye"></i></button>
+          <button class="action-btn edit-btn" onclick="markMsgRead(${m.id})" title="Marquer lu"><i class="fas fa-check"></i></button>
+          <button class="action-btn del-btn" onclick="deleteMsg(${m.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  document.getElementById('msgBadge').textContent = messages.filter(m=>!m.lu).length;
+}
+
+function viewMsg(id) {
+  const m = messages.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('modalMsgBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.2rem">
+      <div class="form-group"><label>De</label><div style="padding:0.7rem;background:var(--bg);border-radius:8px;font-size:0.88rem">${m.nom}</div></div>
+      <div class="form-group"><label>Téléphone</label><div style="padding:0.7rem;background:var(--bg);border-radius:8px;font-size:0.88rem">${m.phone}</div></div>
+      <div class="form-group" style="grid-column:1/-1"><label>Sujet</label><div style="padding:0.7rem;background:var(--bg);border-radius:8px;font-size:0.88rem;font-weight:600">${m.sujet}</div></div>
+      <div class="form-group" style="grid-column:1/-1"><label>Message</label><div style="padding:1rem;background:var(--bg);border-radius:8px;font-size:0.88rem;line-height:1.6">${m.msg}</div></div>
+      <div class="form-group" style="grid-column:1/-1"><label>Reçu le</label><div style="padding:0.7rem;background:var(--bg);border-radius:8px;font-size:0.85rem;color:var(--muted)">${m.date}</div></div>
+    </div>
+  `;
+  document.getElementById('replyBtn').href = `tel:${m.phone}`;
+  markMsgRead(id);
+  openModal('modalMsg');
+}
+
+function markMsgRead(id) {
+  const m = messages.find(x=>x.id===id);
+  if(m) { m.lu=true; renderMessages(); }
+}
+function markAllRead() {
+  messages.forEach(m=>m.lu=true); renderMessages(); showToast('Tous les messages marqués comme lus ✓','green');
+}
+function deleteMsg(id) {
+  if(!confirm('Supprimer ce message ?')) return;
+  messages = messages.filter(m=>m.id!==id); renderMessages(); showToast('Message supprimé','red');
+}
+function toggleAllCheck(cb) {
+  document.querySelectorAll('#msgsBody input[type=checkbox]').forEach(c=>c.checked=cb.checked);
+}
+
+// ====== ESTIMATIONS ======
+function renderEstimations() {
+  const grid = document.getElementById('estimGrid');
+  const statusLabel = { attente:'En attente', cours:'En cours', terminee:'Terminée' };
+  const statusBadge = { attente:'badge-red', cours:'badge-orange', terminee:'badge-green' };
+  grid.innerHTML = estimations.map(e => `
+    <div class="estim-card">
+      <div class="estim-card-head">
+        <div>
+          <div class="estim-name">${e.nom}</div>
+          <div style="font-size:0.78rem;color:var(--muted)">${e.date}</div>
+        </div>
+        <span class="badge ${statusBadge[e.status]}">${statusLabel[e.status]}</span>
+      </div>
+      <div class="estim-info">
+        <div class="estim-info-item"><div class="estim-info-label">Type</div><div class="estim-info-val">${e.type}</div></div>
+        <div class="estim-info-item"><div class="estim-info-label">Superficie</div><div class="estim-info-val">${e.super} m²</div></div>
+        <div class="estim-info-item"><div class="estim-info-label">Localisation</div><div class="estim-info-val">${e.loc}</div></div>
+        <div class="estim-info-item"><div class="estim-info-label">Objectif</div><div class="estim-info-val">${e.objectif}</div></div>
+        <div class="estim-info-item" style="grid-column:1/-1"><div class="estim-info-label">Description</div><div class="estim-info-val" style="font-weight:400;color:var(--muted);font-size:0.8rem">${e.desc}</div></div>
+      </div>
+      <div class="estim-actions">
+        <a href="tel:${e.phone}" class="btn btn-green" style="flex:1;justify-content:center;font-size:0.78rem"><i class="fas fa-phone"></i> ${e.phone}</a>
+        <button class="btn btn-ghost" style="font-size:0.78rem" onclick="changeEstimStatus(${e.id},'cours')"><i class="fas fa-play"></i> En cours</button>
+        <button class="btn btn-primary" style="font-size:0.78rem" onclick="changeEstimStatus(${e.id},'terminee')"><i class="fas fa-check"></i> Terminer</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('estimBadge').textContent = estimations.filter(e=>e.status==='attente').length;
+}
+function changeEstimStatus(id, status) {
+  const e = estimations.find(x=>x.id===id);
+  if(e) { e.status=status; renderEstimations(); showToast('Statut mis à jour ✓','green'); }
+}
+
+// ====== PARTNERS ======
+function renderPartners() {
+  const tbody = document.getElementById('partnersBody');
+  tbody.innerHTML = partners.map((p,i) => `
+    <tr>
+      <td style="color:var(--muted);font-size:0.8rem">${i+1}</td>
+      <td style="font-weight:600">${p.nom}</td>
+      <td><span class="badge badge-blue">${p.cat}</span></td>
+      <td style="font-size:0.82rem;color:var(--muted)">${p.web||'–'}</td>
+      <td><span class="badge ${p.actif?'badge-green':'badge-gray'}">${p.actif?'Actif':'Inactif'}</span></td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="action-btn edit-btn" onclick="togglePartner(${p.id})" title="Toggle actif"><i class="fas fa-toggle-on"></i></button>
+          <button class="action-btn del-btn" onclick="deletePartner(${p.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function togglePartner(id) {
+  const p = partners.find(x=>x.id===id);
+  if(p) { p.actif=!p.actif; renderPartners(); showToast(p.actif?'Partenaire activé ✓':'Partenaire désactivé','orange'); }
+}
+function deletePartner(id) {
+  if(!confirm('Supprimer ce partenaire ?')) return;
+  partners = partners.filter(p=>p.id!==id); renderPartners(); showToast('Partenaire supprimé','red');
+}
+function savePartner() {
+  const nom = document.getElementById('pName').value.trim();
+  if(!nom) { showToast('Veuillez entrer un nom','red'); return; }
+  partners.push({ id:Date.now(), nom, cat:document.getElementById('pCat').value, web:document.getElementById('pWeb').value, actif:true });
+  closeModal('modalPartner'); renderPartners(); showToast('Partenaire ajouté ✓','green');
+  document.getElementById('pName').value=''; document.getElementById('pWeb').value='';
+}
+
+// ====== FAQ ======
+function renderFaqs() {
+  const list = document.getElementById('faqList');
+  list.innerHTML = faqs.map(f => `
+    <div class="card" style="overflow:visible">
+      <div class="card-body" style="display:flex;align-items:flex-start;gap:1rem">
+        <div style="flex:1">
+          <div style="font-weight:700;margin-bottom:0.5rem;font-size:0.9rem">${f.q}</div>
+          <div style="font-size:0.83rem;color:var(--muted);line-height:1.6">${f.a}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="action-btn edit-btn" title="Modifier"><i class="fas fa-edit"></i></button>
+          <button class="action-btn del-btn" onclick="deleteFaq(${f.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function saveFaq() {
+  const q = document.getElementById('faqQ').value.trim();
+  const a = document.getElementById('faqA').value.trim();
+  if(!q||!a) { showToast('Remplissez tous les champs','red'); return; }
+  faqs.push({ id:Date.now(), q, a });
+  closeModal('modalFaq'); renderFaqs(); showToast('Question ajoutée ✓','green');
+  document.getElementById('faqQ').value=''; document.getElementById('faqA').value='';
+}
+function deleteFaq(id) {
+  if(!confirm('Supprimer cette question ?')) return;
+  faqs = faqs.filter(f=>f.id!==id); renderFaqs(); showToast('Question supprimée','red');
+}
+
+// ====== TESTIMONIALS ======
+function renderTestis() {
+  const colors = ['#E8650A','#3D7A34','#3A7BD5','#9B59B6'];
+  document.getElementById('testiGrid').innerHTML = testis.map((t,i) => `
+    <div class="card" style="padding:1.4rem;position:relative;overflow:visible">
+      <div style="color:#FFB800;margin-bottom:0.7rem;font-size:0.9rem">${'★'.repeat(t.note)}</div>
+      <div style="font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">${t.text}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:0.7rem">
+          <div style="width:38px;height:38px;border-radius:50%;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.78rem">${t.nom.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+          <div><div style="font-size:0.85rem;font-weight:700">${t.nom}</div><div style="font-size:0.75rem;color:var(--muted)">${t.role}</div></div>
+        </div>
+        <button class="action-btn del-btn" onclick="deleteTesti(${t.id})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+}
+function saveTesti() {
+  const nom = document.getElementById('tName').value.trim();
+  const text = document.getElementById('tText').value.trim();
+  if(!nom||!text) { showToast('Remplissez tous les champs','red'); return; }
+  testis.push({ id:Date.now(), nom, role:document.getElementById('tRole').value, note:+document.getElementById('tNote').value, text });
+  closeModal('modalTesti'); renderTestis(); showToast('Témoignage ajouté ✓','green');
+  ['tName','tRole','tText'].forEach(id=>document.getElementById(id).value='');
+}
+function deleteTesti(id) {
+  if(!confirm('Supprimer ce témoignage ?')) return;
+  testis = testis.filter(t=>t.id!==id); renderTestis(); showToast('Témoignage supprimé','red');
+}
+
+// ====== SETTINGS PANELS ======
+function showSettingsPanel(id, el) {
+  ['general','contact','notifications','securite','apparence'].forEach(s=>{
+    document.getElementById('sp-'+s).style.display = s===id?'block':'none';
+  });
+  document.querySelectorAll('.settings-nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ====== MODALS ======
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+// ====== NOTIFICATIONS ======
+function toggleNotif() { document.getElementById('notifPanel').classList.toggle('open'); }
+
+// ====== TOAST ======
+function showToast(msg, type='orange') {
+  const colors = { orange:'var(--orange)', green:'var(--green)', red:'var(--red)', blue:'var(--blue)' };
+  const el = document.createElement('div');
+  el.className='toast-msg';
+  el.style.borderLeftColor = colors[type]||colors.orange;
+  el.innerHTML = `<i class="fas ${type==='green'?'fa-check-circle':type==='red'?'fa-times-circle':'fa-info-circle'}" style="color:${colors[type]||colors.orange}"></i> ${msg}`;
+  document.getElementById('toastWrap').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+// ====== KEYBOARD ======
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+    document.getElementById('notifPanel').classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

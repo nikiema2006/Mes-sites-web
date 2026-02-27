@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Immobilier - Clip Path</title>
+    <style>
+        body {
+            min-height: 100vh;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            /* Zoom pour la démo (retirer pour taille réelle) */
+            transform: scale(3);
+        }
+
+        .property-card {
+            position: relative;
+            width: 100px;
+            height: 200px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Partie image (100x100) */
+        .property-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* Partie détails avec clip-path (100x100) */
+        .property-details {
+            width: 100px;
+            height: 100px;
+            background-color: #513D34;
+            clip-path: path("M0,0H45A10,10 0,0,1 55,10V10A10,10 0,0,0 65,20H90A10,10 0,0,1 100,30V84A4,4 0,0,1 96,88H79A4,4 0,0,0 75,92V96A4,4 0,0,1 71,100H10A10,10 0,0,1 0,90V0A0,0 0,0,1 0,0Z");
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            margin-top: -1px; /* Évite la ligne de jointure */
+        }
+
+        .price {
+            font-size: 14px;
+            font-weight: 800;
+            color: #FFD700;
+            line-height: 1;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .type {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+
+        .surface {
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        .location {
+            font-size: 8px;
+            opacity: 0.7;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* Bouton GO en bas à droite */
+        .go-button {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #FF6B6B, #EE5A6F);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(238, 90, 111, 0.4);
+            transition: all 0.2s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .go-button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 3px 12px rgba(238, 90, 111, 0.6);
+        }
+
+        .go-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Badge "NEW" optionnel */
+        .badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #FFD700;
+            color: #513D34;
+            font-size: 7px;
+            font-weight: 800;
+            padding: 2px 4px;
+            border-radius: 2px;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="property-card">
+        <span class="badge">NEW</span>
+        
+        <!-- Image au-dessus -->
+        <img src="https://images.unsplash.com/photo-1706808849777-96e0d7be3bb7?w=200&h=200&fit=crop" 
+             alt="Villa moderne" 
+             class="property-image">
+        
+        <!-- Détails dans le clip-path -->
+        <div class="property-details">
+            <div class="price">450K€</div>
+            <div class="type">Villa</div>
+            <div class="surface">120 m²</div>
+            <div class="location">📍 Paris 16e</div>
+        </div>
+        
+        <!-- Bouton GO -->
+        <button class="go-button" onclick="alert('Visite virtuelle lancée!')">GO</button>
+    </div>
+
+</body>
+</html>
