@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yirilux Immobilier — Votre confort, notre métier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root {
+  --or: #D4AF37;
+  --or-light: #E8CC6A;
+  --or-dark: #B8941F;
+  --noir: #0F0F0F;
+  --blanc: #FAF9F6;
+  --gris: #2A2A2A;
+  --gris-mid: #5A5A5A;
+  --gris-light: #F2F1EE;
+  --gris-border: #E0DDD8;
+  --shadow: 0 4px 30px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+  --radius: 8px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--blanc);
+  color: var(--gris);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--or);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
+  mix-blend-mode: multiply;
+}
+#cursor.hover { width: 28px; height: 28px; background: var(--or-light); opacity: 0.8; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--or); border-radius: 3px; }
+
+/* ─── GLOBAL PATTERNS ─── */
+.african-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.03'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath d='M15 15L30 0L45 15L30 30Z'/%3E%3Cpath d='M15 45L30 30L45 45L30 60Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ─── REVEAL ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ─── TYPOGRAPHY ─── */
+h1, h2, h3, .display { font-family: var(--font-display); }
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700;
+  color: var(--noir);
+  line-height: 1.15;
+  margin-top: 0.4rem;
+}
+.section-title .underline-or {
+  position: relative;
+  display: inline-block;
+}
+.section-title .underline-or::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 100%; height: 3px;
+  background: var(--or);
+}
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--or);
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.btn:hover::after { transform: translateX(0); }
+
+.btn-noir {
+  background: var(--noir);
+  color: var(--blanc);
+  z-index: 0;
+}
+.btn-noir:hover { color: var(--noir); }
+
+.btn-or {
+  background: var(--or);
+  color: var(--noir);
+}
+.btn-or::after { background: var(--noir); }
+.btn-or:hover { color: var(--or); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--noir);
+  border: 1.5px solid var(--noir);
+}
+.btn-outline:hover { color: var(--noir); border-color: var(--or); }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 40px;
+  height: 70px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(250,249,246,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo svg { transition: transform 0.3s ease; }
+.nav-logo:hover svg { transform: rotate(5deg) scale(1.05); }
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--noir);
+  letter-spacing: 0.02em;
+}
+.nav-logo-text span { color: var(--or); }
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gris);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--or);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: var(--noir); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.whatsapp-btn {
+  width: 40px; height: 40px;
+  background: var(--or);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.whatsapp-btn:hover { background: var(--noir); transform: scale(1.1); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--noir); transition: all 0.3s ease; }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 140px 0 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 60px;
+  align-items: center;
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px;
+}
+.hero-eyebrow-line { width: 40px; height: 1.5px; background: var(--or); }
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 900;
+  color: var(--noir);
+  line-height: 1.08;
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--or);
+}
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--gris-mid);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+
+/* Search bar */
+.search-bar {
+  background: white;
+  border: 1.5px solid var(--gris-border);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 20px;
+}
+.search-input-wrap {
+  flex: 1;
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px;
+  border-right: 1px solid var(--gris-border);
+}
+.search-input-wrap svg { color: var(--or); flex-shrink: 0; }
+.search-input-wrap input {
+  border: none; outline: none;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--noir);
+  background: transparent;
+  width: 100%;
+}
+.search-input-wrap input::placeholder { color: var(--gris-mid); }
+.search-select-wrap {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+}
+.search-select-wrap select {
+  border: none; outline: none; cursor: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--gris);
+  background: transparent;
+  appearance: none;
+  padding-right: 16px;
+}
+.search-btn {
+  padding: 12px 20px;
+  background: var(--noir);
+  color: var(--blanc);
+  border: none;
+  border-radius: 8px;
+  cursor: none;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.search-btn:hover { background: var(--or); color: var(--noir); }
+.search-btn svg { color: inherit; }
+
+.tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.tag {
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--gris-border);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gris-mid);
+  cursor: none;
+  transition: all 0.25s ease;
+  background: white;
+}
+.tag:hover, .tag.active {
+  border-color: var(--or);
+  color: var(--or);
+  background: rgba(212,175,55,0.06);
+}
+
+/* Hero images */
+.hero-images {
+  position: relative;
+  height: 500px;
+}
+.hero-img-main {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0% 100%);
+  border-radius: 12px 12px 0 0;
+}
+.hero-badge {
+  position: absolute;
+  top: 24px; right: -16px;
+  background: var(--or);
+  color: var(--noir);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  animation: pulse-badge 2.5s ease-in-out infinite;
+  text-align: center;
+  line-height: 1.3;
+}
+.hero-badge small { display: block; font-family: var(--font-body); font-size: 0.7rem; font-weight: 400; }
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1) translateY(0); box-shadow: 0 8px 30px rgba(212,175,55,0.4); }
+  50% { transform: scale(1.03) translateY(-3px); box-shadow: 0 16px 40px rgba(212,175,55,0.6); }
+}
+.hero-img-secondary {
+  position: absolute;
+  bottom: 10px; left: -24px;
+  width: 180px; height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 3px solid var(--or);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section {
+  padding: 100px 0;
+}
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+.section-header {
+  margin-bottom: 56px;
+}
+.section-header-flex {
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+
+/* ─── PROPERTIES MASONRY ─── */
+.properties-bg { background: var(--gris-light); }
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 24px;
+}
+.prop-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  cursor: none;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.prop-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.14); }
+.prop-card:first-child { grid-row: span 2; }
+.prop-card-img {
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+  display: block;
+}
+.prop-card:first-child .prop-card-img { height: 500px; }
+.prop-card .prop-card-img { height: 220px; }
+.prop-card:hover .prop-card-img { transform: scale(1.05); }
+.prop-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.prop-badge.new { background: var(--or); color: var(--noir); }
+.prop-badge.exclu { background: var(--noir); color: var(--or); }
+.prop-fav {
+  position: absolute;
+  top: 14px; left: 14px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none;
+  border: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+.prop-fav:hover { background: white; transform: scale(1.1); }
+.prop-fav.active svg { fill: #e63946; stroke: #e63946; }
+.prop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15,15,15,0.8) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 30px;
+}
+.prop-card:hover .prop-overlay { opacity: 1; }
+.prop-overlay .btn { transform: translateY(10px); transition: all 0.35s ease; }
+.prop-card:hover .prop-overlay .btn { transform: translateY(0); }
+.prop-info { padding: 20px; }
+.prop-location {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem;
+  color: var(--gris-mid);
+  margin-bottom: 6px;
+}
+.prop-location svg { color: var(--or); }
+.prop-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--noir);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.prop-price {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--or);
+  margin-bottom: 12px;
+}
+.prop-features {
+  display: flex; gap: 16px;
+  border-top: 1px solid var(--gris-border);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+.prop-feat {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.78rem;
+  color: var(--gris-mid);
+  font-weight: 500;
+}
+.prop-feat svg { color: var(--or); width:14px; height:14px; }
+.compare-check {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.75rem;
+  color: var(--gris-mid);
+  margin-top: 10px;
+  cursor: none;
+}
+.compare-check input { cursor: none; accent-color: var(--or); }
+
+/* compare bar */
+#compare-bar {
+  position: fixed;
+  bottom: -80px;
+  left: 50%; transform: translateX(-50%);
+  background: var(--noir);
+  color: var(--blanc);
+  padding: 16px 32px;
+  border-radius: 100px;
+  display: flex; align-items: center; gap: 20px;
+  z-index: 999;
+  transition: bottom 0.4s ease;
+  box-shadow: 0 8px 40px rgba(212,175,55,0.3);
+  border: 1.5px solid var(--or);
+}
+#compare-bar.visible { bottom: 32px; }
+#compare-bar span { font-size: 0.875rem; font-weight: 500; }
+
+/* ─── STATS ─── */
+.stats { background: var(--noir); }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.stat-block {
+  padding: 60px 25px;
+  text-align: center;
+  border-right: 1px solid rgba(212,175,55,0.2);
+  position: relative;
+}
+.stat-block:last-child { border-right: none; }
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--or);
+  line-height: 1;
+  margin-bottom: 8px;
+  display: block;
+}
+.stat-label {
+  font-size: 0.88rem;
+  color: rgba(250,249,246,0.65);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* ─── PROCESS ─── */
+.process { background: white; }
+.process-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+  margin-top: 60px;
+}
+.process-timeline::before {
+  content: '';
+  position: absolute;
+  top: 56px; left: 10%; right: 10%;
+  height: 2px;
+  background: linear-gradient(to right, var(--or), var(--or-light), var(--or));
+  z-index: 0;
+}
+.process-step {
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.process-icon {
+  width: 64px; height: 64px;
+  background: var(--or);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(212,175,55,0.4);
+  clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+  border-radius: 0;
+  width: 70px; height: 70px;
+  background: var(--or);
+}
+.process-icon svg { color: var(--noir); }
+.process-num {
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 22px; height: 22px;
+  background: var(--noir);
+  color: var(--or);
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.process-step-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--noir);
+  margin-bottom: 8px;
+}
+.process-step-desc {
+  font-size: 0.82rem;
+  color: var(--gris-mid);
+  line-height: 1.6;
+}
+
+/* ─── SERVICES TABS ─── */
+.services { background: var(--gris-light); }
+.tabs {
+  display: flex; gap: 0;
+  border-bottom: 2px solid var(--gris-border);
+  margin-bottom: 48px;
+}
+.tab-btn {
+  padding: 14px 28px;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gris-mid);
+  cursor: none;
+  position: relative;
+  transition: color 0.25s ease;
+}
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: var(--or);
+  transition: width 0.3s ease;
+}
+.tab-btn.active, .tab-btn:hover { color: var(--noir); }
+.tab-btn.active::after { width: 100%; }
+.tab-content { display: none; }
+.tab-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.tab-content.reverse { direction: rtl; }
+.tab-content.reverse > * { direction: ltr; }
+.tab-img {
+  width: 100%; height: 380px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+}
+.tab-body h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--noir);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.tab-body p {
+  font-size: 0.95rem;
+  color: var(--gris-mid);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+.tab-advantages {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 32px;
+}
+.tab-advantages li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.88rem;
+  color: var(--gris);
+  line-height: 1.5;
+}
+.tab-advantages li::before {
+  content: '◆';
+  color: var(--or);
+  font-size: 0.55rem;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+/* ─── MAP SECTION ─── */
+.geo { background: white; }
+.geo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 60px;
+}
+#map {
+  width: 100%; height: 420px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--gris-border);
+}
+.quartiers { display: flex; flex-direction: column; gap: 20px; }
+.quartier-card {
+  display: flex; gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gris-border);
+  cursor: none;
+  transition: all 0.3s ease;
+  background: white;
+}
+.quartier-card:hover {
+  border-color: var(--or);
+  box-shadow: 0 4px 20px rgba(212,175,55,0.12);
+  transform: translateX(6px);
+}
+.quartier-img { width: 80px; height: 70px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+.quartier-info h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--noir); margin-bottom: 4px; }
+.quartier-info p { font-size: 0.78rem; color: var(--gris-mid); line-height: 1.5; }
+.quartier-info .q-count { font-size: 0.75rem; color: var(--or); font-weight: 600; margin-top: 4px; }
+
+/* ─── CALCULATRICE ─── */
+.calc { background: var(--noir); }
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border: 1.5px solid var(--or);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(212,175,55,0.15);
+}
+.calc-panel {
+  background: #161616;
+  padding: 52px 48px;
+}
+.calc-panel + .calc-panel {
+  border-left: 1.5px solid rgba(212,175,55,0.25);
+}
+.calc-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blanc);
+  margin-bottom: 8px;
+}
+.calc-sub {
+  font-size: 0.82rem;
+  color: rgba(250,249,246,0.5);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+.calc-field { margin-bottom: 24px; }
+.calc-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(250,249,246,0.7);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.calc-field input, .calc-field select {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--blanc);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+.calc-field input:focus, .calc-field select:focus { border-color: var(--or); }
+.calc-field input[type="range"] {
+  background: none;
+  border: none;
+  padding: 0;
+  accent-color: var(--or);
+  cursor: none;
+}
+.slider-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+.slider-labels span { font-size: 0.72rem; color: rgba(250,249,246,0.4); }
+.calc-result {
+  background: rgba(212,175,55,0.08);
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.calc-result .result-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--or);
+  display: block;
+}
+.calc-result .result-label { font-size: 0.75rem; color: rgba(250,249,246,0.5); }
+.form-field { margin-bottom: 16px; }
+.form-field input, .form-field select {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--blanc);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+.form-field input:focus, .form-field select:focus { border-color: var(--or); }
+.form-field input::placeholder { color: rgba(250,249,246,0.3); }
+.form-success {
+  display: none;
+  background: rgba(212,175,55,0.15);
+  border: 1px solid var(--or);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--or);
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ─── FAQ ─── */
+.faq { background: white; }
+.faq-list { max-width: 800px; margin: 60px auto 0; }
+.faq-item {
+  border-bottom: 1px solid var(--gris-border);
+}
+.faq-q {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 0;
+  background: none;
+  border: none;
+  cursor: none;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--noir);
+  text-align: left;
+  transition: color 0.25s ease;
+}
+.faq-q:hover { color: var(--or); }
+.faq-icon {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--gris-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  color: var(--gris-mid);
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+.faq-item.open .faq-icon {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: rotate(45deg);
+}
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+.faq-a p { font-size: 0.9rem; color: var(--gris-mid); line-height: 1.7; }
+
+/* ─── BLOG ─── */
+.blog { background: var(--gris-light); }
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 28px;
+  margin-top: 56px;
+}
+.blog-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: none;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.blog-img { width: 100%; height: 200px; object-fit: cover; transition: transform 0.6s ease; display: block; }
+.blog-card:hover .blog-img { transform: scale(1.04); }
+.blog-img-wrap { overflow: hidden; }
+.blog-body { padding: 24px; }
+.blog-cat {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  background: rgba(212,175,55,0.1);
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+.blog-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--noir);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.blog-meta {
+  font-size: 0.75rem;
+  color: var(--gris-mid);
+  margin-bottom: 14px;
+}
+.blog-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--or);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: gap 0.25s ease;
+}
+.blog-link:hover { gap: 10px; }
+
+/* ─── TRUST ─── */
+.trust { background: white; padding: 60px 0; }
+.trust-label { text-align: center; font-size: 0.82rem; color: var(--gris-mid); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 40px; }
+.partners {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+.partner {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gris-border);
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+  cursor: none;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  letter-spacing: 0.15em;
+  padding: 8px 20px;
+  border: 1.5px solid var(--gris-border);
+  border-radius: 4px;
+}
+.partner:hover { color: var(--or); border-color: var(--or); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--noir);
+  padding: 80px 0 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+.footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--or);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(212,175,55,0.2);
+}
+.footer-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--blanc);
+  margin-bottom: 8px;
+}
+.footer-logo-text span { color: var(--or); }
+.footer-slogan {
+  font-size: 0.85rem;
+  color: rgba(250,249,246,0.5);
+  margin-bottom: 24px;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+.social-links { display: flex; gap: 12px; }
+.social-link {
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(212,175,55,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--or);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: none;
+}
+.social-link:hover { background: var(--or); color: var(--noir); border-color: var(--or); }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { 
+  font-size: 0.875rem;
+  color: rgba(250,249,246,0.6);
+  text-decoration: none;
+  transition: color 0.25s ease;
+  display: flex; align-items: center; gap: 6px;
+}
+.footer-links a::before { content: '→'; color: var(--or); font-size: 0.7rem; opacity: 0; transition: opacity 0.25s ease; }
+.footer-links a:hover { color: var(--blanc); }
+.footer-links a:hover::before { opacity: 1; }
+.footer-contact-item {
+  display: flex; gap: 10px;
+  margin-bottom: 14px;
+  font-size: 0.875rem;
+  color: rgba(250,249,246,0.6);
+  line-height: 1.5;
+}
+.footer-contact-item svg { color: var(--or); flex-shrink: 0; margin-top: 2px; }
+.footer-contact-item a { color: inherit; text-decoration: none; transition: color 0.25s ease; }
+.footer-contact-item a:hover { color: var(--or); }
+.newsletter-form { display: flex; gap: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(212,175,55,0.3); margin-top: 4px; }
+.newsletter-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  padding: 12px 16px;
+  color: var(--blanc);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+}
+.newsletter-form input::placeholder { color: rgba(250,249,246,0.3); }
+.newsletter-form button {
+  background: var(--or);
+  color: var(--noir);
+  border: none;
+  padding: 12px 18px;
+  cursor: none;
+  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  transition: background 0.25s ease;
+  white-space: nowrap;
+}
+.newsletter-form button:hover { background: var(--or-light); }
+.newsletter-note { font-size: 0.72rem; color: rgba(250,249,246,0.3); margin-top: 8px; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 20px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-bottom p, .footer-bottom a {
+  font-size: 0.75rem;
+  color: rgba(250,249,246,0.3);
+  text-decoration: none;
+}
+.footer-bottom a:hover { color: var(--or); }
+.footer-legal { display: flex; gap: 20px; }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: var(--blanc);
+  z-index: 998;
+  display: flex; flex-direction: column;
+  padding: 100px 40px 60px;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--noir);
+  text-decoration: none;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--gris-border);
+  transition: color 0.2s ease;
+}
+.mobile-menu a:hover { color: var(--or); }
+
+/* ─── LOADING SKELETON ─── */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-load 1.5s ease infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-load {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .properties-grid { grid-template-columns: 1fr 1fr; }
+  .properties-grid .prop-card:first-child { grid-row: span 1; }
+  .properties-grid .prop-card:first-child .prop-card-img { height: 220px; }
+}
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-images { display: none; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-block { border-right: none; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .process-timeline { grid-template-columns: 1fr 1fr; }
+  .process-timeline::before { display: none; }
+  .tab-content.active { grid-template-columns: 1fr; }
+  .tab-content.reverse { direction: ltr; }
+  .geo-grid { grid-template-columns: 1fr; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-panel + .calc-panel { border-left: none; border-top: 1px solid rgba(212,175,55,0.25); }
+  .blog-grid { grid-template-columns: 1fr; }
+  nav .nav-links { display: none; }
+  nav .nav-right .btn { display: none; }
+  .hamburger { display: flex; }
+  .container { padding: 0 24px; }
+  .hero { padding: 100px 24px 60px; }
+  .section { padding: 70px 0; }
+  .stats-grid { gap: 0; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { padding: 20px 24px; flex-direction: column; text-align: center; }
+}
+@media (max-width: 600px) {
+  nav { padding: 0 20px; }
+  .hero h1 { font-size: 2.4rem; }
+  .search-bar { flex-direction: column; gap: 8px; padding: 12px; }
+  .search-input-wrap { border-right: none; border-bottom: 1px solid var(--gris-border); }
+  .search-select-wrap { padding: 8px 0; }
+  .search-btn { width: 100%; justify-content: center; }
+  .properties-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .process-timeline { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .tabs { overflow-x: auto; }
+}
+</style>
+</head>
+<body class="african-pattern">
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#biens">Biens</a>
+  <a href="#services">Services</a>
+  <a href="#estimation">Estimation</a>
+  <a href="#blog">Blog</a>
+  <a href="#contact">Contact</a>
+  <div style="margin-top:32px;"><a href="#contact" class="btn btn-noir">Prendre RDV</a></div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M18 3L33 13.5V30H3V13.5L18 3Z" stroke="#D4AF37" stroke-width="2" fill="none"/>
+      <path d="M18 3L33 13.5H3L18 3Z" fill="#D4AF37" opacity="0.3"/>
+      <path d="M14 30V21H22V30" stroke="#D4AF37" stroke-width="1.5"/>
+      <path d="M10 16L18 9L26 16" stroke="#D4AF37" stroke-width="1"/>
+    </svg>
+    <span class="nav-logo-text">Yiri<span>lux</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#biens">Biens</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#estimation">Estimation</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn btn-outline" style="padding:10px 18px;font-size:0.8rem;">♡ Favoris</a>
+    <a href="https://wa.me/+22600000000" class="whatsapp-btn" title="WhatsApp">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.026 21.993h-.006a9.96 9.96 0 01-5.073-1.384L2 22l1.424-4.801A9.945 9.945 0 012 12.026C2.008 6.529 6.526 2 12.026 2c2.683 0 5.2 1.048 7.094 2.943A9.975 9.975 0 0122 12.025c-.007 5.498-4.526 9.968-10.026 9.968z" fill="none" stroke="white" stroke-width="0"/></svg>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section style="background: var(--blanc);">
+  <div class="hero">
+    <div class="hero-grid">
+      <!-- Gauche 60% -->
+      <div class="hero-left">
+        <div class="hero-eyebrow reveal">
+          <div class="hero-eyebrow-line"></div>
+          <span class="section-label">Agence Yirilux — Premium</span>
+        </div>
+        <h1 class="reveal reveal-delay-1">
+          Trouvez votre bien idéal<br>
+          à <em>Ouagadougou</em>
+        </h1>
+        <p class="hero-subtitle reveal reveal-delay-2">
+          Expertise immobilière et accompagnement personnalisé depuis 15 ans. 
+          Des biens d'exception sélectionnés pour vous, dans les meilleurs quartiers.
+        </p>
+        <!-- Barre de recherche -->
+        <div class="search-bar reveal reveal-delay-3">
+          <div class="search-input-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input type="text" placeholder="Quartier, ville, adresse…" id="searchInput">
+          </div>
+          <div class="search-select-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <select>
+              <option>Tout type</option>
+              <option>Maison / Villa</option>
+              <option>Appartement</option>
+              <option>Terrain</option>
+              <option>Bureau</option>
+            </select>
+          </div>
+          <button class="search-btn" onclick="handleSearch()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Rechercher
+          </button>
+        </div>
+        <div class="tags reveal reveal-delay-4">
+          <button class="tag active" onclick="filterTag(this)">Location</button>
+          <button class="tag" onclick="filterTag(this)">Vente</button>
+          <button class="tag" onclick="filterTag(this)">Meublé</button>
+          <button class="tag" onclick="filterTag(this)">Pool House</button>
+          <button class="tag" onclick="filterTag(this)">Neuf</button>
+        </div>
+      </div>
+
+      <!-- Droite 40% -->
+      <div class="hero-images reveal reveal-delay-2">
+        <img class="hero-img-main" 
+          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" 
+          alt="Salon luxueux"
+          loading="eager">
+        <div class="hero-badge">
+          <strong>87</strong>
+          <small>biens disponibles</small>
+        </div>
+        <img class="hero-img-secondary"
+          src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80"
+          alt="Chambre moderne"
+          loading="eager">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 : BIENS EN VEDETTE -->
+<section class="section properties-bg" id="biens">
+  <div class="container">
+    <div class="section-header-flex reveal">
+      <div>
+        <span class="section-label">Sélection exclusive</span>
+        <h2 class="section-title">Nos <span class="underline-or">coups de cœur</span></h2>
+      </div>
+      <a href="#" class="btn btn-outline">Voir tous les biens →</a>
+    </div>
+    <div class="properties-grid" id="propertiesGrid">
+      <!-- Card 1 - Tall -->
+      <div class="prop-card reveal">
+        <img class="prop-card-img" src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80" alt="Villa avec piscine">
+        <span class="prop-badge new">Nouveau</span>
+        <button class="prop-fav" onclick="toggleFav(this,'prop1')" data-id="prop1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gris)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <div class="prop-overlay">
+          <a href="#" class="btn btn-or">Voir les détails</a>
+        </div>
+        <div class="prop-info">
+          <div class="prop-location"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Ouaga 2000, Zone Résidentielle</div>
+          <div class="prop-title">Villa avec piscine — Prestige</div>
+          <div class="prop-price">185 000 000 FCFA</div>
+          <div class="prop-features">
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>5 pièces</span>
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10V3h16v7"/><path d="M2 14h20"/><path d="M4 14v7m16-7v7"/></svg>4 ch.</span>
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>450 m²</span>
+          </div>
+          <label class="compare-check"><input type="checkbox" onchange="toggleCompare(this,'prop1','Villa Prestige')"> Comparer</label>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="prop-card reveal reveal-delay-1">
+        <img class="prop-card-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Appartement vue panoramique">
+        <span class="prop-badge exclu">Exclusivité</span>
+        <button class="prop-fav" onclick="toggleFav(this,'prop2')" data-id="prop2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gris)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <div class="prop-overlay">
+          <a href="#" class="btn btn-or">Voir les détails</a>
+        </div>
+        <div class="prop-info">
+          <div class="prop-location"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Centre-Ville Premium</div>
+          <div class="prop-title">Appartement vue panoramique</div>
+          <div class="prop-price">62 000 000 FCFA</div>
+          <div class="prop-features">
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>3 pièces</span>
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10V3h16v7"/><path d="M2 14h20"/><path d="M4 14v7m16-7v7"/></svg>2 ch.</span>
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>110 m²</span>
+          </div>
+          <label class="compare-check"><input type="checkbox" onchange="toggleCompare(this,'prop2','Appartement Panoramique')"> Comparer</label>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="prop-card reveal reveal-delay-2">
+        <img class="prop-card-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" alt="Bureau commercial">
+        <span class="prop-badge new">Nouveau</span>
+        <button class="prop-fav" onclick="toggleFav(this,'prop3')" data-id="prop3">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gris)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <div class="prop-overlay">
+          <a href="#" class="btn btn-or">Voir les détails</a>
+        </div>
+        <div class="prop-info">
+          <div class="prop-location"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Zone d'Activités, Secteur 15</div>
+          <div class="prop-title">Bureau commercial haut standing</div>
+          <div class="prop-price">2 800 000 FCFA / mois</div>
+          <div class="prop-features">
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Open space</span>
+            <span class="prop-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>280 m²</span>
+          </div>
+          <label class="compare-check"><input type="checkbox" onchange="toggleCompare(this,'prop3','Bureau Commercial')"> Comparer</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Compare Bar -->
+<div id="compare-bar">
+  <span id="compareCount">0 bien(s) sélectionné(s)</span>
+  <button class="btn btn-or" onclick="compareSelected()" style="padding:8px 18px;font-size:0.8rem;">Comparer →</button>
+  <button onclick="clearCompare()" style="background:none;border:none;color:rgba(250,249,246,0.5);cursor:none;font-size:0.8rem;">✕ Effacer</button>
+</div>
+
+<!-- SECTION 4 : STATS -->
+<section class="section stats" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-block reveal">
+        <span class="stat-number" data-target="150" data-suffix="+">0</span>
+        <p class="stat-label">Biens vendus en 2024</p>
+      </div>
+      <div class="stat-block reveal reveal-delay-1">
+        <span class="stat-number" data-target="98" data-suffix="%">0</span>
+        <p class="stat-label">Clients satisfaits</p>
+      </div>
+      <div class="stat-block reveal reveal-delay-2">
+        <span class="stat-number" data-target="15" data-suffix=" ans">0</span>
+        <p class="stat-label">D'expérience locale</p>
+      </div>
+      <div class="stat-block reveal reveal-delay-3">
+        <span class="stat-number" data-target="24" data-suffix="h">0</span>
+        <p class="stat-label">Délai moyen de réponse</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 : PROCESS -->
+<section class="section process">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <span class="section-label">Notre méthode</span>
+      <h2 class="section-title" style="margin:0 auto;">Comment ça <span class="underline-or">marche ?</span></h2>
+      <p style="max-width:500px;margin:16px auto 0;color:var(--gris-mid);font-size:0.95rem;line-height:1.7;">Un processus simplifié, transparent, et entièrement dédié à votre satisfaction.</p>
+    </div>
+    <div class="process-timeline">
+      <div class="process-step reveal">
+        <div style="position:relative;display:inline-block;">
+          <div class="process-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="process-num">1</div>
+        </div>
+        <h3 class="process-step-title">Consultation personnalisée</h3>
+        <p class="process-step-desc">Un rendez-vous dédié pour comprendre vos besoins, votre budget et vos critères essentiels.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div style="position:relative;display:inline-block;">
+          <div class="process-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div class="process-num">2</div>
+        </div>
+        <h3 class="process-step-title">Sélection sur-mesure</h3>
+        <p class="process-step-desc">Nous sélectionnons dans notre portefeuille les biens qui correspondent exactement à votre profil.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div style="position:relative;display:inline-block;">
+          <div class="process-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <div class="process-num">3</div>
+        </div>
+        <h3 class="process-step-title">Visites accompagnées</h3>
+        <p class="process-step-desc">Visites organisées avec notre équipe, conseils objectifs, vérifications techniques incluses.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div style="position:relative;display:inline-block;">
+          <div class="process-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="process-num">4</div>
+        </div>
+        <h3 class="process-step-title">Signature & suivi</h3>
+        <p class="process-step-desc">Accompagnement complet jusqu'à la remise des clés : notaire, financement, état des lieux.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6 : SERVICES -->
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Ce que nous faisons</span>
+      <h2 class="section-title">Nos <span class="underline-or">services</span></h2>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab-btn active" onclick="switchTab(this,'achat')">Achat</button>
+      <button class="tab-btn" onclick="switchTab(this,'vente')">Vente</button>
+      <button class="tab-btn" onclick="switchTab(this,'location')">Location</button>
+      <button class="tab-btn" onclick="switchTab(this,'conseil')">Conseil Patrimonial</button>
+    </div>
+    <div class="tab-content active" id="tab-achat">
+      <img class="tab-img" src="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=700&q=80" alt="Achat immobilier">
+      <div class="tab-body">
+        <span class="section-label" style="display:block;margin-bottom:12px;">De la recherche à la signature</span>
+        <h3>Votre acquisition, <em style="font-style:italic;color:var(--or)">sécurisée</em></h3>
+        <p>Notre équipe vous accompagne à chaque étape de votre projet d'achat immobilier. De la définition de votre cahier des charges jusqu'à la signature chez le notaire, nous assurons un suivi complet et personnalisé.</p>
+        <ul class="tab-advantages">
+          <li>Accès à notre portefeuille exclusif de 87 biens</li>
+          <li>Analyse comparative des prix du marché local</li>
+          <li>Négociation professionnelle en votre faveur</li>
+          <li>Vérification juridique et technique du bien</li>
+          <li>Accompagnement financement bancaire</li>
+        </ul>
+        <a href="#contact" class="btn btn-noir">Démarrer mon projet d'achat</a>
+      </div>
+    </div>
+    <div class="tab-content reverse" id="tab-vente">
+      <img class="tab-img" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=700&q=80" alt="Vente immobilier">
+      <div class="tab-body">
+        <span class="section-label" style="display:block;margin-bottom:12px;">Estimation réaliste, mise en valeur</span>
+        <h3>Vendez au <em style="font-style:italic;color:var(--or)">meilleur prix</em></h3>
+        <p>Une estimation précise fondée sur les données de marché, une mise en valeur professionnelle de votre bien, et un réseau d'acheteurs qualifiés pour maximiser votre plus-value dans les meilleurs délais.</p>
+        <ul class="tab-advantages">
+          <li>Estimation gratuite et transparente</li>
+          <li>Séance photo professionnelle incluse</li>
+          <li>Diffusion multi-plateformes internationale</li>
+          <li>Sélection d'acheteurs solvables vérifiés</li>
+          <li>Délai moyen de vente : 45 jours</li>
+        </ul>
+        <a href="#contact" class="btn btn-noir">Estimer mon bien gratuitement</a>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-location">
+      <img class="tab-img" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=700&q=80" alt="Location immobilier">
+      <div class="tab-body">
+        <span class="section-label" style="display:block;margin-bottom:12px;">Gestion locative clé en main</span>
+        <h3>Louez sans vous <em style="font-style:italic;color:var(--or)">soucier de rien</em></h3>
+        <p>Confiez la gestion de votre bien à notre équipe. Sélection rigoureuse des locataires, état des lieux, quittances, suivi des travaux… Nous gérons tout pour maximiser votre rentabilité.</p>
+        <ul class="tab-advantages">
+          <li>Sélection et vérification des locataires</li>
+          <li>Rédaction et signature des baux</li>
+          <li>Gestion des loyers et charges</li>
+          <li>Suivi maintenance et travaux</li>
+          <li>Reporting mensuel propriétaire</li>
+        </ul>
+        <a href="#contact" class="btn btn-noir">Confier mon bien en gestion</a>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-conseil">
+      <img class="tab-img" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700&q=80" alt="Conseil patrimonial">
+      <div class="tab-body">
+        <span class="section-label" style="display:block;margin-bottom:12px;">Investissement patrimonial</span>
+        <h3>Construisez votre <em style="font-style:italic;color:var(--or)">patrimoine</em></h3>
+        <p>Nos experts analysent les opportunités du marché immobilier local et vous orientent vers des investissements rentables, qu'il s'agisse d'immobilier résidentiel, commercial ou foncier.</p>
+        <ul class="tab-advantages">
+          <li>Analyse de rentabilité personnalisée</li>
+          <li>Identification des zones à fort potentiel</li>
+          <li>Stratégie fiscale et structuration juridique</li>
+          <li>Suivi portefeuille immobilier</li>
+          <li>Conseil succession et transmission</li>
+        </ul>
+        <a href="#contact" class="btn btn-noir">Parler à un expert</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 : CARTE -->
+<section class="section geo">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Notre territoire</span>
+      <h2 class="section-title">Nous connaissons <span class="underline-or">chaque quartier</span></h2>
+    </div>
+    <div class="geo-grid">
+      <div class="reveal" id="map"></div>
+      <div class="quartiers reveal reveal-delay-1">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:20px;color:var(--noir);">Nos zones de couverture</h3>
+        <div class="quartier-card">
+          <img class="quartier-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=200&q=70" alt="Zone Nord">
+          <div class="quartier-info">
+            <h4>Ouaga 2000</h4>
+            <p>Quartier résidentiel haut de gamme. Villas modernes, ambassades, services premium.</p>
+            <div class="q-count">34 biens disponibles</div>
+          </div>
+        </div>
+        <div class="quartier-card">
+          <img class="quartier-img" src="https://images.unsplash.com/photo-1529408686214-b48b8532f72c?w=200&q=70" alt="Centre-Ville">
+          <div class="quartier-info">
+            <h4>Centre-Ville</h4>
+            <p>Cœur économique. Bureaux, commerces, appartements modernes avec vue dégagée.</p>
+            <div class="q-count">28 biens disponibles</div>
+          </div>
+        </div>
+        <div class="quartier-card">
+          <img class="quartier-img" src="https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?w=200&q=70" alt="Zone Résidentielle">
+          <div class="quartier-info">
+            <h4>Zone Résidentielle Sud</h4>
+            <p>Secteur calme et verdoyant. Maisons familiales, terrain, environnement sécurisé.</p>
+            <div class="q-count">25 biens disponibles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8 : CALCULATRICE -->
+<section class="section calc" id="estimation">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;margin-bottom:48px;">
+      <span class="section-label" style="color:rgba(212,175,55,0.8)">Outils gratuits</span>
+      <h2 class="section-title" style="color:var(--blanc);">Simulez & <span style="color:var(--or);">Estimez</span></h2>
+    </div>
+    <div class="calc-grid reveal">
+      <div class="calc-panel">
+        <h3 class="calc-title">Simulateur d'emprunt</h3>
+        <p class="calc-sub">Calculez votre capacité d'emprunt en quelques secondes</p>
+        <div class="calc-result">
+          <span class="result-value" id="loanResult">0 FCFA</span>
+          <span class="result-label">Capacité d'emprunt estimée</span>
+        </div>
+        <div class="calc-field">
+          <label>Revenus mensuels nets (FCFA)</label>
+          <input type="number" id="income" placeholder="800 000" oninput="calcLoan()">
+        </div>
+        <div class="calc-field">
+          <label>Apport personnel (FCFA)</label>
+          <input type="number" id="deposit" placeholder="5 000 000" oninput="calcLoan()">
+        </div>
+        <div class="calc-field">
+          <label>Durée du prêt : <span id="durationLabel">20 ans</span></label>
+          <input type="range" id="duration" min="5" max="30" value="20" step="5" oninput="updateDuration(this)">
+          <div class="slider-labels"><span>5 ans</span><span>30 ans</span></div>
+        </div>
+        <div class="calc-field">
+          <label>Taux d'intérêt : <span id="rateLabel">7%</span></label>
+          <input type="range" id="rate" min="3" max="15" value="7" step="0.5" oninput="updateRate(this)">
+          <div class="slider-labels"><span>3%</span><span>15%</span></div>
+        </div>
+      </div>
+      <div class="calc-panel">
+        <h3 class="calc-title">Estimation gratuite</h3>
+        <p class="calc-sub">Recevez l'estimation de votre bien sous 24h par l'un de nos experts</p>
+        <form id="estForm" onsubmit="submitEstForm(event)">
+          <div class="form-field"><input type="text" placeholder="Votre prénom et nom *" required></div>
+          <div class="form-field"><input type="tel" placeholder="Numéro de téléphone *" required></div>
+          <div class="form-field"><input type="text" placeholder="Adresse du bien *" required></div>
+          <div class="form-field">
+            <select style="color:rgba(250,249,246,0.7);">
+              <option value="">Type de bien</option>
+              <option>Maison / Villa</option>
+              <option>Appartement</option>
+              <option>Terrain</option>
+              <option>Local commercial</option>
+            </select>
+          </div>
+          <div class="form-field"><input type="number" placeholder="Surface approximative (m²)"></div>
+          <button type="submit" class="btn btn-or" style="width:100%;justify-content:center;margin-top:8px;">
+            Être rappelé par un conseiller →
+          </button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          ✓ Votre demande a bien été reçue ! Un conseiller vous contactera sous 24h.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9 : FAQ -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <span class="section-label">Questions fréquentes</span>
+      <h2 class="section-title">Tout ce que vous <span class="underline-or">souhaitez savoir</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quels sont les frais d'agence Yirilux ?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Nos honoraires sont transparents et conformes au marché local : 5% du prix de vente pour les transactions immobilières, 1 mois de loyer pour les locations nues et 2 mois pour les locations meublées. Ces frais incluent l'intégralité de notre accompagnement du début à la remise des clés.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment estimer mon bien avec Yirilux ?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Notre estimation est entièrement gratuite et sans engagement. Elle se base sur une analyse comparative des ventes récentes dans votre secteur, l'état général du bien, la surface, les équipements et les tendances du marché local. Remplissez le formulaire ci-dessus et un expert vous rappelle sous 24h.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quel est le délai moyen de vente dans la région ?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>En 2024, le délai moyen de vente pour les biens Yirilux est de 45 jours pour un bien correctement évalué. Ce délai peut varier selon le secteur, le type de bien et la conjoncture. Ouaga 2000 et le Centre-Ville affichent les délais les plus courts (30 jours en moyenne).</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-3">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quels documents faut-il pour louer un bien ?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Pour la constitution d'un dossier locataire, nous demandons généralement : pièce d'identité valide, 3 derniers bulletins de salaire ou justificatifs de revenus, dernier avis d'imposition, et éventuellement un garant. Pour les professionnels : extrait RCCM et relevés bancaires des 3 derniers mois.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Yirilux propose-t-elle des biens neufs et VEFA ?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Oui, nous avons des partenariats avec les principaux promoteurs immobiliers de la région. Nous commercialisons des programmes neufs et proposons un accompagnement complet dans le cadre de ventes en l'état futur d'achèvement (VEFA), avec suivi de chantier inclus.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10 : BLOG -->
+<section class="section blog" id="blog">
+  <div class="container">
+    <div class="section-header-flex reveal">
+      <div>
+        <span class="section-label">Conseils & actualités</span>
+        <h2 class="section-title">Notre <span class="underline-or">blog</span></h2>
+      </div>
+      <a href="#" class="btn btn-outline">Tous les articles →</a>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal">
+        <div class="blog-img-wrap">
+          <img class="blog-img" src="https://images.unsplash.com/photo-1582407947304-fd86f28f7b8c?w=600&q=80" alt="Article 1">
+        </div>
+        <div class="blog-body">
+          <span class="blog-cat">Investissement</span>
+          <h3 class="blog-title">Investir dans l'immobilier neuf en 2024 : ce qu'il faut savoir</h3>
+          <p class="blog-meta">12 novembre 2024 · 5 min de lecture</p>
+          <a href="#" class="blog-link">Lire l'article <span>→</span></a>
+        </div>
+      </div>
+      <div class="blog-card reveal reveal-delay-1">
+        <div class="blog-img-wrap">
+          <img class="blog-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Article 2">
+        </div>
+        <div class="blog-body">
+          <span class="blog-cat">Location</span>
+          <h3 class="blog-title">Louer meublé ou vide : le guide complet pour faire le bon choix</h3>
+          <p class="blog-meta">3 octobre 2024 · 7 min de lecture</p>
+          <a href="#" class="blog-link">Lire l'article <span>→</span></a>
+        </div>
+      </div>
+      <div class="blog-card reveal reveal-delay-2">
+        <div class="blog-img-wrap">
+          <img class="blog-img" src="https://images.unsplash.com/photo-1448630360428-65456885c650?w=600&q=80" alt="Article 3">
+        </div>
+        <div class="blog-body">
+          <span class="blog-cat">Marché</span>
+          <h3 class="blog-title">Les quartiers émergents à surveiller à Ouagadougou en 2025</h3>
+          <p class="blog-meta">19 septembre 2024 · 6 min de lecture</p>
+          <a href="#" class="blog-link">Lire l'article <span>→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 11 : TRUST -->
+<section class="trust">
+  <div class="container">
+    <p class="trust-label">Ils nous font confiance</p>
+    <div class="partners">
+      <span class="partner">SGBF Bank</span>
+      <span class="partner">Coris Bank</span>
+      <span class="partner">Maître Ouédraogo</span>
+      <span class="partner">Promotec Immo</span>
+      <span class="partner">BSIC</span>
+      <span class="partner">Société Générale</span>
+      <span class="partner">Cabinet Notarial Traoré</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo-text">Yiri<span>lux</span></div>
+        <div class="footer-slogan">"Votre confort, notre métier"</div>
+        <p style="font-size:0.83rem;color:rgba(250,249,246,0.45);line-height:1.7;margin-bottom:24px;max-width:280px;">Agence immobilière premium basée à Ouagadougou. Spécialiste du marché burkinabè depuis 2009, au service de vos projets immobiliers.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-link" title="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" title="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://wa.me/+22600000000" class="social-link" title="WhatsApp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.026 21.993h-.006a9.96 9.96 0 01-5.073-1.384L2 22l1.424-4.801A9.945 9.945 0 012 12.026C2.008 6.529 6.526 2 12.026 2c2.683 0 5.2 1.048 7.094 2.943A9.975 9.975 0 0122 12.025c-.007 5.498-4.526 9.968-10.026 9.968z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="#biens">Biens à vendre</a></li>
+          <li><a href="#biens">Biens à louer</a></li>
+          <li><a href="#estimation">Estimer mon bien</a></li>
+          <li><a href="#services">Gestion locative</a></li>
+          <li><a href="#blog">Blog & Conseils</a></li>
+          <li><a href="#contact">Nous contacter</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Nos coordonnées</h4>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Avenue de l'Indépendance, Secteur 15<br>Ouagadougou, Burkina Faso</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+22625000000">+226 25 00 00 00</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:contact@yirilux.com">contact@yirilux.com</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Lun – Sam : 8h00 – 18h00<br>Dim : Sur rendez-vous</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size:0.82rem;color:rgba(250,249,246,0.5);line-height:1.6;margin-bottom:16px;">Recevez en avant-première nos nouvelles annonces et conseils du marché.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Votre email…" id="nlEmail">
+          <button onclick="subscribeNewsletter()">S'inscrire</button>
+        </div>
+        <p class="newsletter-note" id="nlFeedback">Sans spam, désinscription en 1 clic.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Yirilux Immobilier. Tous droits réservés.</p>
+    <div class="footer-legal">
+      <a href="#">Mentions légales</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Crédits</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, input, select, label, .prop-card, .quartier-card, .blog-card, .partner, .tag').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ─── NAVBAR SCROLL ───
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── MOBILE MENU ───
+let menuOpen = false;
+function toggleMenu() {
+  menuOpen = !menuOpen;
+  document.getElementById('mobileMenu').classList.toggle('open', menuOpen);
+  const spans = document.querySelectorAll('.hamburger span');
+  if (menuOpen) {
+    spans[0].style.cssText = 'transform:rotate(45deg) translate(5px,5px)';
+    spans[1].style.cssText = 'opacity:0';
+    spans[2].style.cssText = 'transform:rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(s => s.style.cssText = '');
+  }
+}
+document.getElementById('mobileMenu').querySelectorAll('a').forEach(a => a.addEventListener('click', toggleMenu));
+
+// ─── REVEAL ON SCROLL ───
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── COUNTER ANIMATION ───
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = 'true';
+      const target = +e.target.dataset.target;
+      const suffix = e.target.dataset.suffix || '';
+      let current = 0;
+      const step = target / 60;
+      const interval = setInterval(() => {
+        current = Math.min(current + step, target);
+        e.target.textContent = Math.floor(current) + suffix;
+        if (current >= target) clearInterval(interval);
+      }, 25);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-number[data-target]').forEach(el => counterObserver.observe(el));
+
+// ─── TABS ───
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+// ─── FAQ ───
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ─── TAGS ───
+function filterTag(el) {
+  document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── FAVORITES (localStorage) ───
+let favs = JSON.parse(localStorage.getItem('yirilux_favs') || '[]');
+function toggleFav(btn, id) {
+  const idx = favs.indexOf(id);
+  if (idx === -1) { favs.push(id); btn.classList.add('active'); }
+  else { favs.splice(idx,1); btn.classList.remove('active'); }
+  localStorage.setItem('yirilux_favs', JSON.stringify(favs));
+}
+// Restore favs
+favs.forEach(id => {
+  const btn = document.querySelector('[data-id="' + id + '"]');
+  if (btn) btn.classList.add('active');
+});
+
+// ─── COMPARE ───
+let compareList = {};
+function toggleCompare(input, id, name) {
+  if (input.checked) {
+    if (Object.keys(compareList).length >= 3) { alert('Maximum 3 biens comparables.'); input.checked = false; return; }
+    compareList[id] = name;
+  } else { delete compareList[id]; }
+  const bar = document.getElementById('compare-bar');
+  const count = Object.keys(compareList).length;
+  document.getElementById('compareCount').textContent = count + ' bien' + (count > 1 ? 's' : '') + ' sélectionné' + (count > 1 ? 's' : '');
+  bar.classList.toggle('visible', count > 0);
+}
+function clearCompare() {
+  compareList = {};
+  document.querySelectorAll('.compare-check input').forEach(i => i.checked = false);
+  document.getElementById('compare-bar').classList.remove('visible');
+}
+function compareSelected() {
+  const names = Object.values(compareList).join(' vs ');
+  alert('Comparaison : ' + names + '\n(Fonctionnalité bientôt disponible)');
+}
+
+// ─── LOAN CALCULATOR ───
+function calcLoan() {
+  const income = parseFloat(document.getElementById('income').value) || 0;
+  const deposit = parseFloat(document.getElementById('deposit').value) || 0;
+  const duration = +document.getElementById('duration').value;
+  const rate = +document.getElementById('rate').value / 100 / 12;
+  const months = duration * 12;
+  const maxMonthly = income * 0.33;
+  let loanAmount = 0;
+  if (rate > 0) {
+    loanAmount = maxMonthly * (1 - Math.pow(1 + rate, -months)) / rate;
+  }
+  const total = loanAmount + deposit;
+  document.getElementById('loanResult').textContent = formatFCFA(Math.round(total));
+}
+function updateDuration(el) {
+  document.getElementById('durationLabel').textContent = el.value + ' ans';
+  calcLoan();
+}
+function updateRate(el) {
+  document.getElementById('rateLabel').textContent = el.value + '%';
+  calcLoan();
+}
+function formatFCFA(n) {
+  return n.toLocaleString('fr-FR') + ' FCFA';
+}
+
+// ─── ESTIMATION FORM ───
+function submitEstForm(e) {
+  e.preventDefault();
+  document.getElementById('estForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+// ─── NEWSLETTER ───
+function subscribeNewsletter() {
+  const email = document.getElementById('nlEmail').value;
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const fb = document.getElementById('nlFeedback');
+  if (!re.test(email)) {
+    fb.textContent = '⚠ Entrez un email valide.';
+    fb.style.color = '#e63946';
+    return;
+  }
+  fb.textContent = '✓ Inscription confirmée, merci !';
+  fb.style.color = 'var(--or)';
+  document.getElementById('nlEmail').value = '';
+}
+
+// ─── SEARCH ───
+function handleSearch() {
+  const val = document.getElementById('searchInput').value.trim();
+  if (val) { alert('Recherche pour : "' + val + '"\n(Intégration moteur à connecter)'); }
+}
+
+// ─── LEAFLET MAP ───
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([12.36, -1.53], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
+      maxZoom: 19
+    }).addTo(map);
+
+    const goldIcon = L.divIcon({
+      html: '<div style="width:14px;height:14px;background:#D4AF37;border-radius:50%;border:2px solid #0F0F0F;box-shadow:0 2px 8px rgba(212,175,55,0.6);"></div>',
+      className: '', iconSize: [14,14]
+    });
+
+    const points = [
+      [12.378, -1.52, 'Ouaga 2000 — 34 biens'],
+      [12.365, -1.535, 'Centre-Ville — 28 biens'],
+      [12.348, -1.542, 'Zone Résidentielle Sud — 25 biens'],
+      [12.36, -1.51, 'Secteur Industriel — 8 biens'],
+      [12.385, -1.55, 'Zone Nord — 12 biens'],
+    ];
+    points.forEach(([lat, lng, label]) => {
+      L.marker([lat, lng], { icon: goldIcon })
+        .addTo(map)
+        .bindPopup(`<b style="font-family:serif;color:#0F0F0F;">${label}</b>`, { className: 'custom-popup' });
+    });
+  } catch(e) { console.log('Map init error', e); }
+});
+</script>
+</body>
+</html>
