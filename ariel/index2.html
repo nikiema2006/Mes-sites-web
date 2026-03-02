@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+<title>Ariel Immobilier — Achat · Vente · Location · Gestion Locative</title>
+
+<!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400&display=swap" rel="stylesheet"/>
+
+<!-- PHOSPHOR ICONS -->
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- SWIPER -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+
+<!-- LEAFLET MAP -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<style>
+/* ─── RESET & BASE ────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:#F5F0E8;
+  color:#181410;
+  font-family:'Syne', sans-serif;
+  overflow-x:hidden;
+  width:100%;
+  max-width:100vw;
+  cursor:none;
+}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#F5F0E8}
+::-webkit-scrollbar-thumb{background:#E85B00;border-radius:3px}
+
+/* ─── VARIABLES ──────────────────── */
+:root{
+  --ink:#181410;
+  --ink2:#2E2923;
+  --cream:#F5F0E8;
+  --cream2:#EDE6D9;
+  --cream3:#DDD5C5;
+  --muted:#9C9285;
+  --orange:#E85B00;
+  --orange2:#FF7A30;
+  --white:#FFFFFF;
+  --serif:'Cormorant Garamond', Georgia, serif;
+  --sans:'Syne', sans-serif;
+  --mono:'DM Mono', monospace;
+  --nav-h:76px;
+}
+
+/* ─── CURSOR ──────────────────── */
+#cd{width:8px;height:8px;background:var(--orange);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cr{width:36px;height:36px;border:1.5px solid var(--orange);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s,opacity .2s}
+.ch #cd{width:14px;height:14px;background:var(--orange)}
+.ch #cr{width:56px;height:56px;opacity:.15;border-color:var(--orange)}
+@media(max-width:768px){#cd,#cr{display:none}body{cursor:auto}}
+
+/* ─── PRELOADER ───────────────── */
+#pre{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  transition:opacity .7s ease, transform .7s ease;
+  width:100vw;height:100vh;
+}
+.pre-name{
+  font-family:var(--serif);
+  font-size:clamp(32px,8vw,72px);
+  font-weight:300;
+  color:var(--cream);
+  letter-spacing:8px;
+  text-align:center;
+  overflow:hidden;
+}
+.pre-name span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+.pre-name span.accent{color:var(--orange);animation-delay:.15s}
+.pre-progress{
+  width:140px;height:2px;
+  background:rgba(255,255,255,.1);
+  position:relative;overflow:hidden;
+  border-radius:2px;
+}
+.pre-bar{
+  position:absolute;left:0;top:0;height:100%;
+  background:var(--orange);width:0;
+  animation:preBar 1.8s .3s ease forwards;
+}
+.pre-sub{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);
+  opacity:0;animation:fadeIn .5s 1.6s ease both;
+  text-align:center;padding:0 20px;
+}
+@keyframes slideUp{to{transform:translateY(0)}}
+@keyframes preBar{to{width:100%}}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ─── NAV ─────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);
+  padding:0 56px;
+  display:flex;justify-content:space-between;align-items:center;
+  z-index:800;
+  width:100%;
+  max-width:100vw;
+  transition:background .4s,backdrop-filter .4s,border .4s;
+}
+nav.solid{
+  background:rgba(245,240,232,.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--cream3);
+}
+.nb{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.nb-logo{width:42px;height:42px;flex-shrink:0}
+.nb-text{display:flex;flex-direction:column;line-height:1.1}
+.nb-text .t1{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);letter-spacing:3px;transition:color .3s}
+.nb-text .t2{font-family:var(--mono);font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--orange)}
+
+nav:not(.solid) .t1{color:var(--cream)}
+nav:not(.solid) .t2{color:var(--orange)}
+
+.nl{list-style:none;display:flex;gap:32px;align-items:center;margin:0;padding:0}
+.nl a{
+  font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;color:var(--cream);
+  position:relative;transition:color .3s;white-space:nowrap;
+}
+nav.solid .nl a{color:var(--ink2)}
+.nl a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1px;background:var(--orange);
+  transition:width .3s;
+}
+.nl a:hover::after{width:100%}
+.nl a:hover{color:var(--orange)}
+nav.solid .nl a:hover{color:var(--orange)}
+
+.nav-btn{
+  background:var(--orange) !important;
+  color:var(--white) !important;
+  padding:10px 24px;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  border:none;cursor:pointer;
+  transition:background .3s,transform .2s !important;
+  text-decoration:none;display:inline-block;
+}
+.nav-btn:hover{background:var(--ink) !important;transform:translateY(-2px)}
+.nav-btn::after{display:none !important}
+
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;z-index:900}
+.hbg span{width:24px;height:2px;transition:all .4s;display:block;background:var(--cream)}
+nav.solid .hbg span{background:var(--ink)}
+.hbg.o span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hbg.o span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hbg.o span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ─── MOBILE NAV ──────────────── */
+#mnav{
+  position:fixed;inset:0;z-index:700;
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  clip-path:inset(0 0 100% 0);
+  transition:clip-path .6s cubic-bezier(.77,0,.175,1);
+  width:100vw;height:100vh;
+}
+#mnav.open{clip-path:inset(0 0 0% 0)}
+#mnav a{
+  font-family:var(--serif);
+  font-size:clamp(24px,6vw,40px);
+  color:var(--cream);text-decoration:none;
+  letter-spacing:3px;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  width:80%;text-align:center;
+  transition:color .3s;
+}
+#mnav a:hover{color:var(--orange)}
+#mnav a:last-child{
+  margin-top:20px;border:none;
+  background:var(--orange);color:var(--white) !important;
+  padding:16px 40px;font-size:14px;letter-spacing:3px;
+  font-family:var(--sans);font-weight:700;
+}
+
+/* ─── HERO ─────────────────────────────────────── */
+#hero{
+  position:relative;
+  min-height:100vh;
+  min-height:100svh;
+  display:grid;
+  grid-template-columns:48% 52%;
+  width:100%;
+  max-width:100vw;
+  overflow:hidden;
+  background:var(--ink);
+}
+
+/* LEFT panel */
+.hl{
+  position:relative;z-index:2;
+  background:var(--ink);
+  padding:calc(var(--nav-h) + 40px) 48px 48px;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  min-height:100%;
+  overflow:hidden;
+}
+.hl::before{
+  content:'';
+  position:absolute;
+  bottom:80px;right:0;
+  width:1px;height:160px;
+  background:linear-gradient(var(--orange),transparent);
+}
+.hl::after{
+  content:'';
+  position:absolute;
+  bottom:80px;right:0;
+  width:120px;height:1px;
+  background:linear-gradient(to left,var(--orange),transparent);
+}
+
+.h-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(232,91,0,.8);margin-bottom:32px;
+}
+
+.h-title{
+  font-family:var(--serif);
+  font-size:clamp(40px,4.5vw,80px);
+  font-weight:300;
+  line-height:.95;
+  color:var(--cream);
+  letter-spacing:-1px;
+  margin-bottom:24px;
+}
+.h-title em{
+  font-style:italic;
+  color:var(--orange);
+  display:block;
+  margin-top:8px;
+}
+.h-title .outline-word{
+  -webkit-text-stroke:1px rgba(244,239,230,.2);
+  color:transparent;
+}
+
+/* Animated word container */
+.word-switch{
+  display:inline-block;
+  overflow:hidden;
+  vertical-align:bottom;
+  height:1.1em;
+  line-height:1.1;
+}
+.ws-inner{
+  display:flex;flex-direction:column;
+  animation:wsAnim 9s cubic-bezier(.76,0,.24,1) infinite;
+}
+@keyframes wsAnim{
+  0%,26%   {transform:translateY(0)}
+  33%,59%  {transform:translateY(-1.1em)}
+  66%,92%  {transform:translateY(-2.2em)}
+  100%     {transform:translateY(-3.3em)}
+}
+.ws-word{
+  flex-shrink:0;height:1.1em;
+  display:flex;align-items:center;
+}
+
+.h-desc{
+  font-size:15px;line-height:1.8;
+  color:rgba(244,239,230,.6);
+  max-width:420px;margin-top:0;
+}
+
+/* Hero search bar */
+.h-search{
+  margin-top:40px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:4px;
+  overflow:hidden;
+}
+.hs-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08)}
+.hs-tab{
+  flex:1;padding:14px 0;
+  background:none;border:none;cursor:pointer;
+  font-family:var(--sans);font-size:11px;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(244,239,230,.35);
+  transition:all .3s;
+  position:relative;
+}
+.hs-tab::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:2px;
+  background:var(--orange);transition:width .3s;
+}
+.hs-tab.on{color:var(--cream)}
+.hs-tab.on::after{width:100%}
+.hs-tab:hover{color:rgba(244,239,230,.7)}
+.hs-fields{
+  display:grid;grid-template-columns:1fr 1fr auto;
+  gap:0;
+}
+.hs-field{
+  padding:16px 20px;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.hs-field:last-of-type{border-right:none}
+.hs-field label{
+  display:block;font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(232,91,0,.7);margin-bottom:6px;
+}
+.hs-field select{
+  width:100%;background:none;border:none;
+  color:var(--cream);font-family:var(--sans);
+  font-size:14px;font-weight:600;outline:none;
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F5F0E8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right center;
+  padding-right:20px;
+}
+.hs-field select option{background:var(--ink);color:var(--cream)}
+.hs-btn{
+  padding:16px 28px;
+  background:var(--orange);border:none;cursor:pointer;
+  color:var(--white);
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--sans);font-size:12px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  transition:background .3s;white-space:nowrap;
+}
+.hs-btn:hover{background:var(--orange2)}
+.hs-btn i{font-size:18px}
+
+.h-stats{
+  display:flex;gap:0;
+  border-top:1px solid rgba(255,255,255,.08);
+  margin-top:auto;
+  padding-top:32px;
+}
+.h-stat{
+  flex:1;padding:20px 0;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.h-stat:last-child{border-right:none;padding-right:0}
+.h-stat:first-child{padding-left:0}
+.h-stat-n{
+  font-family:var(--serif);
+  font-size:36px;font-weight:300;
+  color:var(--cream);line-height:1;
+}
+.h-stat-n em{color:var(--orange);font-style:normal;font-size:28px;margin-left:2px}
+.h-stat-l{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-top:6px;
+}
+
+/* RIGHT panel — photo */
+.hr{
+  position:relative;overflow:hidden;
+  min-height:100%;
+}
+.hr-img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform 8s ease;
+}
+.hr:hover .hr-img{transform:scale(1.04)}
+.hr-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(24,20,16,.5) 0%,transparent 50%),
+             linear-gradient(to top,rgba(24,20,16,.4) 0%,transparent 40%);
+  z-index:1;
+}
+
+/* Floating property card */
+.hr-card{
+  position:absolute;bottom:40px;right:40px;z-index:2;
+  width:280px;
+  background:rgba(245,240,232,.98);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 24px 64px rgba(24,20,16,.3);
+  overflow:hidden;
+  border-radius:4px;
+  transform:translateY(0);
+  transition:transform .3s;
+}
+.hr-card:hover{transform:translateY(-5px)}
+.hr-card-img{
+  width:100%;height:150px;
+  object-fit:cover;
+  display:block;
+}
+.hr-card-body{padding:20px}
+.hr-card-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--orange);color:var(--white);
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;padding:4px 10px;margin-bottom:10px;
+  border-radius:2px;
+}
+.hr-card-name{
+  font-family:var(--serif);
+  font-size:18px;font-weight:600;color:var(--ink);
+  line-height:1.2;
+}
+.hr-card-loc{
+  font-size:12px;color:var(--muted);
+  margin-top:6px;display:flex;align-items:center;gap:5px;
+}
+.hr-card-price{
+  font-family:var(--serif);
+  font-size:24px;font-weight:700;
+  color:var(--orange);margin-top:12px;
+}
+.hr-card-feats{
+  display:flex;gap:16px;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--cream3);
+}
+.hr-card-feat{
+  display:flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+}
+.hr-card-feat i{font-size:14px;color:var(--orange)}
+
+/* Badge top-left */
+.hr-badge{
+  position:absolute;top:40px;left:40px;z-index:2;
+  display:flex;flex-direction:column;gap:0;
+  animation:fadeInDown 1s ease;
+}
+@keyframes fadeInDown{
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hr-badge-inner{
+  background:var(--orange);
+  padding:10px 16px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);
+  display:flex;align-items:center;gap:8px;
+  border-radius:4px 4px 0 0;
+}
+.hr-badge-inner i{font-size:16px}
+.hr-badge-count{
+  font-family:var(--serif);font-size:36px;
+  font-weight:300;color:var(--white);
+  background:rgba(24,20,16,.85);
+  padding:12px 16px;
+  backdrop-filter:blur(8px);
+  border-radius:0 0 4px 4px;
+  text-align:center;
+}
+
+/* ── Mobile hero ─────────────────── */
+@media(max-width:1024px){
+  #hero{
+    grid-template-columns:1fr;
+    min-height:100vh;
+    min-height:100svh;
+  }
+  .hr{
+    position:absolute;inset:0;z-index:0;
+    height:100%;
+  }
+  .hr-overlay{
+    background:rgba(24,20,16,.75);
+  }
+  .hl{
+    position:relative;z-index:1;
+    background:transparent !important;
+    min-height:100vh;
+    min-height:100svh;
+    padding:calc(var(--nav-h) + 24px) 24px 40px;
+    justify-content:center;
+  }
+  .hl::before,.hl::after{display:none}
+  .h-title{font-size:clamp(36px,10vw,56px)}
+  .h-desc{color:rgba(244,239,230,.7);max-width:none}
+  .hr-card{display:none}
+  .hr-badge{top:auto;bottom:30px;left:24px}
+  .hs-fields{grid-template-columns:1fr;gap:0}
+  .hs-field{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .hs-btn{grid-column:1/-1;justify-content:center;padding:18px}
+  .h-stats{margin-top:40px;padding-top:24px}
+  .h-stat-n{font-size:28px}
+}
+
+@media(max-width:640px){
+  nav{padding:0 20px;height:70px;--nav-h:70px}
+  .nb-text .t1{font-size:18px}
+  .nl{display:none}
+  .hbg{display:flex}
+  .h-search{margin-top:32px}
+  .hs-tab{font-size:10px;letter-spacing:1px}
+  .h-stats{flex-direction:column;gap:16px}
+  .h-stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);padding:16px 0}
+  .h-stat:last-child{border-bottom:none}
+}
+
+/* ─── TICKER ──────────────────── */
+.ticker{
+  background:var(--orange);
+  padding:16px 0;
+  overflow:hidden;
+  white-space:nowrap;
+  width:100%;
+  max-width:100vw;
+  position:relative;
+}
+.ticker-t{display:inline-flex;animation:tick 30s linear infinite}
+.ticker:hover .ticker-t{animation-play-state:paused}
+.ti{
+  padding:0 40px;
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--white);font-weight:500;
+}
+.ti i{font-size:16px;opacity:.8}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── SECTIONS ─────────────────── */
+.s{max-width:1380px;margin:0 auto;padding:100px 56px}
+.sf{background:var(--ink);padding:100px 0}
+.sf .si{max-width:1380px;margin:0 auto;padding:0 56px}
+.sw{background:var(--white);padding:100px 0}
+.sw .si{max-width:1380px;margin:0 auto;padding:0 56px}
+.sc2{background:var(--cream2);padding:100px 0}
+.sc2 .si{max-width:1380px;margin:0 auto;padding:0 56px}
+
+/* label */
+.lbl{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--orange);margin-bottom:20px;
+}
+.lbl::before{content:'';width:28px;height:1px;background:var(--orange)}
+.lbl-c{justify-content:center;margin-left:auto;margin-right:auto}
+.lbl-c::before{display:none}
+.lbl-light{color:rgba(232,91,0,.6)}
+.lbl-light::before{background:rgba(232,91,0,.4)}
+
+/* Heading */
+.h2{
+  font-family:var(--serif);
+  font-size:clamp(36px,4.5vw,64px);
+  font-weight:300;line-height:.95;letter-spacing:-1px;
+}
+.h2 em{font-style:italic;color:var(--orange)}
+.h2 .o{-webkit-text-stroke:1px rgba(28,24,20,.2);color:transparent}
+.h2.lt{color:var(--cream)}
+.h2.lt .o{-webkit-text-stroke:1px rgba(244,239,230,.15)}
+
+/* Reveal classes — visibles par défaut, animées si JS actif */
+.rv,.rvl,.rvr{opacity:1;transform:none}
+.js-active .rv{opacity:0;transform:translateY(30px)}
+.js-active .rvl{opacity:0;transform:translateX(-30px)}
+.js-active .rvr{opacity:0;transform:translateX(30px)}
+
+/* ─── ABOUT ──────────────────── */
+#about{max-width:1380px;margin:0 auto;padding:100px 56px}
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.ab-img-wrap{position:relative}
+.ab-img{
+  width:100%;aspect-ratio:4/5;
+  object-fit:cover;display:block;
+  border-radius:4px;
+}
+.ab-img-deco{
+  position:absolute;
+  top:-20px;left:-20px;
+  width:80px;height:80px;
+  border:1px solid var(--cream3);
+  z-index:-1;
+  border-radius:4px;
+}
+.ab-badge{
+  position:absolute;
+  bottom:-24px;right:-24px;
+  width:130px;height:130px;
+  background:var(--orange);
+  border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;
+  box-shadow:0 10px 40px rgba(232,91,0,.3);
+}
+.ab-badge-n{font-family:var(--serif);font-size:44px;font-weight:300;color:var(--white);line-height:1}
+.ab-badge-t{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.8);text-align:center;line-height:1.4}
+.ab-txt p{font-size:16px;line-height:1.8;color:var(--ink2);margin-top:20px}
+.ab-feats{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+.af{
+  padding:24px;
+  border:1px solid var(--cream3);
+  border-radius:4px;
+  transition:all .35s;display:flex;gap:16px;align-items:flex-start;
+  background:var(--white);
+}
+.af:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.05)}
+.af-ico{
+  width:44px;height:44px;flex-shrink:0;
+  background:rgba(232,91,0,.08);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:4px;
+}
+.af-ico i{font-size:22px;color:var(--orange)}
+.af-title{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.3px;margin-bottom:4px}
+.af-desc{font-size:13px;color:var(--muted);line-height:1.5}
+
+@media(max-width:1024px){
+  #about{padding:80px 32px}
+  .ab-grid{grid-template-columns:1fr;gap:50px}
+  .ab-img-wrap{max-width:500px;margin:0 auto;width:100%}
+  .ab-badge{width:110px;height:110px;right:10px;bottom:-15px}
+  .ab-badge-n{font-size:36px}
+}
+@media(max-width:640px){
+  #about{padding:60px 20px}
+  .ab-feats{grid-template-columns:1fr}
+  .ab-img-deco{display:none}
+}
+
+/* ─── SERVICES ────────────────── */
+.srv-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--cream3);
+  margin-top:64px;
+  border-radius:4px;
+  overflow:hidden;
+}
+.srv{
+  padding:40px 32px;
+  border-right:1px solid var(--cream3);
+  position:relative;overflow:hidden;
+  transition:all .45s;cursor:pointer;
+  background:var(--white);
+}
+.srv:last-child{border-right:none}
+.srv::before{
+  content:'';
+  position:absolute;bottom:0;left:0;
+  width:100%;height:0;
+  background:var(--ink);
+  transition:height .5s cubic-bezier(.77,0,.175,1);
+  z-index:0;
+}
+.srv:hover::before{height:100%}
+.srv>*{position:relative;z-index:1;transition:color .4s}
+.srv-n{
+  font-family:var(--serif);
+  font-size:64px;font-weight:300;
+  color:var(--cream3);line-height:1;
+  transition:color .4s;
+  margin-bottom:20px;
+}
+.srv:hover .srv-n{color:rgba(232,91,0,.2)}
+.srv-ico{
+  width:50px;height:50px;
+  background:rgba(232,91,0,.08);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;
+  border-radius:4px;
+  transition:background .4s;
+}
+.srv-ico i{font-size:24px;color:var(--orange);transition:color .4s}
+.srv:hover .srv-ico{background:rgba(232,91,0,.2)}
+.srv-title{font-size:18px;font-weight:700;color:var(--ink);transition:color .4s;margin-bottom:12px}
+.srv:hover .srv-title{color:var(--cream)}
+.srv-desc{font-size:14px;line-height:1.7;color:var(--muted);transition:color .4s}
+.srv:hover .srv-desc{color:rgba(244,239,230,.5)}
+.srv-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:24px;font-family:var(--mono);font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--orange);text-decoration:none;
+  transition:gap .3s,color .4s;
+  font-weight:600;
+}
+.srv:hover .srv-link{gap:12px;color:var(--orange2)}
+
+@media(max-width:1100px){
+  .srv-grid{grid-template-columns:1fr 1fr}
+  .srv:nth-child(2){border-right:none}
+  .srv:nth-child(1),.srv:nth-child(2){border-bottom:1px solid var(--cream3)}
+}
+@media(max-width:640px){
+  .srv-grid{grid-template-columns:1fr}
+  .srv{border-right:none;border-bottom:1px solid var(--cream3)!important}
+  .srv:last-child{border-bottom:none!important}
+}
+
+/* ─── PROPERTIES ──────────────── */
+.ph{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:24px;flex-wrap:wrap}
+.pfilts{display:flex;gap:8px;flex-wrap:wrap}
+.pf{
+  padding:10px 20px;border:1px solid var(--cream3);
+  background:none;cursor:pointer;
+  font-family:var(--sans);font-size:11px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);transition:all .3s;
+  border-radius:4px;
+}
+.pf.on,.pf:hover{
+  background:var(--orange);border-color:var(--orange);color:var(--white);
+}
+
+.pswiper{overflow:visible !important;padding-bottom:50px}
+.pswiper .swiper-wrapper{align-items:stretch}
+.swiper-slide{height:auto;max-width:380px}
+
+.pc{
+  background:var(--white);
+  border:1px solid var(--cream3);
+  border-radius:4px;
+  overflow:hidden;
+  transition:all .4s;cursor:pointer;height:100%;
+  display:flex;flex-direction:column;
+}
+.pc:hover{
+  transform:translateY(-8px);
+  box-shadow:0 32px 80px rgba(24,20,16,.12);
+  border-color:rgba(232,91,0,.3);
+}
+.pc-img{
+  position:relative;overflow:hidden;
+  height:240px;flex-shrink:0;
+}
+.pc-img img{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  transition:transform .6s ease;
+}
+.pc:hover .pc-img img{transform:scale(1.08)}
+.pc-tag{
+  position:absolute;top:16px;left:16px;
+  background:var(--orange);color:var(--white);
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:6px 12px;z-index:2;
+  border-radius:2px;
+}
+.pc-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(24,20,16,.6),transparent 60%);
+  opacity:0;transition:opacity .4s;z-index:1;
+}
+.pc:hover .pc-overlay{opacity:1}
+.pc-area{
+  position:absolute;bottom:16px;right:16px;z-index:3;
+  background:rgba(245,240,232,.95);backdrop-filter:blur(8px);
+  padding:6px 14px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--ink);letter-spacing:1px;
+  border-radius:2px;
+  opacity:0;transform:translateY(10px);
+  transition:all .4s;
+}
+.pc:hover .pc-area{opacity:1;transform:translateY(0)}
+.pc-fav{
+  position:absolute;top:16px;right:16px;z-index:3;
+  width:40px;height:40px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .3s;border:none;
+  border-radius:50%;
+}
+.pc-fav i{font-size:20px;color:var(--muted);transition:color .3s}
+.pc-fav:hover,.pc-fav.active{background:var(--orange)}
+.pc-fav:hover i,.pc-fav.active i{color:var(--white)}
+.pc-body{padding:28px;flex:1;display:flex;flex-direction:column}
+.pc-type{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--orange);margin-bottom:8px;
+}
+.pc-name{
+  font-family:var(--serif);font-size:22px;
+  font-weight:600;color:var(--ink);line-height:1.2;
+}
+.pc-loc{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--muted);margin-top:8px;
+}
+.pc-loc i{font-size:16px;color:var(--orange)}
+.pc-price{
+  font-family:var(--serif);
+  font-size:26px;font-weight:700;color:var(--ink);
+  margin-top:auto;padding-top:20px;margin-top:20px;
+  border-top:1px solid var(--cream3);
+}
+.pc-price em{color:var(--orange);font-style:normal}
+.pc-feats{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+.pcf{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+}
+.pcf i{font-size:16px;color:var(--orange)}
+
+.swiper-pagination-bullet{
+  background:var(--cream3) !important;opacity:1 !important;
+  width:8px !important;height:8px !important;
+  transition:all .3s !important;
+}
+.swiper-pagination-bullet-active{
+  background:var(--orange) !important;
+  width:24px !important;border-radius:4px !important;
+}
+
+@media(max-width:768px){
+  .ph{flex-direction:column;align-items:flex-start;gap:20px}
+  .swiper-slide{max-width:320px}
+  .pc-img{height:200px}
+}
+
+/* ─── STATS ───────────────────── */
+.stats-layout{
+  display:grid;grid-template-columns:1.3fr 1fr;
+  align-items:stretch;
+  min-height:600px;
+}
+.stats-l{padding:100px 56px;max-width:720px;margin-left:auto}
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;margin-top:48px;
+  border-radius:4px;overflow:hidden;
+}
+.sb{
+  padding:40px 32px;background:var(--cream2);
+  transition:background .3s;
+}
+.sb:hover{background:var(--cream3)}
+.sb-n{
+  font-family:var(--serif);
+  font-size:56px;font-weight:300;line-height:1;color:var(--ink);
+}
+.sb-n em{color:var(--orange);font-style:normal;font-size:40px}
+.sb-d{font-size:14px;line-height:1.6;color:var(--muted);margin-top:10px}
+.stats-r{
+  background:var(--orange);
+  padding:80px 64px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.stats-r::before{
+  content:'';position:absolute;top:-50%;right:-20%;
+  width:600px;height:600px;
+  background:rgba(255,255,255,.05);border-radius:50%;
+}
+.stats-r .h2{color:var(--white);position:relative;z-index:1}
+.stats-r .h2 .o{-webkit-text-stroke:1px rgba(255,255,255,.3)}
+.stats-r p{font-size:16px;line-height:1.8;color:rgba(255,255,255,.8);margin-top:24px;max-width:360px;position:relative;z-index:1}
+.btn-w{
+  display:inline-flex;align-items:center;gap:12px;
+  margin-top:40px;padding:16px 32px;
+  background:var(--white);color:var(--orange);
+  font-family:var(--sans);font-size:12px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all .3s;border-radius:4px;
+  position:relative;z-index:1;
+  width:fit-content;
+}
+.btn-w:hover{background:var(--ink);color:var(--white);transform:translateY(-2px)}
+.btn-w i{font-size:18px;transition:transform .3s}
+.btn-w:hover i{transform:translateX(4px)}
+
+@media(max-width:1100px){
+  .stats-layout{grid-template-columns:1fr}
+  .stats-l{padding:80px 32px;max-width:none;margin:0}
+  .stats-r{padding:60px 32px}
+}
+@media(max-width:640px){
+  .stats-grid{grid-template-columns:1fr}
+  .sb-n{font-size:48px}
+}
+
+/* ─── PROCESS ─────────────────── */
+.proc-steps{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:24px;margin-top:64px;position:relative;
+}
+.proc-steps::before{
+  content:'';
+  position:absolute;
+  top:36px;left:calc(100%/12);right:calc(100%/12);
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cream3) 15%,var(--cream3) 85%,transparent);
+  z-index:0;
+}
+.ps{
+  padding:0 12px;text-align:center;
+  position:relative;z-index:1;
+}
+.ps-circle{
+  width:72px;height:72px;
+  border:2px solid var(--cream3);
+  background:var(--cream);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+  transition:all .4s;
+  position:relative;
+}
+.ps-circle::after{
+  content:'';position:absolute;inset:-4px;
+  border:2px solid transparent;border-top-color:var(--orange);
+  border-radius:50%;opacity:0;transition:opacity .4s;
+}
+.ps:hover .ps-circle::after{opacity:1}
+.ps-circle i{font-size:28px;color:var(--orange);transition:color .4s}
+.ps:hover .ps-circle{background:var(--orange);border-color:var(--orange)}
+.ps:hover .ps-circle i{color:var(--white)}
+.ps-n{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;color:var(--muted);
+  margin-bottom:8px;
+}
+.ps-t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.ps-d{font-size:13px;color:var(--muted);line-height:1.6}
+
+@media(max-width:1100px){
+  .proc-steps{grid-template-columns:repeat(3,1fr);gap:40px 24px}
+  .proc-steps::before{display:none}
+}
+@media(max-width:640px){
+  .proc-steps{grid-template-columns:repeat(2,1fr)}
+  .ps-circle{width:60px;height:60px}
+  .ps-circle i{font-size:24px}
+}
+
+/* ─── TEAM ────────────────────── */
+.team-header{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;margin-bottom:56px}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.tm{cursor:pointer;overflow:hidden;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;transition:transform .3s}
+.tm:hover{transform:translateY(-5px)}
+.tm-img{
+  position:relative;overflow:hidden;
+  aspect-ratio:3/4;
+}
+.tm-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s ease;
+  filter:saturate(.9);
+}
+.tm:hover .tm-img img{transform:scale(1.05);filter:saturate(1)}
+.tm-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(24,20,16,.9) 0%,transparent 60%);
+  transition:opacity .4s;
+}
+.tm-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:24px;z-index:2;
+}
+.tm-name{
+  font-family:var(--serif);font-size:24px;
+  font-weight:600;color:var(--white);
+}
+.tm-role{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--orange);margin-top:6px;
+}
+.tm-socials{
+  display:flex;gap:10px;margin-top:16px;
+  opacity:0;transform:translateY(10px);
+  transition:all .35s .1s;
+}
+.tm:hover .tm-socials{opacity:1;transform:translateY(0)}
+.ts{
+  width:36px;height:36px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;text-decoration:none;color:var(--cream);
+  transition:all .3s;border-radius:4px;
+}
+.ts:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-2px)}
+.ts i{font-size:16px}
+
+@media(max-width:1024px){
+  .team-header{grid-template-columns:1fr;gap:24px}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .team-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}
+}
+
+/* ─── TESTIMONIALS ────────────── */
+.tl{display:grid;grid-template-columns:360px 1fr;gap:80px;align-items:start}
+.tl-sticky{position:sticky;top:120px}
+.tl-bigq{
+  font-family:var(--serif);font-size:140px;
+  line-height:.7;color:var(--cream3);
+  display:block;margin-bottom:16px;
+  margin-top:20px;
+}
+.tl-sticky p{font-size:16px;line-height:1.8;color:var(--ink2);margin-top:16px}
+.tl-nav{display:flex;gap:12px;margin-top:32px}
+.tn{
+  width:48px;height:48px;
+  border:1px solid var(--cream3);
+  background:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);transition:all .3s;
+  border-radius:4px;
+}
+.tn i{font-size:20px}
+.tn:hover{background:var(--orange);border-color:var(--orange);color:var(--white)}
+
+.tl-items{display:flex;flex-direction:column;gap:16px}
+.ti2{
+  padding:32px;
+  background:var(--cream);
+  border-left:3px solid transparent;
+  transition:all .4s;
+  border-radius:0 4px 4px 0;
+  cursor:pointer;
+}
+.ti2:hover,.ti2.on{border-left-color:var(--orange);background:var(--white);box-shadow:0 10px 40px rgba(0,0,0,.05)}
+.ti2-stars{
+  display:flex;gap:4px;margin-bottom:16px;
+}
+.ti2-stars i{font-size:16px;color:var(--orange)}
+.ti2-q{
+  font-family:var(--serif);font-size:20px;
+  font-weight:300;font-style:italic;
+  line-height:1.6;color:var(--ink);
+}
+.ti2-auth{
+  display:flex;align-items:center;gap:16px;
+  margin-top:24px;padding-top:20px;
+  border-top:1px solid var(--cream3);
+}
+.ti2-av{
+  width:48px;height:48px;
+  background:var(--orange);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:18px;font-weight:700;
+  color:var(--white);border-radius:4px;
+}
+.ti2-name{font-size:15px;font-weight:700;color:var(--ink)}
+.ti2-role{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--muted);margin-top:4px}
+
+@media(max-width:1024px){
+  .tl{grid-template-columns:1fr;gap:40px}
+  .tl-sticky{position:static}
+  .tl-bigq{font-size:100px}
+}
+
+/* ─── BLOG/INSIGHTS ───────────── */
+.blog-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;margin-top:56px;
+}
+.blog-grid .big{
+  grid-column:span 2;
+}
+.bc{
+  background:var(--white);
+  border:1px solid var(--cream3);
+  border-radius:4px;
+  overflow:hidden;transition:all .4s;cursor:pointer;
+  display:flex;flex-direction:column;
+}
+.bc:hover{transform:translateY(-6px);box-shadow:0 24px 64px rgba(24,20,16,.1);border-color:var(--orange)}
+.bc-img{
+  height:220px;overflow:hidden;flex-shrink:0;
+  position:relative;
+}
+.big .bc-img{height:320px}
+.bc-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s ease;
+}
+.bc:hover .bc-img img{transform:scale(1.06)}
+.bc-cat{
+  position:absolute;top:16px;left:16px;
+  background:var(--orange);color:var(--white);
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:6px 14px;
+  border-radius:2px;
+}
+.bc-body{padding:28px;flex:1;display:flex;flex-direction:column}
+.bc-date{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;
+}
+.bc-title{
+  font-family:var(--serif);font-size:22px;
+  font-weight:600;color:var(--ink);line-height:1.25;
+}
+.big .bc-title{font-size:28px}
+.bc-exc{
+  font-size:14px;line-height:1.75;
+  color:var(--muted);margin-top:12px;flex:1;
+}
+.bc-read{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--orange);text-decoration:none;transition:gap .3s;
+  font-weight:600;
+}
+.bc-read i{font-size:14px;transition:transform .3s}
+.bc-read:hover{gap:13px}
+.bc-read:hover i{transform:translateX(3px)}
+
+@media(max-width:1024px){
+  .blog-grid{grid-template-columns:1fr;gap:20px}
+  .blog-grid .big{grid-column:span 1}
+  .big .bc-img{height:220px}
+}
+
+/* ─── FAQ ─────────────────────── */
+.faq-layout{display:grid;grid-template-columns:380px 1fr;gap:80px}
+.faq-l p{font-size:16px;line-height:1.8;color:var(--ink2);margin-top:20px}
+.faq-l .btn-o{margin-top:36px}
+.faq-list{border-top:1px solid var(--cream3)}
+.fi{border-bottom:1px solid var(--cream3)}
+.fi-q{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:20px;padding:24px 0;cursor:pointer;
+  font-size:16px;font-weight:600;color:var(--ink);
+  transition:color .3s;user-select:none;
+}
+.fi-q:hover{color:var(--orange)}
+.fi-icon{
+  width:36px;height:36px;flex-shrink:0;
+  border:1px solid var(--cream3);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .35s;border-radius:4px;
+}
+.fi-icon i{font-size:20px;color:var(--orange);transition:transform .35s}
+.fi.open .fi-icon{background:var(--orange);border-color:var(--orange)}
+.fi.open .fi-icon i{color:var(--white);transform:rotate(45deg)}
+.fi-a{
+  overflow:hidden;max-height:0;
+  transition:max-height .45s ease,padding .45s;
+}
+.fi.open .fi-a{max-height:300px;padding-bottom:24px}
+.fi-a p{font-size:15px;line-height:1.8;color:var(--muted)}
+
+@media(max-width:1024px){
+  .faq-layout{grid-template-columns:1fr;gap:40px}
+}
+
+/* ─── NEWSLETTER ──────────────── */
+.nl-strip{
+  padding:80px 56px;
+  display:flex;align-items:center;justify-content:space-between;gap:56px;
+  flex-wrap:wrap;
+  max-width:1380px;margin:0 auto;
+}
+.nl-text h3{
+  font-family:var(--serif);
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:300;color:var(--cream);line-height:1.1;
+}
+.nl-text h3 em{font-style:italic;color:var(--orange)}
+.nl-text p{font-size:15px;color:var(--muted);margin-top:12px}
+.nl-form{
+  display:flex;flex:1;max-width:480px;min-width:280px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:4px;
+  overflow:hidden;
+}
+.nl-input{
+  flex:1;padding:16px 20px;
+  background:transparent;
+  border:none;
+  color:var(--cream);font-family:var(--sans);font-size:15px;
+  outline:none;
+}
+.nl-input::placeholder{color:var(--muted)}
+.nl-form .btn-o{border-radius:0;padding:16px 28px}
+
+/* ─── CONTACT ────────────────── */
+#contact{background:var(--cream);padding:100px 0}
+.ct-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:90px;align-items:start}
+.ct-l h2{
+  font-family:var(--serif);
+  font-size:clamp(36px,4.2vw,64px);
+  font-weight:300;line-height:.95;color:var(--ink);margin-top:20px;
+}
+.ct-l h2 em{font-style:italic;color:var(--orange)}
+.ct-l p{font-size:16px;line-height:1.85;color:var(--ink2);margin-top:24px;max-width:400px}
+.ct-infos{margin-top:48px;display:flex;flex-direction:column;gap:28px}
+.cti{display:flex;gap:20px;align-items:flex-start}
+.cti-ico{
+  width:52px;height:52px;flex-shrink:0;
+  border:1px solid var(--cream3);
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;border-radius:4px;
+}
+.cti-ico i{font-size:24px;color:var(--orange)}
+.cti:hover .cti-ico{background:var(--orange);border-color:var(--orange)}
+.cti:hover .cti-ico i{color:var(--white)}
+.cti-lbl{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--orange)}
+.cti-v{font-size:16px;font-weight:600;color:var(--ink);margin-top:4px}
+.cti-s{font-size:13px;color:var(--muted);margin-top:2px}
+
+.cf{background:var(--white);padding:48px;border:1px solid var(--cream3);border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.03)}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cfg{margin-bottom:20px}
+.cfg label{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.cfg input,
+.cfg select,
+.cfg textarea{
+  width:100%;padding:14px 18px;
+  background:var(--cream);border:1px solid var(--cream3);
+  color:var(--ink);font-family:var(--sans);font-size:15px;
+  outline:none;transition:all .3s;
+  appearance:none;border-radius:4px;
+}
+.cfg input:focus,
+.cfg select:focus,
+.cfg textarea:focus{
+  border-color:var(--orange);
+  background:var(--white);
+  box-shadow:0 0 0 4px rgba(232,91,0,.08);
+}
+.cfg textarea{resize:vertical;min-height:120px}
+.cf-submit{width:100%;margin-top:8px;justify-content:center;padding:18px}
+.cf-note{
+  font-family:var(--mono);font-size:11px;letter-spacing:1px;
+  color:var(--muted);text-align:center;margin-top:16px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.cf-note i{font-size:14px;color:var(--orange)}
+.form-ok{
+  display:none;text-align:center;padding:60px 32px;
+}
+.form-ok i{font-size:64px;color:var(--orange);display:block;margin-bottom:20px}
+.form-ok h4{font-family:var(--serif);font-size:32px;color:var(--ink);margin-bottom:8px}
+.form-ok p{font-size:15px;color:var(--muted)}
+
+@media(max-width:1100px){
+  .ct-grid{grid-template-columns:1fr;gap:60px}
+  .cf{padding:32px}
+}
+@media(max-width:640px){
+  .cf-row{grid-template-columns:1fr}
+  .nl-strip{padding:60px 24px;flex-direction:column;align-items:stretch}
+  .nl-form{width:100%}
+}
+
+/* ─── MAP MODERNE ────────────────────── */
+.map-section{
+  width:100%;height:500px;
+  position:relative;
+  background:var(--cream2);
+}
+#map{
+  width:100%;height:100%;
+  z-index:1;
+}
+.map-overlay{
+  position:absolute;bottom:30px;left:30px;z-index:2;
+  background:rgba(255,255,255,.98);
+  padding:24px 28px;
+  border-radius:4px;
+  box-shadow:0 20px 60px rgba(0,0,0,.15);
+  max-width:320px;
+  backdrop-filter:blur(10px);
+  border:1px solid var(--cream3);
+}
+.map-overlay h4{
+  font-family:var(--serif);
+  font-size:24px;color:var(--ink);
+  margin-bottom:8px;
+}
+.map-overlay p{
+  font-size:14px;color:var(--muted);
+  line-height:1.6;
+  margin-bottom:16px;
+}
+.map-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);color:var(--white);
+  padding:10px 20px;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;
+  border-radius:4px;
+  transition:all .3s;
+  font-weight:600;
+}
+.map-btn:hover{background:var(--ink);transform:translateY(-2px)}
+.map-btn i{font-size:16px}
+
+@media(max-width:768px){
+  .map-section{height:400px}
+  .map-overlay{
+    left:20px;right:20px;bottom:20px;
+    max-width:none;
+    padding:20px;
+  }
+  .map-overlay h4{font-size:20px}
+}
+
+/* ─── FOOTER ─────────────────── */
+footer{background:var(--ink);padding:80px 56px 32px}
+.foot-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:64px}
+.fb-name{font-family:var(--serif);font-size:28px;font-weight:300;color:var(--cream);letter-spacing:3px}
+.fb-name span{color:var(--orange)}
+.fb-sub{font-family:var(--mono);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.fb-p{font-size:14px;line-height:1.85;color:rgba(244,239,230,.5);margin-top:24px;max-width:300px}
+.fb-socials{display:flex;gap:10px;margin-top:28px}
+.fbs{
+  width:40px;height:40px;
+  border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);text-decoration:none;transition:all .3s;
+  border-radius:4px;
+}
+.fbs i{font-size:18px}
+.fbs:hover{background:var(--orange);border-color:var(--orange);color:var(--white);transform:translateY(-3px)}
+.fc h5{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:24px;
+  padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.fc a{
+  font-size:14px;color:rgba(244,239,230,.5);
+  text-decoration:none;transition:all .3s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.fc a::before{
+  content:'';width:0;height:1px;background:var(--orange);
+  transition:width .3s;flex-shrink:0;
+}
+.fc a:hover{color:var(--cream)}
+.fc a:hover::before{width:14px}
+.foot-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:32px;border-top:1px solid rgba(255,255,255,.06);
+  flex-wrap:wrap;gap:20px;
+}
+.foot-copy{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:rgba(244,239,230,.3)}
+.foot-copy span{color:var(--orange)}
+.foot-legal{display:flex;gap:24px}
+.foot-legal a{font-family:var(--mono);font-size:11px;color:rgba(244,239,230,.3);text-decoration:none;transition:color .3s}
+.foot-legal a:hover{color:var(--cream)}
+
+@media(max-width:1024px){
+  footer{padding:60px 32px 24px}
+  .foot-main{grid-template-columns:1fr 1fr;gap:40px}
+}
+@media(max-width:640px){
+  .foot-main{grid-template-columns:1fr}
+  .foot-bottom{flex-direction:column;text-align:center}
+}
+
+/* ─── SCROLL TOP ─────────────── */
+#tt{
+  position:fixed;bottom:28px;right:28px;
+  width:50px;height:50px;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:400;
+  opacity:0;transform:translateY(20px);
+  transition:all .4s;
+  box-shadow:0 8px 30px rgba(24,20,16,.3);
+  border-radius:50%;
+  border:none;
+}
+#tt i{font-size:24px;color:var(--cream);transition:transform .3s}
+#tt.show{opacity:1;transform:translateY(0)}
+#tt:hover{background:var(--orange);transform:translateY(-3px)}
+#tt:hover i{transform:translateY(-2px)}
+
+/* Buttons */
+.btn-o{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 32px;
+  background:var(--orange);color:var(--white);
+  font-family:var(--sans);font-size:12px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;border:none;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:all .3s;
+  border-radius:4px;
+}
+.btn-o:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 10px 30px rgba(232,91,0,.3)}
+.btn-o i{font-size:18px;transition:transform .3s}
+.btn-o:hover i{transform:translateX(4px)}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 28px;
+  background:transparent;color:var(--ink);
+  font-family:var(--sans);font-size:12px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  border:1.5px solid var(--cream3);text-decoration:none;
+  cursor:pointer;transition:all .3s;
+  border-radius:4px;
+}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);background:rgba(232,91,0,.05)}
+
+/* Utility */
+@media(max-width:1100px){
+  nav,.s,.sf .si,.sw .si,.sc2 .si{padding-left:32px;padding-right:32px}
+  #about{padding-left:32px;padding-right:32px}
+}
+@media(max-width:640px){
+  nav,.s,.sf .si,.sw .si,.sc2 .si{padding-left:20px;padding-right:20px}
+  #about{padding-left:20px;padding-right:20px}
+  .h2{font-size:clamp(32px,8vw,48px)}
+}
+</style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+
+<!-- ═══ PRELOADER ════════════════════════════════════ -->
+<div id="pre">
+  <div class="pre-name">
+    <span>ARIEL </span><span class="accent">IMMOBILIER</span>
+  </div>
+  <div class="pre-progress"><div class="pre-bar"></div></div>
+  <div class="pre-sub">Achat &middot; Vente &middot; Location &middot; Gestion Locative</div>
+</div>
+
+<!-- ═══ NAV ══════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nb">
+    <svg class="nb-logo" viewBox="0 0 42 42" fill="none">
+      <ellipse cx="21" cy="21" rx="19" ry="7.5" stroke="#E85B00" stroke-width="2" fill="none"/>
+      <polygon points="21,7 36,21 6,21" fill="#E85B00"/>
+      <rect x="15" y="21" width="12" height="10" fill="#E85B00" opacity="0.65"/>
+      <rect x="18.5" y="24" width="5" height="7" fill="#E85B00" opacity="0.9"/>
+    </svg>
+    <div class="nb-text">
+      <span class="t1">ARIEL</span>
+      <span class="t2">Immobilier</span>
+    </div>
+  </a>
+  <ul class="nl">
+    <li><a href="#about">À Propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#properties">Biens</a></li>
+    <li><a href="#team">Équipe</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact" class="nav-btn">Nous Contacter</a></li>
+  </ul>
+  <button class="hbg" id="hbg" onclick="toggleMob()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mnav">
+  <a href="#about" onclick="toggleMob()">À Propos</a>
+  <a href="#services" onclick="toggleMob()">Services</a>
+  <a href="#properties" onclick="toggleMob()">Biens</a>
+  <a href="#team" onclick="toggleMob()">Équipe</a>
+  <a href="#blog" onclick="toggleMob()">Blog</a>
+  <a href="#contact" onclick="toggleMob()">Nous Contacter</a>
+</div>
+
+<!-- ═══ HERO ══════════════════════════════════════════ -->
+<section id="hero">
+
+  <!-- LEFT: Dark content panel -->
+  <div class="hl">
+    <div>
+      <div class="h-eyebrow" id="he">
+        <i class="ph ph-seal-check"></i>
+        Agence certifiée — 15 ans d'expertise
+      </div>
+
+      <h1 class="h-title" id="ht">
+        L'Immobilier<br>
+        que vous<br>
+        <em>
+          <span class="word-switch">
+            <span class="ws-inner">
+              <span class="ws-word">Méritez.</span>
+              <span class="ws-word">Rêvez.</span>
+              <span class="ws-word">Vivez.</span>
+              <span class="ws-word">Méritez.</span>
+            </span>
+          </span>
+        </em>
+      </h1>
+
+      <p class="h-desc" id="hd">
+        Ariel Immobilier transforme vos projets immobiliers en réalité. Achat, vente, location ou gestion locative — nous sommes à vos côtés à chaque étape avec expertise, transparence et passion.
+      </p>
+
+      <!-- Search bar -->
+      <div class="h-search" id="hs">
+        <div class="hs-tabs">
+          <button class="hs-tab on" onclick="switchTab(this)">Acheter</button>
+          <button class="hs-tab" onclick="switchTab(this)">Louer</button>
+          <button class="hs-tab" onclick="switchTab(this)">Estimer</button>
+        </div>
+        <div class="hs-fields">
+          <div class="hs-field">
+            <label>Type de bien</label>
+            <select>
+              <option>Tous types</option>
+              <option>Villa</option>
+              <option>Appartement</option>
+              <option>Duplex</option>
+              <option>Terrain</option>
+              <option>Immeuble</option>
+            </select>
+          </div>
+          <div class="hs-field">
+            <label>Budget max</label>
+            <select>
+              <option>Tout budget</option>
+              <option>— 50 000 000 FCFA</option>
+              <option>— 100 000 000 FCFA</option>
+              <option>— 200 000 000 FCFA</option>
+              <option>200 000 000+ FCFA</option>
+            </select>
+          </div>
+          <button class="hs-btn" onclick="window.location='#properties'">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            Rechercher
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="h-stats" id="hst">
+      <div class="h-stat">
+        <div class="h-stat-n"><span class="cnt" data-t="500">0</span><em>+</em></div>
+        <div class="h-stat-l">Biens vendus</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-n"><span class="cnt" data-t="15">0</span><em> ans</em></div>
+        <div class="h-stat-l">D'expérience</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-n"><span class="cnt" data-t="98">0</span><em>%</em></div>
+        <div class="h-stat-l">Satisfaction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Photo panel -->
+  <div class="hr">
+    <img
+      class="hr-img"
+      src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85&auto=format&fit=crop"
+      alt="Villa contemporaine Ariel Immobilier"
+    />
+    <div class="hr-overlay"></div>
+
+    <!-- Available badge -->
+    <div class="hr-badge" id="hb">
+      <div class="hr-badge-inner">
+        <i class="ph-bold ph-house-line"></i>
+        Disponibles
+      </div>
+      <div class="hr-badge-count">38</div>
+    </div>
+
+    <!-- Featured property card -->
+    <div class="hr-card" id="hc">
+      <img
+        class="hr-card-img"
+        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=520&q=80&auto=format&fit=crop"
+        alt="Villa en vedette"
+      />
+      <div class="hr-card-body">
+        <div class="hr-card-tag">
+          <i class="ph-bold ph-star"></i>
+          En Vedette
+        </div>
+        <div class="hr-card-name">Villa Contemporaine</div>
+        <div class="hr-card-loc">
+          <i class="ph ph-map-pin"></i>
+          Quartier Résidentiel
+        </div>
+        <div class="hr-card-price">185 000 000 FCFA</div>
+        <div class="hr-card-feats">
+          <span class="hr-card-feat"><i class="ph ph-bed"></i> 4 Ch.</span>
+          <span class="hr-card-feat"><i class="ph ph-bathtub"></i> 3 SdB</span>
+          <span class="hr-card-feat"><i class="ph ph-ruler"></i> 280m²</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TICKER ════════════════════════════════════════ -->
+<div class="ticker">
+  <div class="ticker-t" id="tickerT">
+    <span class="ti"><i class="ph ph-house"></i> Achat Immobilier</span>
+    <span class="ti"><i class="ph ph-currency-dollar"></i> Vente Immobilière</span>
+    <span class="ti"><i class="ph ph-key"></i> Location</span>
+    <span class="ti"><i class="ph ph-clipboard-text"></i> Gestion Locative</span>
+    <span class="ti"><i class="ph ph-chart-line"></i> Estimation Gratuite</span>
+    <span class="ti"><i class="ph ph-handshake"></i> Conseil Patrimonial</span>
+    <span class="ti"><i class="ph ph-house"></i> Achat Immobilier</span>
+    <span class="ti"><i class="ph ph-currency-dollar"></i> Vente Immobilière</span>
+    <span class="ti"><i class="ph ph-key"></i> Location</span>
+    <span class="ti"><i class="ph ph-clipboard-text"></i> Gestion Locative</span>
+    <span class="ti"><i class="ph ph-chart-line"></i> Estimation Gratuite</span>
+    <span class="ti"><i class="ph ph-handshake"></i> Conseil Patrimonial</span>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═════════════════════════════════════════ -->
+<section id="about">
+  <div class="ab-grid">
+    <div class="ab-img-wrap rvl">
+      <div class="ab-img-deco"></div>
+      <img
+        class="ab-img"
+        src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=85&auto=format&fit=crop"
+        alt="Ariel Immobilier — Notre agence"
+      />
+      <div class="ab-badge">
+        <div class="ab-badge-n">15</div>
+        <div class="ab-badge-t">Ans<br>d'expertise</div>
+      </div>
+    </div>
+    <div class="ab-txt rvr">
+      <div class="lbl">Notre Histoire</div>
+      <h2 class="h2">Une Passion<br>pour <em>l'Immobilier</em><br><span class="o">Transmise</span></h2>
+      <p>Fondée en 2009, Ariel Immobilier est née d'une conviction simple : chaque transaction immobilière mérite une attention particulière, une expertise reconnue et une relation de confiance durable.</p>
+      <p>Implantés au cœur du marché local, nos conseillers connaissent chaque quartier, chaque opportunité, chaque nuance d'un marché en constante évolution.</p>
+      <div class="ab-feats">
+        <div class="af rv">
+          <div class="af-ico"><i class="ph-bold ph-trophy"></i></div>
+          <div>
+            <div class="af-title">Expertise Reconnue</div>
+            <div class="af-desc">Agence certifiée, membre des réseaux immobiliers nationaux.</div>
+          </div>
+        </div>
+        <div class="af rv">
+          <div class="af-ico"><i class="ph-bold ph-users-three"></i></div>
+          <div>
+            <div class="af-title">Accompagnement Total</div>
+            <div class="af-desc">De la recherche jusqu'à la remise des clés, nous sommes là.</div>
+          </div>
+        </div>
+        <div class="af rv">
+          <div class="af-ico"><i class="ph-bold ph-chart-line-up"></i></div>
+          <div>
+            <div class="af-title">Analyse de Marché</div>
+            <div class="af-desc">Des données précises pour prendre les meilleures décisions.</div>
+          </div>
+        </div>
+        <div class="af rv">
+          <div class="af-ico"><i class="ph-bold ph-globe-hemisphere-east"></i></div>
+          <div>
+            <div class="af-title">Réseau Étendu</div>
+            <div class="af-desc">Un carnet d'adresses solide d'acheteurs et d'investisseurs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ══════════════════════════════════════ -->
+<div class="sw" id="services">
+  <div class="si">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;margin-bottom:20px">
+      <div class="rvl">
+        <div class="lbl">Ce Que Nous Faisons</div>
+        <h2 class="h2">Quatre Services,<br>Une <em>Excellence</em><br><span class="o">Immuable</span></h2>
+      </div>
+      <p class="rvr" style="font-size:16px;line-height:1.85;color:var(--ink2)">De la simple location à la gestion complète de patrimoine, Ariel Immobilier vous offre une gamme de services pensés pour maximiser la valeur de vos actifs immobiliers.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv rv">
+        <div class="srv-n">01</div>
+        <div class="srv-ico"><i class="ph-bold ph-house"></i></div>
+        <div class="srv-title">Achat Immobilier</div>
+        <p class="srv-desc">Nous analysons vos critères, sélectionnons les meilleures opportunités et vous accompagnons jusqu'à la signature définitive chez le notaire.</p>
+        <a href="#contact" class="srv-link">Commencer <i class="ph-bold ph-arrow-right"></i></a>
+      </div>
+      <div class="srv rv">
+        <div class="srv-n">02</div>
+        <div class="srv-ico"><i class="ph-bold ph-currency-dollar"></i></div>
+        <div class="srv-title">Vente Immobilière</div>
+        <p class="srv-desc">Estimation rigoureuse, promotion multi-canaux, négociation experte — nous vendons votre bien au meilleur prix, dans les meilleurs délais.</p>
+        <a href="#contact" class="srv-link">Estimer mon bien <i class="ph-bold ph-arrow-right"></i></a>
+      </div>
+      <div class="srv rv">
+        <div class="srv-n">03</div>
+        <div class="srv-ico"><i class="ph-bold ph-key"></i></div>
+        <div class="srv-title">Location</div>
+        <p class="srv-desc">Mise en location rapide, sélection rigoureuse des locataires, rédaction des baux — nous simplifions chaque étape pour propriétaires comme locataires.</p>
+        <a href="#contact" class="srv-link">Trouver un bien <i class="ph-bold ph-arrow-right"></i></a>
+      </div>
+      <div class="srv rv">
+        <div class="srv-n">04</div>
+        <div class="srv-ico"><i class="ph-bold ph-clipboard-text"></i></div>
+        <div class="srv-title">Gestion Locative</div>
+        <p class="srv-desc">Déléguez entièrement la gestion de votre patrimoine : perception des loyers, suivi technique, comptabilité et rapports mensuels détaillés.</p>
+        <a href="#contact" class="srv-link">Déléguer ma gestion <i class="ph-bold ph-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROPERTIES ════════════════════════════════════ -->
+<div class="sc2" id="properties">
+  <div class="si">
+    <div class="ph rv">
+      <div>
+        <div class="lbl">Catalogue</div>
+        <h2 class="h2">Biens <em>Disponibles</em></h2>
+      </div>
+      <div class="pfilts">
+        <button class="pf on" data-f="all">Tous</button>
+        <button class="pf" data-f="vente">Vente</button>
+        <button class="pf" data-f="location">Location</button>
+        <button class="pf" data-f="gestion">Gestion</button>
+      </div>
+    </div>
+    <div class="swiper pswiper" id="pswiper">
+      <div class="swiper-wrapper" id="pwrap"></div>
+      <div class="swiper-pagination" style="bottom:0"></div>
+    </div>
+    <div style="text-align:center;margin-top:48px">
+      <a href="#contact" class="btn-o">
+        Voir tous nos biens <i class="ph-bold ph-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATS ═════════════════════════════════════════ -->
+<div style="background:var(--cream)">
+  <div class="stats-layout rv">
+    <div class="stats-l">
+      <div class="lbl">Nos Résultats</div>
+      <h2 class="h2">Des Chiffres<br>qui <em>Parlent</em><br><span class="o">d'Eux-Mêmes</span></h2>
+      <div class="stats-grid">
+        <div class="sb">
+          <div class="sb-n"><span class="cnt" data-t="500">0</span><em>+</em></div>
+          <div class="sb-d">Transactions immobilières réussies depuis notre création</div>
+        </div>
+        <div class="sb">
+          <div class="sb-n"><span class="cnt" data-t="15">0</span><em> ans</em></div>
+          <div class="sb-d">D'expérience et de présence active sur le marché</div>
+        </div>
+        <div class="sb">
+          <div class="sb-n"><span class="cnt" data-t="200">0</span><em>+</em></div>
+          <div class="sb-d">Biens en portefeuille de gestion locative active</div>
+        </div>
+        <div class="sb">
+          <div class="sb-n"><span class="cnt" data-t="98">0</span><em>%</em></div>
+          <div class="sb-d">Taux de satisfaction client mesuré chaque année</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-r">
+      <h2 class="h2 lt">Votre<br><em>Patrimoine</em><br><span class="o">Mérite</span><br>le Meilleur</h2>
+      <p>Confiez votre projet immobilier à une équipe dont chaque action est guidée par un seul objectif : votre satisfaction et la valorisation de votre patrimoine.</p>
+      <a href="#contact" class="btn-w">
+        Prendre Rendez-vous <i class="ph-bold ph-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROCESS ═══════════════════════════════════════ -->
+<div class="sw" id="process">
+  <div class="si">
+    <div class="rv" style="text-align:center;max-width:540px;margin:0 auto 0">
+      <div class="lbl lbl-c">Notre Approche</div>
+      <h2 class="h2" style="text-align:center">La Démarche <em>Ariel</em><br><span class="o">en 6 Étapes</span></h2>
+    </div>
+    <div class="proc-steps">
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-chat-teardrop-dots"></i></div>
+        <div class="ps-n">Étape 01</div>
+        <div class="ps-t">Consultation</div>
+        <p class="ps-d">Échange approfondi pour comprendre vos besoins et définir votre projet.</p>
+      </div>
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-magnifying-glass"></i></div>
+        <div class="ps-n">Étape 02</div>
+        <div class="ps-t">Recherche</div>
+        <p class="ps-d">Sélection rigoureuse des opportunités correspondant à vos critères.</p>
+      </div>
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-house-line"></i></div>
+        <div class="ps-n">Étape 03</div>
+        <div class="ps-t">Visites</div>
+        <p class="ps-d">Accompagnement personnalisé lors de toutes vos visites de biens.</p>
+      </div>
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-handshake"></i></div>
+        <div class="ps-n">Étape 04</div>
+        <div class="ps-t">Négociation</div>
+        <p class="ps-d">Défense active de vos intérêts pour obtenir les meilleures conditions.</p>
+      </div>
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-file-text"></i></div>
+        <div class="ps-n">Étape 05</div>
+        <div class="ps-t">Administratif</div>
+        <p class="ps-d">Gestion complète des dossiers, compromis et actes notariaux.</p>
+      </div>
+      <div class="ps rv">
+        <div class="ps-circle"><i class="ph-bold ph-key"></i></div>
+        <div class="ps-n">Étape 06</div>
+        <div class="ps-t">Remise des Clés</div>
+        <p class="ps-d">Accompagnement jusqu'à l'état des lieux et la remise officielle.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TEAM ══════════════════════════════════════════ -->
+<div class="sf" id="team">
+  <div class="si">
+    <div class="team-header">
+      <div class="rvl">
+        <div class="lbl lbl-light">Notre Équipe</div>
+        <h2 class="h2 lt">Des Experts<br>à <em>Votre</em> Service</h2>
+      </div>
+      <div class="rvr">
+        <p style="font-size:16px;line-height:1.85;color:rgba(244,239,230,.6)">Chaque membre de l'équipe Ariel est sélectionné pour sa maîtrise technique, sa connaissance du marché et sa capacité à créer des relations durables avec nos clients.</p>
+        <a href="#contact" class="btn-o" style="margin-top:32px;display:inline-flex">
+          Contacter l'équipe <i class="ph-bold ph-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="tm rv">
+        <div class="tm-img">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&auto=format&fit=crop&crop=face"
+            alt="Ariel Kouadio — Directeur Général"
+          />
+          <div class="tm-overlay"></div>
+          <div class="tm-info">
+            <div class="tm-name">Ariel Kouadio</div>
+            <div class="tm-role">Directeur Général</div>
+            <div class="tm-socials">
+              <a class="ts" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+              <a class="ts" href="#" aria-label="Email"><i class="ph ph-envelope"></i></a>
+              <a class="ts" href="#" aria-label="Téléphone"><i class="ph ph-phone"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tm rv">
+        <div class="tm-img">
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80&auto=format&fit=crop&crop=face"
+            alt="Amina Diallo — Responsable Ventes"
+          />
+          <div class="tm-overlay"></div>
+          <div class="tm-info">
+            <div class="tm-name">Amina Diallo</div>
+            <div class="tm-role">Responsable Ventes</div>
+            <div class="tm-socials">
+              <a class="ts" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+              <a class="ts" href="#" aria-label="Email"><i class="ph ph-envelope"></i></a>
+              <a class="ts" href="#" aria-label="Téléphone"><i class="ph ph-phone"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tm rv">
+        <div class="tm-img">
+          <img
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&auto=format&fit=crop&crop=face"
+            alt="Jean-Baptiste Mensah — Expert Gestion Locative"
+          />
+          <div class="tm-overlay"></div>
+          <div class="tm-info">
+            <div class="tm-name">J.-B. Mensah</div>
+            <div class="tm-role">Expert Gestion Locative</div>
+            <div class="tm-socials">
+              <a class="ts" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+              <a class="ts" href="#" aria-label="Email"><i class="ph ph-envelope"></i></a>
+              <a class="ts" href="#" aria-label="Téléphone"><i class="ph ph-phone"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tm rv">
+        <div class="tm-img">
+          <img
+            src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80&auto=format&fit=crop&crop=face"
+            alt="Fatoumata Traoré — Conseillère Acquisitions"
+          />
+          <div class="tm-overlay"></div>
+          <div class="tm-info">
+            <div class="tm-name">Fatoumata Traoré</div>
+            <div class="tm-role">Conseillère Acquisitions</div>
+            <div class="tm-socials">
+              <a class="ts" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+              <a class="ts" href="#" aria-label="Email"><i class="ph ph-envelope"></i></a>
+              <a class="ts" href="#" aria-label="Téléphone"><i class="ph ph-phone"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIALS ══════════════════════════════════ -->
+<div class="sw" id="testimonials">
+  <div class="si">
+    <div class="tl">
+      <div class="tl-sticky rvl">
+        <div class="lbl">Témoignages</div>
+        <h2 class="h2">Ce Que<br>Disent Nos<br><em>Clients</em></h2>
+        <span class="tl-bigq">"</span>
+        <p>Plus de 500 clients nous font confiance. Voici quelques-uns de leurs retours sincères.</p>
+        <div class="tl-nav">
+          <button class="tn" onclick="prevT()" aria-label="Précédent"><i class="ph-bold ph-arrow-left"></i></button>
+          <button class="tn" onclick="nextT()" aria-label="Suivant"><i class="ph-bold ph-arrow-right"></i></button>
+        </div>
+      </div>
+      <div class="tl-items rvr" id="tlist">
+        <div class="ti2 on">
+          <div class="ti2-stars">
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+          </div>
+          <p class="ti2-q">« Une équipe d'une rare compétence. Ils ont trouvé notre villa en 18 jours, parfaitement dans notre budget. Le suivi post-vente est exemplaire — je recommande sans la moindre hésitation. »</p>
+          <div class="ti2-auth">
+            <div class="ti2-av">KD</div>
+            <div>
+              <div class="ti2-name">Kofi & Nana Danso</div>
+              <div class="ti2-role">Acquéreurs — Villa 4 chambres</div>
+            </div>
+          </div>
+        </div>
+        <div class="ti2">
+          <div class="ti2-stars">
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+          </div>
+          <p class="ti2-q">« Grâce à la gestion locative d'Ariel, mes 3 appartements se gèrent sans stress. Les loyers tombent à date fixe, les locataires sont bien sélectionnés. Un service vraiment professionnel. »</p>
+          <div class="ti2-auth">
+            <div class="ti2-av">AB</div>
+            <div>
+              <div class="ti2-name">Ama Boateng</div>
+              <div class="ti2-role">Propriétaire — 3 appartements en gestion</div>
+            </div>
+          </div>
+        </div>
+        <div class="ti2">
+          <div class="ti2-stars">
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+          </div>
+          <p class="ti2-q">« La vente de mon immeuble s'est réalisée au-delà de mes espérances. L'équipe a su mettre en valeur le bien, trouver un acheteur sérieux et sécuriser toute la transaction. »</p>
+          <div class="ti2-auth">
+            <div class="ti2-av">YM</div>
+            <div>
+              <div class="ti2-name">Yannick Mensah</div>
+              <div class="ti2-role">Vendeur — Immeuble commercial</div>
+            </div>
+          </div>
+        </div>
+        <div class="ti2">
+          <div class="ti2-stars">
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+          </div>
+          <p class="ti2-q">« Mon premier achat aurait pu être stressant. Avec Ariel, tout a été fluide, transparent et rassurant. Je me suis senti guidé et protégé à chaque étape. »</p>
+          <div class="ti2-auth">
+            <div class="ti2-av">SF</div>
+            <div>
+              <div class="ti2-name">Seydou Fofana</div>
+              <div class="ti2-role">Premier acquéreur — Appartement T3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BLOG ══════════════════════════════════════════ -->
+<div class="sc2" id="blog">
+  <div class="si">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:0;flex-wrap:wrap;gap:20px" class="rv">
+      <div>
+        <div class="lbl">Actualités & Conseils</div>
+        <h2 class="h2">Nos <em>Insights</em><br><span class="o">Immobiliers</span></h2>
+      </div>
+      <a href="#" class="btn-ghost">
+        Voir tout le blog <i class="ph-bold ph-arrow-right"></i>
+      </a>
+    </div>
+    <div class="blog-grid">
+      <div class="bc big rv">
+        <div class="bc-img">
+          <img
+            src="https://images.unsplash.com/photo-1582407947304-fd86f28f3f34?w=900&q=80&auto=format&fit=crop"
+            alt="Marché immobilier 2025"
+          />
+          <div class="bc-cat">Marché</div>
+        </div>
+        <div class="bc-body">
+          <div class="bc-date">15 Janvier 2025 &middot; 8 min de lecture</div>
+          <div class="bc-title">Marché Immobilier 2025 : Les Grandes Tendances qui Façonnent l'Avenir</div>
+          <p class="bc-exc">Analyse complète des dynamiques du marché cette année : hausse des prix, nouvelles zones prisées, et opportunités pour les investisseurs avisés.</p>
+          <a href="#" class="bc-read">Lire l'article <i class="ph-bold ph-arrow-right"></i></a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="bc rv">
+          <div class="bc-img">
+            <img
+              src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=600&q=80&auto=format&fit=crop"
+              alt="Premier achat immobilier"
+            />
+            <div class="bc-cat">Conseils</div>
+          </div>
+          <div class="bc-body">
+            <div class="bc-date">8 Janvier 2025</div>
+            <div class="bc-title">5 Erreurs à Éviter lors de Votre Premier Achat</div>
+            <a href="#" class="bc-read">Lire l'article <i class="ph-bold ph-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="bc rv">
+          <div class="bc-img">
+            <img
+              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80&auto=format&fit=crop"
+              alt="Investissement locatif"
+            />
+            <div class="bc-cat">Investissement</div>
+          </div>
+          <div class="bc-body">
+            <div class="bc-date">2 Janvier 2025</div>
+            <div class="bc-title">Investissement Locatif : Comment Calculer Votre Rendement</div>
+            <a href="#" class="bc-read">Lire l'article <i class="ph-bold ph-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAQ ═══════════════════════════════════════════ -->
+<div class="sw" id="faq">
+  <div class="si">
+    <div class="faq-layout">
+      <div class="faq-l rvl">
+        <div class="lbl">Questions Fréquentes</div>
+        <h2 class="h2">Vous Avez<br>des <em>Questions</em> ?</h2>
+        <p>Voici les réponses aux questions que nos clients nous posent le plus souvent. Si vous n'y trouvez pas votre réponse, notre équipe est disponible 6j/7.</p>
+        <a href="#contact" class="btn-o">
+          Poser une question <i class="ph-bold ph-arrow-right"></i>
+        </a>
+      </div>
+      <div class="faq-list rvr" id="flist"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEWSLETTER ════════════════════════════════════ -->
+<div class="sf">
+  <div class="si">
+    <div class="nl-strip rv">
+      <div class="nl-text">
+        <h3>Restez Informé<br>des Meilleures <em>Opportunités</em></h3>
+        <p>Recevez nos nouvelles offres, conseils et analyses de marché directement dans votre boîte mail.</p>
+      </div>
+      <div class="nl-form">
+        <input class="nl-input" type="email" placeholder="votre@email.com" aria-label="Email"/>
+        <button class="btn-o" onclick="nlSub(this)" style="border:none;cursor:pointer">
+          S'inscrire <i class="ph-bold ph-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══════════════════════════════════════ -->
+<div id="contact">
+  <div style="max-width:1380px;margin:0 auto;padding:0 56px">
+    <div class="ct-grid">
+      <div class="ct-l rvl">
+        <div class="lbl">Contactez-Nous</div>
+        <h2>Parlons de<br>Votre <em>Projet</em><br>Immobilier</h2>
+        <p>Que vous souhaitiez acheter, vendre, louer ou confier la gestion de votre bien, notre équipe vous répond rapidement.</p>
+        <div class="ct-infos">
+          <div class="cti">
+            <div class="cti-ico"><i class="ph-bold ph-map-pin"></i></div>
+            <div>
+              <div class="cti-lbl">Adresse</div>
+              <div class="cti-v">Ariel Immobilier — Siège Social</div>
+              <div class="cti-s">123 Avenue Principale, Abidjan</div>
+            </div>
+          </div>
+          <div class="cti">
+            <div class="cti-ico"><i class="ph-bold ph-phone"></i></div>
+            <div>
+              <div class="cti-lbl">Téléphone</div>
+              <div class="cti-v">+225 27 00 00 00 00</div>
+              <div class="cti-s">Lun–Sam : 8h00 – 18h00</div>
+            </div>
+          </div>
+          <div class="cti">
+            <div class="cti-ico"><i class="ph-bold ph-envelope"></i></div>
+            <div>
+              <div class="cti-lbl">Email</div>
+              <div class="cti-v">contact@arielimmobilier.com</div>
+              <div class="cti-s">Réponse garantie sous 24h</div>
+            </div>
+          </div>
+          <div class="cti">
+            <div class="cti-ico"><i class="ph-bold ph-whatsapp-logo"></i></div>
+            <div>
+              <div class="cti-lbl">WhatsApp</div>
+              <div class="cti-v">+225 07 00 00 00 00</div>
+              <div class="cti-s">Disponible 7j/7</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cf rvr">
+        <div class="form-ok" id="fok">
+          <i class="ph-fill ph-check-circle"></i>
+          <h4>Message Envoyé !</h4>
+          <p>Notre équipe vous contactera dans les 24 heures ouvrées.</p>
+        </div>
+        <form id="cform" onsubmit="submitForm(event)">
+          <div class="cf-row">
+            <div class="cfg">
+              <label>Prénom *</label>
+              <input type="text" placeholder="Jean" required aria-label="Prénom"/>
+            </div>
+            <div class="cfg">
+              <label>Nom *</label>
+              <input type="text" placeholder="Dupont" required aria-label="Nom"/>
+            </div>
+          </div>
+          <div class="cfg">
+            <label>Email *</label>
+            <input type="email" placeholder="jean@email.com" required aria-label="Email"/>
+          </div>
+          <div class="cfg">
+            <label>Téléphone</label>
+            <input type="tel" placeholder="+225 07 XX XX XX XX" aria-label="Téléphone"/>
+          </div>
+          <div class="cfg">
+            <label>Type de Demande</label>
+            <select aria-label="Type de demande">
+              <option value="">Choisir...</option>
+              <option>Achat Immobilier</option>
+              <option>Vente Immobilière</option>
+              <option>Location</option>
+              <option>Gestion Locative</option>
+              <option>Estimation Gratuite</option>
+              <option>Conseil Patrimonial</option>
+            </select>
+          </div>
+          <div class="cfg">
+            <label>Message *</label>
+            <textarea placeholder="Décrivez votre projet immobilier..." required aria-label="Message"></textarea>
+          </div>
+          <button type="submit" class="btn-o cf-submit">
+            Envoyer ma Demande <i class="ph-bold ph-paper-plane-tilt"></i>
+          </button>
+          <p class="cf-note">
+            <i class="ph ph-lock"></i>
+            Vos données sont strictement confidentielles et ne seront jamais partagées.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAP MODERNE ═══════════════════════════════════ -->
+<div class="map-section">
+  <div id="map"></div>
+  <div class="map-overlay">
+    <h4>Ariel Immobilier</h4>
+    <p>123 Avenue Principale<br>Abidjan, Côte d'Ivoire</p>
+    <a href="https://www.google.com/maps" target="_blank" class="map-btn">
+      <i class="ph-bold ph-navigation-arrow"></i>
+      Itinéraire
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <div class="foot-main">
+    <div>
+      <div class="fb-name">ARIEL <span>IMM</span>OBILIER</div>
+      <div class="fb-sub">Achat · Vente · Location · Gestion Locative</div>
+      <p class="fb-p">Votre partenaire de confiance pour tous vos projets immobiliers. Expertise locale, accompagnement personnalisé, résultats mesurables depuis 2009.</p>
+      <div class="fb-socials">
+        <a class="fbs" href="#" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+        <a class="fbs" href="#" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        <a class="fbs" href="#" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+        <a class="fbs" href="#" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        <a class="fbs" href="#" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+      </div>
+    </div>
+    <div class="fc">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">Achat Immobilier</a></li>
+        <li><a href="#services">Vente Immobilière</a></li>
+        <li><a href="#services">Location</a></li>
+        <li><a href="#services">Gestion Locative</a></li>
+        <li><a href="#contact">Estimation Gratuite</a></li>
+        <li><a href="#contact">Conseil Patrimonial</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h5>Agence</h5>
+      <ul>
+        <li><a href="#about">Notre Histoire</a></li>
+        <li><a href="#team">Notre Équipe</a></li>
+        <li><a href="#process">Notre Démarche</a></li>
+        <li><a href="#testimonials">Témoignages</a></li>
+        <li><a href="#blog">Blog & Actualités</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:+2252700000000"><i class="ph ph-phone"></i> Nous Appeler</a></li>
+        <li><a href="mailto:contact@arielimmobilier.com"><i class="ph ph-envelope"></i> Nous Écrire</a></li>
+        <li><a href="#"><i class="ph ph-whatsapp-logo"></i> WhatsApp</a></li>
+        <li><a href="#contact"><i class="ph ph-calendar"></i> Prendre RDV</a></li>
+        <li><a href="#"><i class="ph ph-map-pin"></i> Nous Trouver</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-copy">© 2025 <span>Ariel Immobilier</span>. Tous droits réservés. Agence certifiée.</div>
+    <div class="foot-legal">
+      <a href="#">Mentions Légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">CGU</a>
+      <a href="#">Plan du Site</a>
+    </div>
+  </div>
+</footer>
+
+<button id="tt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">
+  <i class="ph-bold ph-arrow-up"></i>
+</button>
+
+<script>
+// Add JS class for animation handling
+document.body.classList.add('js-active');
+
+/* ─── CURSOR ─── */
+const cd = document.getElementById('cd');
+const cr = document.getElementById('cr');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let cx=mx, cy=my;
+let cursorActive = !window.matchMedia('(max-width: 768px)').matches;
+
+if(cursorActive){
+  document.addEventListener('mousemove', e => { 
+    mx=e.clientX; my=e.clientY; 
+    cd.style.left=mx+'px'; 
+    cd.style.top=my+'px'; 
+  });
+  function animCursor(){ 
+    cx+=(mx-cx)*.12; 
+    cy+=(my-cy)*.12; 
+    cr.style.left=cx+'px'; 
+    cr.style.top=cy+'px'; 
+    requestAnimationFrame(animCursor); 
+  }
+  animCursor();
+  document.querySelectorAll('a,button,.srv,.pc,.tm,.fi-q,.bc').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
+}
+
+/* ─── PRELOADER ─── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const pre = document.getElementById('pre');
+    pre.style.opacity = '0';
+    pre.style.transform = 'translateY(-100%)';
+    setTimeout(() => {
+      pre.style.display = 'none';
+      initHero();
+      initMap(); // Init map after preloader
+    }, 750);
+  }, 2000);
+});
+
+/* ─── HERO ENTRANCE ─── */
+function initHero() {
+  const tl = gsap.timeline();
+  tl.to('#he', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'})
+    .to('#ht', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'}, '-=0.6')
+    .to('#hd', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'}, '-=0.6')
+    .to('#hs', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'}, '-=0.6')
+    .to('#hst', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'}, '-=0.6')
+    .to(['#hb','#hc'], {opacity: 1, duration: 1, stagger: 0.2, ease: 'power3.out'}, '-=0.4');
+}
+
+/* ─── NAV ─── */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  const tt = document.getElementById('tt');
+  if(window.scrollY > 60){
+    nav.classList.add('solid');
+  } else {
+    nav.classList.remove('solid');
+  }
+  if(window.scrollY > 500){
+    tt.classList.add('show');
+  } else {
+    tt.classList.remove('show');
+  }
+});
+
+function toggleMob() {
+  const m = document.getElementById('mnav');
+  const h = document.getElementById('hbg');
+  const isOpen = m.classList.toggle('open');
+  h.classList.toggle('o');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+/* ─── HERO TAB ─── */
+function switchTab(el) {
+  document.querySelectorAll('.hs-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ─── GSAP SCROLL REVEALS ─── */
+gsap.registerPlugin(ScrollTrigger);
+
+// Révélation générale avec animation
+gsap.utils.toArray('.rv').forEach((el, i) => {
+  gsap.from(el, {
+    opacity: 0, 
+    y: 30, 
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: { 
+      trigger: el, 
+      start: 'top 85%', 
+      once: true 
+    },
+    delay: (i % 3) * 0.1
+  });
+});
+
+gsap.utils.toArray('.rvl').forEach(el => {
+  gsap.from(el, {
+    opacity: 0, 
+    x: -30, 
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: { 
+      trigger: el, 
+      start: 'top 85%', 
+      once: true 
+    }
+  });
+});
+
+gsap.utils.toArray('.rvr').forEach(el => {
+  gsap.from(el, {
+    opacity: 0, 
+    x: 30, 
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: { 
+      trigger: el, 
+      start: 'top 85%', 
+      once: true 
+    }
+  });
+});
+
+/* ─── COUNTERS ─── */
+function animCount(el, target) {
+  let start = 0;
+  const dur = 2000;
+  const step = target / (dur / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.floor(start);
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+const cntObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.cnt').forEach(c => animCount(c, +c.dataset.t));
+    cntObs.unobserve(e.target);
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.h-stats, .stats-grid').forEach(el => cntObs.observe(el));
+
+/* ─── PROPERTIES ─── */
+const props = [
+  { tag:'Vente', type:'Villa', name:'Villa Contemporaine', loc:'Cocody Ambassades', price:'185 000 000', rooms:4, baths:3, area:'280', cat:'vente', img:'photo-1580587771525-78b9dba3b914' },
+  { tag:'Location', type:'Appartement', name:'Appartement Standing', loc:'Plateau', price:'450 000 /mois', rooms:3, baths:2, area:'130', cat:'location', img:'photo-1522708323590-d24dbb6b0267' },
+  { tag:'Vente', type:'Duplex', name:'Duplex Moderne', loc:'Angré', price:'95 000 000', rooms:3, baths:2, area:'185', cat:'vente', img:'photo-1567496898669-ee935f5f647a' },
+  { tag:'Gestion', type:'Immeuble', name:'Immeuble 8 Apparts', loc:'Marcory', price:'Gestion Complète', rooms:8, baths:8, area:'720', cat:'gestion', img:'photo-1486325212027-8081e485255e' },
+  { tag:'Location', type:'Studio Meublé', name:'Studio Haut de Gamme', loc:'Deux Plateaux', price:'150 000 /mois', rooms:1, baths:1, area:'48', cat:'location', img:'photo-1484154218962-a197022b5858' },
+  { tag:'Vente', type:'Terrain', name:'Terrain Viabilisé', loc:'Bingerville', price:'28 000 000', rooms:0, baths:0, area:'600', cat:'vente', img:'photo-1500382017468-9049fed747ef' },
+];
+
+let swiper;
+function buildSwiper(f) {
+  const data = f === 'all' ? props : props.filter(p => p.cat === f);
+  document.getElementById('pwrap').innerHTML = data.map(p => `
+    <div class="swiper-slide">
+      <div class="pc">
+        <div class="pc-img">
+          <img
+            src="https://images.unsplash.com/photo-${p.img}?w=780&q=80&auto=format&fit=crop"
+            alt="${p.name}"
+            loading="lazy"
+          />
+          <div class="pc-tag">${p.tag}</div>
+          <div class="pc-overlay"></div>
+          <div class="pc-area"><i class="ph ph-ruler" style="font-size:12px"></i> ${p.area}m²</div>
+          <button class="pc-fav" aria-label="Favori"><i class="ph ph-heart"></i></button>
+        </div>
+        <div class="pc-body">
+          <div class="pc-type">${p.type}</div>
+          <div class="pc-name">${p.name}</div>
+          <div class="pc-loc"><i class="ph ph-map-pin"></i>${p.loc}</div>
+          <div class="pc-price">${p.price.includes('/')
+            ? p.price.replace('/mois','') + ' <em>FCFA</em><span style="font-size:13px;color:var(--muted);font-family:var(--mono)"> /mois</span>'
+            : p.price + ' <em>FCFA</em>'
+          }</div>
+          <div class="pc-feats">
+            ${p.rooms > 0 ? `<span class="pcf"><i class="ph ph-bed"></i>${p.rooms} ch.</span>` : ''}
+            ${p.baths > 0 ? `<span class="pcf"><i class="ph ph-bathtub"></i>${p. baths} sdb</span>` : ''}
+            <span class="pcf"><i class="ph ph-ruler"></i>${p.area}m²</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  
+  if (swiper) swiper.destroy(true, true);
+  swiper = new Swiper('#pswiper', {
+    slidesPerView: 1,
+    spaceBetween: 24,
+    pagination: { 
+      el: '.swiper-pagination', 
+      clickable: true,
+      dynamicBullets: true
+    },
+    breakpoints: { 
+      640: {slidesPerView: 2}, 
+      1024: {slidesPerView: 3},
+      1280: {slidesPerView: 3.5}
+    },
+    grabCursor: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    }
+  });
+}
+buildSwiper('all');
+
+document.querySelectorAll('.pf').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.pf').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    buildSwiper(b.dataset.f);
+  });
+});
+
+/* ─── FAQ ─── */
+const faqs = [
+  { q:'Quels sont vos honoraires pour la vente d\'un bien ?', a:'Nos honoraires de vente sont compris entre 3% et 5% du prix de vente TTC, selon la nature du bien. Ils couvrent l\'estimation, la commercialisation, les visites et l\'accompagnement notarial.' },
+  { q:'Combien de temps faut-il pour vendre un bien ?', a:'En moyenne, nous vendons un bien correctement estimé en 30 à 90 jours. Ce délai dépend de la localisation, du prix demandé, de l\'état du marché et de la qualité de la présentation.' },
+  { q:'Comment fonctionne la gestion locative ?', a:'Nous prenons en charge la totalité : annonces, sélection du locataire, bail, état des lieux, perception des loyers, gestion des réparations et reporting mensuel détaillé. Vous n\'avez strictement rien à faire.' },
+  { q:'Proposez-vous des estimations gratuites ?', a:'Oui, absolument. Nous réalisons des estimations gratuites et sans engagement pour tout type de bien immobilier. Il suffit de nous contacter ou de remplir le formulaire en ligne.' },
+  { q:'Quelles zones géographiques couvrez-vous ?', a:'Nous couvrons l\'ensemble d\'Abidjan et sa périphérie. Grâce à notre réseau de partenaires, nous pouvons également vous accompagner dans d\'autres régions du pays.' },
+  { q:'Puis-je vous confier plusieurs biens simultanément ?', a:'Absolument. Nous gérons des portefeuilles multi-biens avec des tableaux de bord personnalisés, une comptabilité dédiée et un interlocuteur unique pour simplifier votre suivi.' },
+];
+
+document.getElementById('flist').innerHTML = faqs.map(f => `
+  <div class="fi">
+    <div class="fi-q" onclick="toggleFaq(this.parentElement)">
+      <span>${f.q}</span>
+      <div class="fi-icon"><i class="ph-bold ph-plus"></i></div>
+    </div>
+    <div class="fi-a"><p>${f.a}</p></div>
+  </div>
+`).join('');
+
+function toggleFaq(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.fi').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+/* ─── TESTIMONIALS ─── */
+let ti = 0;
+function setTesti(n) {
+  const items = document.querySelectorAll('.ti2');
+  items.forEach(i => i.classList.remove('on'));
+  ti = (n + items.length) % items.length;
+  items[ti].classList.add('on');
+  items[ti].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+function nextT() { setTesti(ti + 1); }
+function prevT() { setTesti(ti - 1); }
+
+// Auto-rotate testimonials
+setInterval(() => nextT(), 6000);
+
+/* ─── FORM ─── */
+function submitForm(e) {
+  e.preventDefault();
+  const form = document.getElementById('cform');
+  const ok = document.getElementById('fok');
+  form.style.display = 'none';
+  ok.style.display = 'block';
+  // Reset after 5 seconds
+  setTimeout(() => {
+    form.reset();
+    form.style.display = 'block';
+    ok.style.display = 'none';
+  }, 5000);
+}
+
+/* ─── NEWSLETTER ─── */
+function nlSub(btn) {
+  const input = btn.parentElement.querySelector('input');
+  if(input.value && input.value.includes('@')){
+    btn.innerHTML = '<i class="ph-bold ph-check"></i> Inscrit !';
+    btn.style.background = 'var(--ink)';
+    btn.disabled = true;
+    setTimeout(() => {
+      input.value = '';
+      btn.innerHTML = 'S\'inscrire <i class="ph-bold ph-arrow-right"></i>';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  } else {
+    input.style.borderColor = 'red';
+    setTimeout(() => input.style.borderColor = '', 1000);
+  }
+}
+
+/* ─── HEART TOGGLE ─── */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.pc-fav');
+  if (!btn) return;
+  const ico = btn.querySelector('i');
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) {
+    ico.classList.remove('ph', 'ph-heart');
+    ico.classList.add('ph-fill', 'ph-heart');
+    btn.style.background = 'var(--orange)';
+    ico.style.color = 'var(--white)';
+  } else {
+    ico.classList.remove('ph-fill', 'ph-heart');
+    ico.classList.add('ph', 'ph-heart');
+    btn.style.background = 'rgba(255,255,255,.95)';
+    ico.style.color = 'var(--muted)';
+  }
+});
+
+/* ─── MAP MODERNE (Leaflet) ─── */
+function initMap() {
+  // Coordonnées d'Abidjan (à modifier selon l'adresse réelle)
+  const lat = 5.3599517;
+  const lng = -4.0082563;
+  
+  const map = L.map('map', {
+    scrollWheelZoom: false,
+    zoomControl: false
+  }).setView([lat, lng], 15);
+  
+  // Ajouter le contrôle de zoom en bas à droite
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
+  
+  // Fond de carte moderne (CartoDB Voyager)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
+  }).addTo(map);
+  
+  // Icône personnalisée
+  const icon = L.divIcon({
+    className: 'custom-marker',
+    html: '<div style="background:#E85B00;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(232,91,0,.4);border:3px solid white;"><i class="ph-fill ph-house" style="color:white;font-size:20px;"></i></div>',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40]
+  });
+  
+  // Marqueur
+  L.marker([lat, lng], {icon: icon}).addTo(map)
+    .bindPopup('<b style="font-family:Cormorant Garamond;font-size:18px;color:#181410;">Ariel Immobilier</b><br><span style="font-family:Syne;font-size:13px;color:#666;">Votre agence immobilière de confiance</span>')
+    .openPopup();
+}
+
+/* ─── SMOOTH SCROLL POUR ANCRES ─── */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      const offset = 80;
+      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({top: targetPosition, behavior: 'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>
