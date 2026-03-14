@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plasma Hero v2 — Digital Craftsman</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --copper:      #c97f3f;
+  --copper-lt:   #e8a96a;
+  --rose-gold:   #d4846a;
+  --cream:       #f5ece0;
+  --dark:        #080705;
+  --dark-2:      #100e0b;
+  --dark-3:      #181410;
+  --muted:       #5c5044;
+  --text:        #e0d4c4;
+}
+
+html, body { width:100%; min-height:100%; background:var(--dark); color:var(--text);
+  font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
+  padding: 5rem 1.5rem 5rem;
+  overflow: hidden;
+}
+
+/* Grain */
+.hero::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:200; mix-blend-mode:overlay;
+}
+
+/* ── PLASMA CANVAS ────────────────────────────── */
+#plasma {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── HERO CONTENT ─────────────────────────────── */
+.hero-content {
+  position: relative; z-index: 10;
+  text-align: center;
+  max-width: 820px;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  border: 1px solid rgba(201,127,63,.35);
+  background: rgba(201,127,63,.07);
+  color: var(--copper-lt);
+  font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: .45em 1.3em; border-radius: 2em;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(12px);
+}
+.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--copper); animation: blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.8rem, 6.5vw, 5.6rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -.03em;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(155deg, var(--cream) 15%, var(--copper-lt) 55%, var(--rose-gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.sub {
+  font-size: 1.05rem; font-weight: 300;
+  color: var(--muted); line-height: 1.75;
+  max-width: 500px; margin: 0 auto 2.8rem;
+}
+
+.cta { display:flex; gap:.85rem; justify-content:center; flex-wrap:wrap; }
+
+.btn-p {
+  background: linear-gradient(135deg, var(--copper), var(--rose-gold));
+  color:#080705; font-family:'Syne',sans-serif;
+  font-weight:700; font-size:.88rem; letter-spacing:.04em;
+  padding:.85em 2.2em; border:none; border-radius:.45em;
+  cursor:pointer; transition:opacity .2s,transform .2s;
+}
+.btn-p:hover { opacity:.85; transform:translateY(-2px); }
+
+.btn-g {
+  background:transparent; color:var(--muted); font-size:.88rem;
+  padding:.85em 2.2em; border:1px solid rgba(92,80,68,.4);
+  border-radius:.45em; cursor:pointer; transition:color .2s,border-color .2s;
+}
+.btn-g:hover { color:var(--text); border-color:rgba(201,127,63,.45); }
+
+/* ── MOCKUP ───────────────────────────────────── */
+.mockup-wrap {
+  position: relative; z-index: 10;
+  width: min(820px, 92vw);
+}
+
+/* Glow cuivré sous le card quand impact */
+.mockup-wrap::before {
+  content:'';
+  position:absolute;
+  inset: -1px;
+  border-radius: 1.15rem;
+  background: linear-gradient(180deg, rgba(201,127,63,.6) 0%, rgba(212,132,106,.3) 40%, transparent 70%);
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.mockup-wrap.hit::before { opacity: 1; }
+
+.card {
+  background: linear-gradient(160deg, #141008, #0d0b08);
+  border: 1px solid rgba(201,127,63,.1);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8),
+    0 50px 100px rgba(0,0,0,.75),
+    inset 0 1px 0 rgba(255,255,255,.03);
+  transition: border-color .5s ease, box-shadow .5s ease;
+}
+.mockup-wrap.hit .card {
+  border-color: rgba(201,127,63,.3);
+  box-shadow:
+    0 0 0 1px rgba(201,127,63,.08),
+    0 0 40px rgba(201,127,63,.06),
+    0 50px 100px rgba(0,0,0,.75),
+    inset 0 1px 0 rgba(255,220,150,.07);
+}
+
+/* Top bar */
+.topbar {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.8rem 1.2rem;
+  border-bottom:1px solid rgba(255,255,255,.035);
+  background:rgba(255,255,255,.015);
+}
+.dot { width:11px; height:11px; border-radius:50%; }
+.dr{background:#ff5f57} .dy{background:#febc2e} .dg{background:#28c840}
+.url-bar {
+  margin:0 auto;
+  font-size:.7rem; color:var(--muted);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.05);
+  padding:.28em 1.1em; border-radius:.3em;
+}
+
+/* Body layout */
+.body {
+  display:grid;
+  grid-template-columns: 190px 1fr;
+  min-height: 320px;
+}
+@media(max-width:580px){ .body{ grid-template-columns:1fr; } .sidebar{ display:none; } }
+
+/* Sidebar */
+.sidebar {
+  border-right:1px solid rgba(255,255,255,.035);
+  padding:1rem .85rem;
+  display:flex; flex-direction:column; gap:.3rem;
+}
+.s-item {
+  display:flex; align-items:center; gap:.55rem;
+  padding:.42rem .55rem; border-radius:.38rem;
+  font-size:.78rem; color:var(--muted);
+  cursor:pointer; transition:background .15s,color .15s;
+  user-select:none;
+}
+.s-item:hover,.s-item.on { background:rgba(201,127,63,.1); color:var(--copper-lt); }
+.s-ico {
+  width:14px; height:14px; border-radius:3px;
+  background:currentColor; opacity:.55; flex-shrink:0;
+}
+
+.s-section {
+  font-size:.62rem; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(92,80,68,.6); padding:.7rem .55rem .2rem; font-weight:500;
+}
+
+/* Main */
+.main { padding:1.3rem 1.5rem; display:flex; flex-direction:column; gap:.7rem; }
+
+.main-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:.2rem;
+}
+.main-title {
+  font-family:'Syne',sans-serif; font-size:.82rem; font-weight:700;
+  color:rgba(224,212,196,.75);
+}
+
+.pill {
+  font-size:.65rem; padding:.25em .8em; border-radius:2em; font-weight:500;
+}
+.pc { background:rgba(201,127,63,.15); color:var(--copper-lt); }
+.pr { background:rgba(212,132,106,.15); color:var(--rose-gold); }
+.pm { background:rgba(92,80,68,.15); color:var(--muted); }
+
+.task {
+  display:flex; align-items:center; gap:.75rem;
+  padding:.6rem .75rem;
+  background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:.45rem;
+  font-size:.78rem; color:rgba(224,212,196,.55);
+  transition:background .2s,border-color .2s;
+  cursor:default;
+}
+.task:hover {
+  background:rgba(201,127,63,.05);
+  border-color:rgba(201,127,63,.15);
+}
+.chk {
+  width:14px; height:14px; border-radius:50%;
+  border:1.5px solid rgba(201,127,63,.35); flex-shrink:0;
+  position:relative;
+}
+.chk.done { background:var(--copper); border-color:var(--copper); }
+.chk.done::after {
+  content:''; position:absolute; top:2px; left:4px;
+  width:4px; height:7px;
+  border:1.5px solid #0a0a0a; border-top:none; border-left:none;
+  transform:rotate(40deg);
+}
+
+.avatars { display:flex; margin-left:auto; }
+.av {
+  width:22px; height:22px; border-radius:50%;
+  border:2px solid var(--dark-2);
+  margin-left:-6px; font-size:.58rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.a1{ background:linear-gradient(135deg,#c97f3f,#d4846a); color:#080705; }
+.a2{ background:linear-gradient(135deg,#3f7dc9,#2d5a9e); color:#fff; }
+.a3{ background:linear-gradient(135deg,#9e3fc9,#7a2d9e); color:#fff; }
+
+.prog-bar {
+  height:3px; background:rgba(255,255,255,.05);
+  border-radius:2px; overflow:hidden; margin-left:auto; width:60px;
+}
+.prog-fill { height:100%; border-radius:2px;
+  background:linear-gradient(90deg,var(--copper),var(--copper-lt)); }
+</style>
+</head>
+<body>
+<section class="hero" id="hero">
+
+  <canvas id="plasma"></canvas>
+
+  <!-- ── HERO TEXT ── -->
+  <div class="hero-content">
+    <div class="badge"><span class="badge-dot"></span>Digital Craftsman — Ouagadougou</div>
+    <h1>L'artisanat<br>du web, réinventé</h1>
+    <p class="sub">Interfaces sur-mesure, expériences immersives et systèmes digitaux pensés pour durer. Aucun template, aucun compromis.</p>
+    <div class="cta">
+      <button class="btn-p">Démarrer un projet</button>
+      <button class="btn-g">Voir mes œuvres →</button>
+    </div>
+  </div>
+
+  <!-- ── MOCKUP ── -->
+  <div class="mockup-wrap" id="mockup-wrap">
+    <div class="card" id="card">
+
+      <div class="topbar">
+        <span class="dot dr"></span>
+        <span class="dot dy"></span>
+        <span class="dot dg"></span>
+        <span class="url-bar">workspace.[] — Vue d'ensemble</span>
+      </div>
+
+      <div class="body">
+        <div class="sidebar">
+          <div class="s-section">Espace</div>
+          <div class="s-item on"><div class="s-ico" style="border-radius:50%"></div>Vue d'ensemble</div>
+          <div class="s-item"><div class="s-ico"></div>Projets</div>
+          <div class="s-item"><div class="s-ico" style="height:10px"></div>Livrables</div>
+          <div class="s-section" style="margin-top:.5rem">Clients</div>
+          <div class="s-item"><div class="s-ico" style="border-radius:50%;width:12px;height:12px"></div>Kôrô Finance</div>
+          <div class="s-item"><div class="s-ico" style="border-radius:50%;width:12px;height:12px"></div>Zongo Tech</div>
+          <div class="s-item" style="margin-top:auto"><div class="s-ico" style="border-radius:50%;width:10px;height:10px;opacity:.3"></div>Paramètres</div>
+        </div>
+
+        <div class="main">
+          <div class="main-header">
+            <span class="main-title">Sprint actif — Semaine 12</span>
+            <span class="pill pc">En cours</span>
+          </div>
+
+          <div class="task">
+            <div class="chk done"></div>
+            Refonte UI — Kôrô Finance
+            <div class="avatars" style="margin-left:auto">
+              <div class="av a1">N</div><div class="av a2">A</div>
+            </div>
+          </div>
+          <div class="task">
+            <div class="chk"></div>
+            Animation hero — WebGL shaders
+            <span class="pill pr" style="margin-left:auto">Review</span>
+          </div>
+          <div class="task">
+            <div class="chk done"></div>
+            Design system — tokens Afro-futuriste
+            <div class="avatars" style="margin-left:auto"><div class="av a3">K</div></div>
+          </div>
+          <div class="task">
+            <div class="chk"></div>
+            API dashboard Zongo Tech
+            <div style="margin-left:auto;display:flex;align-items:center;gap:.6rem">
+              <div class="prog-bar"><div class="prog-fill" style="width:40%"></div></div>
+              <span style="font-size:.68rem;color:var(--muted)">40%</span>
+            </div>
+          </div>
+          <div class="task">
+            <div class="chk"></div>
+            Core Web Vitals — optimisation
+            <span class="pill pm" style="margin-left:auto">À faire</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  PLASMA ENGINE — Canvas 2D, Machine à états
+//  Flux top→bottom  |  impact  |  spread gauche/droite
+// ════════════════════════════════════════════════════════
+
+const canvas   = document.getElementById('plasma');
+const hero     = document.getElementById('hero');
+const mockupWr = document.getElementById('mockup-wrap');
+const card     = document.getElementById('card');
+let ctx;
+
+// ── Résolution ───────────────────────────────────────
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  const W   = hero.offsetWidth;
+  const H   = hero.offsetHeight;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ── Coordonnées du card (px CSS relatifs au hero) ────
+function getCard() {
+  const hr = hero.getBoundingClientRect();
+  const cr = mockupWr.getBoundingClientRect();
+  return {
+    top:     cr.top  - hr.top,
+    left:    cr.left - hr.left,
+    right:   cr.right - hr.left,
+    width:   cr.width,
+    cx:      cr.left + cr.width * 0.5 - hr.left,
+  };
+}
+
+// ════════════════════════════════════════════════════════
+//  STATE MACHINE
+// ════════════════════════════════════════════════════════
+//  FLOWING   → tête descend depuis le haut
+//  IMPACT    → flash bref au contact
+//  SPREADING → rivières qui s'étendent G/D
+//  DRAINING  → tout se dissout
+//  PAUSE     → attente avant le prochain cycle
+
+const FLOW_SPEED    = 320;   // px/s   — vitesse de descente
+const SPREAD_SPEED  = 260;   // px/s   — vitesse d'étalement latéral
+const DRAIN_DUR     = 1.4;   // s      — durée du fondu
+const IMPACT_DUR    = 0.18;  // s      — durée du flash d'impact
+const PAUSE_DUR     = 0.9;   // s      — pause avant le prochain cycle
+
+let state        = 'FLOWING';
+let headY        = -80;      // Y de la tête (CSS px)
+let spreadL      = 0;        // extension rivière gauche (px)
+let spreadR      = 0;        // extension rivière droite (px)
+let stateTimer   = 0;        // chrono dans l'état courant
+let globalTime   = 0;
+let lastTs       = null;
+
+function enterState(s) {
+  state = s;
+  stateTimer = 0;
+  if (s === 'SPREADING' || s === 'IMPACT') {
+    mockupWr.classList.add('hit');
+  } else if (s === 'FLOWING') {
+    mockupWr.classList.remove('hit');
+    const c = getCard();
+    headY    = -80;
+    spreadL  = 0;
+    spreadR  = 0;
+  } else if (s === 'DRAINING') {
+    // garde les spread values en l'état
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  DESSIN
+// ════════════════════════════════════════════════════════
+
+// Couleurs de base
+const C_CORE   = 'rgba(255, 240, 200,'; // blanc chaud
+const C_COP    = 'rgba(201, 127,  63,'; // cuivre
+const C_ROSE   = 'rgba(212, 132, 106,'; // rose gold
+
+// ── Colonne de fond (toujours visible, statique) ──────
+function drawColumn(cx, heroH) {
+  // Filet cuivré permanent au centre
+  const g = ctx.createLinearGradient(cx, 0, cx, heroH);
+  g.addColorStop(0,   C_COP + '0)');
+  g.addColorStop(0.05, C_COP + '.18)');
+  g.addColorStop(0.5,  C_COP + '.28)');
+  g.addColorStop(0.85, C_COP + '.18)');
+  g.addColorStop(1,    C_COP + '0)');
+
+  ctx.save();
+  ctx.fillStyle = g;
+  ctx.fillRect(cx - 1.5, 0, 3, heroH);
+  ctx.restore();
+}
+
+// ── Tête lumineuse + traîne ───────────────────────────
+function drawHead(cx, y, wobble, alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+
+  const ax = cx + wobble;
+
+  // — Traîne (gradient vertical remontant) —
+  const trailLen = 160;
+  const tg = ctx.createLinearGradient(ax, y - trailLen, ax, y);
+  tg.addColorStop(0, C_COP + '0)');
+  tg.addColorStop(0.4, C_COP + (0.25 * alpha) + ')');
+  tg.addColorStop(0.8, C_CORE + (0.55 * alpha) + ')');
+  tg.addColorStop(1,   C_CORE + (0.9 * alpha) + ')');
+
+  ctx.fillStyle = tg;
+  ctx.fillRect(ax - 2.5, y - trailLen, 5, trailLen);
+
+  // — Halo glow de la tête —
+  const rg = ctx.createRadialGradient(ax, y, 0, ax, y, 55);
+  rg.addColorStop(0,   C_CORE + (0.95 * alpha) + ')');
+  rg.addColorStop(0.18, C_COP  + (0.7  * alpha) + ')');
+  rg.addColorStop(0.5,  C_COP  + (0.25 * alpha) + ')');
+  rg.addColorStop(1,    C_COP  + '0)');
+
+  ctx.fillStyle = rg;
+  ctx.beginPath();
+  ctx.arc(ax, y, 55, 0, Math.PI * 2);
+  ctx.fill();
+
+  // — Noyau brillant —
+  ctx.shadowColor = '#ffeecc';
+  ctx.shadowBlur  = 18;
+  ctx.fillStyle   = C_CORE + alpha + ')';
+  ctx.beginPath();
+  ctx.arc(ax, y, 4.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// ── Flash d'impact ────────────────────────────────────
+function drawImpact(cx, cardTop, progress) {
+  // progress: 0→1 (1 = début du flash, 0 = fin)
+  const alpha = Math.pow(progress, 0.5);
+  const radius = 20 + (1 - progress) * 60;
+
+  ctx.save();
+  const rg = ctx.createRadialGradient(cx, cardTop, 0, cx, cardTop, radius);
+  rg.addColorStop(0,   C_CORE + alpha + ')');
+  rg.addColorStop(0.3, C_COP  + (alpha * 0.7) + ')');
+  rg.addColorStop(1,   C_COP  + '0)');
+  ctx.fillStyle = rg;
+  ctx.beginPath();
+  ctx.arc(cx, cardTop, radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// ── Rivières latérales ────────────────────────────────
+//  On dessine la rivière comme un chemin bezier avec gradient
+//  La courbe s'affaisse légèrement (gravité) + le bout a un halo
+
+function drawRiver(cx, cardTop, extentL, extentR, alpha) {
+  if (alpha <= 0 || (extentL <= 0 && extentR <= 0)) return;
+  ctx.save();
+
+  // Glow de la jonction centrale (point d'impact)
+  const joinR = ctx.createRadialGradient(cx, cardTop, 0, cx, cardTop, 35);
+  joinR.addColorStop(0,   C_CORE + (0.8 * alpha) + ')');
+  joinR.addColorStop(0.4, C_COP  + (0.5 * alpha) + ')');
+  joinR.addColorStop(1,   C_COP  + '0)');
+  ctx.fillStyle = joinR;
+  ctx.beginPath();
+  ctx.arc(cx, cardTop, 35, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── Rivière gauche ──────────────────────────────────
+  if (extentL > 1) {
+    const ex  = cx - extentL;
+    const sag = Math.min(extentL * 0.06, 14); // affaissement max 14px
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cardTop);
+    // bezier: début horizontal, fin légèrement vers le bas
+    ctx.bezierCurveTo(
+      cx - extentL * 0.35, cardTop + sag * 0.2,
+      cx - extentL * 0.7,  cardTop + sag * 0.75,
+      ex,                  cardTop + sag
+    );
+
+    const grad = ctx.createLinearGradient(cx, cardTop, ex, cardTop);
+    grad.addColorStop(0,    C_CORE + (0.9 * alpha) + ')');
+    grad.addColorStop(0.25, C_COP  + (0.75 * alpha) + ')');
+    grad.addColorStop(0.75, C_ROSE + (0.45 * alpha) + ')');
+    grad.addColorStop(1,    C_COP  + '0)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth   = 3.5;
+    ctx.lineCap     = 'round';
+    ctx.shadowColor = '#c97f3f';
+    ctx.shadowBlur  = 14;
+    ctx.stroke();
+
+    // halo du bout de la rivière gauche
+    const tipR = ctx.createRadialGradient(ex, cardTop + sag, 0, ex, cardTop + sag, 18);
+    tipR.addColorStop(0,  C_COP + (0.7 * alpha) + ')');
+    tipR.addColorStop(1,  C_COP + '0)');
+    ctx.fillStyle = tipR;
+    ctx.beginPath();
+    ctx.arc(ex, cardTop + sag, 18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // ── Rivière droite (miroir) ─────────────────────────
+  if (extentR > 1) {
+    const ex  = cx + extentR;
+    const sag = Math.min(extentR * 0.06, 14);
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cardTop);
+    ctx.bezierCurveTo(
+      cx + extentR * 0.35, cardTop + sag * 0.2,
+      cx + extentR * 0.7,  cardTop + sag * 0.75,
+      ex,                  cardTop + sag
+    );
+
+    const grad = ctx.createLinearGradient(cx, cardTop, ex, cardTop);
+    grad.addColorStop(0,    C_CORE + (0.9 * alpha) + ')');
+    grad.addColorStop(0.25, C_COP  + (0.75 * alpha) + ')');
+    grad.addColorStop(0.75, C_ROSE + (0.45 * alpha) + ')');
+    grad.addColorStop(1,    C_COP  + '0)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth   = 3.5;
+    ctx.lineCap     = 'round';
+    ctx.shadowColor = '#c97f3f';
+    ctx.shadowBlur  = 14;
+    ctx.stroke();
+
+    const tipR = ctx.createRadialGradient(ex, cardTop + sag, 0, ex, cardTop + sag, 18);
+    tipR.addColorStop(0,  C_COP + (0.7 * alpha) + ')');
+    tipR.addColorStop(1,  C_COP + '0)');
+    ctx.fillStyle = tipR;
+    ctx.beginPath();
+    ctx.arc(ex, cardTop + sag, 18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+// ── Glow ambiant du bord supérieur du card ────────────
+function drawCardTopGlow(cardLeft, cardRight, cardTop, alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+  const g = ctx.createLinearGradient(cardLeft, cardTop, cardRight, cardTop);
+  g.addColorStop(0,    C_COP + '0)');
+  g.addColorStop(0.25, C_COP + (0.25 * alpha) + ')');
+  g.addColorStop(0.5,  C_CORE + (0.4 * alpha) + ')');
+  g.addColorStop(0.75, C_COP + (0.25 * alpha) + ')');
+  g.addColorStop(1,    C_COP + '0)');
+  ctx.fillStyle = g;
+  ctx.filter = 'blur(6px)';
+  ctx.fillRect(cardLeft, cardTop - 3, cardRight - cardLeft, 6);
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════
+//  BOUCLE PRINCIPALE
+// ════════════════════════════════════════════════════════
+function loop(ts) {
+  if (!lastTs) lastTs = ts;
+  const dt = Math.min((ts - lastTs) / 1000, 0.05);
+  lastTs = ts;
+  globalTime += dt;
+  stateTimer += dt;
+
+  const W = hero.offsetWidth;
+  const H = hero.offsetHeight;
+
+  // Wobble organique de la colonne
+  const wobble = Math.sin(globalTime * 1.3) * 9 + Math.sin(globalTime * 2.1) * 4;
+
+  // Données du card
+  const cd = getCard();
+
+  // ── UPDATE ──────────────────────────────────────────
+  if (state === 'FLOWING') {
+    headY += FLOW_SPEED * dt;
+    if (headY >= cd.top) enterState('IMPACT');
+
+  } else if (state === 'IMPACT') {
+    if (stateTimer >= IMPACT_DUR) enterState('SPREADING');
+
+  } else if (state === 'SPREADING') {
+    const maxSpread = cd.width * 0.52; // légèrement au-delà du bord
+    spreadL += SPREAD_SPEED * dt;
+    spreadR += SPREAD_SPEED * dt;
+    // Easing: plus lent en fin d'extension
+    const ease = t => t < 1 ? t : 1;
+    spreadL = Math.min(spreadL, maxSpread);
+    spreadR = Math.min(spreadR, maxSpread);
+    if (spreadL >= maxSpread) enterState('DRAINING');
+
+  } else if (state === 'DRAINING') {
+    if (stateTimer >= DRAIN_DUR) enterState('PAUSE');
+
+  } else if (state === 'PAUSE') {
+    if (stateTimer >= PAUSE_DUR) {
+      mockupWr.classList.remove('hit');
+      enterState('FLOWING');
+    }
+  }
+
+  // ── DRAW ────────────────────────────────────────────
+  ctx.clearRect(0, 0, W, H);
+
+  // Alpha selon état
+  let headAlpha   = 0;
+  let riverAlpha  = 0;
+  let impactProg  = 0;  // 1→0
+  let glowAlpha   = 0;
+
+  if (state === 'FLOWING') {
+    headAlpha = 1;
+  } else if (state === 'IMPACT') {
+    impactProg = 1 - (stateTimer / IMPACT_DUR);
+    glowAlpha  = 1;
+  } else if (state === 'SPREADING') {
+    riverAlpha = 1;
+    glowAlpha  = 1;
+  } else if (state === 'DRAINING') {
+    riverAlpha = Math.max(0, 1 - (stateTimer / DRAIN_DUR));
+    glowAlpha  = riverAlpha;
+  }
+
+  // 1. Colonne de fond
+  drawColumn(cd.cx, H);
+
+  // 2. Glow ambiant bord du card
+  drawCardTopGlow(cd.left, cd.right, cd.top, glowAlpha * 0.9);
+
+  // 3. Tête + traîne
+  if (state === 'FLOWING') {
+    drawHead(cd.cx, headY, wobble, headAlpha);
+  }
+
+  // 4. Flash d'impact
+  if (state === 'IMPACT') {
+    drawImpact(cd.cx, cd.top, impactProg);
+    // On garde la tête visible au point d'impact
+    drawHead(cd.cx, cd.top, 0, impactProg * 0.5);
+  }
+
+  // 5. Rivières
+  if (riverAlpha > 0) {
+    drawRiver(cd.cx, cd.top, spreadL, spreadR, riverAlpha);
+  }
+
+  requestAnimationFrame(loop);
+}
+
+// ── Démarrage ────────────────────────────────────────
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

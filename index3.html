@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Sections Gallery</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-dot.active {
+            background: white;
+            transform: scale(1.3);
+            border-color: rgba(0,0,0,0.2);
+        }
+        
+        /* Container principal */
+        .hero-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-section {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* HERO 1: Typographie Cinétique Noire */
+        .hero-1 {
+            background: #0a0a0a;
+            color: white;
+        }
+        
+        .kinetic-text {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-align: center;
+            letter-spacing: -0.05em;
+        }
+        
+        .kinetic-text span {
+            display: block;
+            opacity: 0;
+            transform: translateY(100px);
+            animation: slideUp 1s forwards;
+        }
+        
+        .kinetic-text span:nth-child(1) { animation-delay: 0.1s; color: #fff; }
+        .kinetic-text span:nth-child(2) { animation-delay: 0.2s; color: #666; }
+        .kinetic-text span:nth-child(3) { animation-delay: 0.3s; color: #ff3333; }
+        
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-1 .subtitle {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+        }
+        
+        /* HERO 2: Three.js Particules Interactive */
+        .hero-2 {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1e 100%);
+        }
+        
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-2-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            pointer-events: none;
+        }
+        
+        .hero-2 h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            mix-blend-mode: difference;
+        }
+        
+        /* HERO 3: Glassmorphism Moderne */
+        .hero-3 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 4rem;
+            max-width: 800px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            transform: perspective(1000px) rotateX(10deg);
+            transition: transform 0.5s;
+        }
+        
+        .glass-card:hover {
+            transform: perspective(1000px) rotateX(0deg);
+        }
+        
+        .glass-card h2 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .glass-card p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 20s infinite;
+        }
+        
+        .shape:nth-child(1) { width: 300px; height: 300px; top: -150px; left: -150px; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 200px; height: 200px; bottom: -100px; right: -100px; animation-delay: -5s; }
+        .shape:nth-child(3) { width: 150px; height: 150px; top: 50%; left: 20%; animation-delay: -10s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* HERO 4: Brutalist/Retro */
+        .hero-4 {
+            background: #ff00ff;
+            color: #000;
+            font-family: 'Courier New', monospace;
+            border: 20px solid #000;
+        }
+        
+        .brutalist-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+        
+        .brutalist-text h1 {
+            font-size: 5rem;
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: 4px 4px 0px #ffff00;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { text-shadow: 4px 4px 0px #ffff00; }
+            92% { text-shadow: -4px 4px 0px #00ffff; }
+            94% { text-shadow: 4px -4px 0px #ff0000; }
+            96% { text-shadow: 4px 4px 0px #ffff00; }
+        }
+        
+        .brutalist-box {
+            background: #000;
+            color: #0f0;
+            padding: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            border: 4px solid #ffff00;
+            box-shadow: 8px 8px 0 #000;
+        }
+        
+        /* HERO 5: 3D CSS Cards */
+        .hero-5 {
+            background: #f4f4f4;
+            perspective: 1000px;
+        }
+        
+        .css-3d-container {
+            display: flex;
+            gap: 3rem;
+            transform-style: preserve-3d;
+        }
+        
+        .card-3d {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            color: white;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card-3d:nth-child(1) { transform: rotateY(-15deg) translateZ(50px); background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .card-3d:nth-child(2) { transform: rotateY(0deg) translateZ(100px); background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .card-3d:nth-child(3) { transform: rotateY(15deg) translateZ(50px); background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        
+        .card-3d:hover {
+            transform: rotateY(0deg) translateZ(150px) scale(1.1);
+        }
+        
+        .card-3d h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* HERO 6: Gradient Animé */
+        .hero-6 {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .minimal-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .minimal-content h1 {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 100;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .circle-reveal {
+            width: 150px;
+            height: 150px;
+            border: 2px solid white;
+            border-radius: 50%;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .circle-reveal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: reveal 3s ease-in-out infinite;
+        }
+        
+        @keyframes reveal {
+            0%, 100% { width: 0; height: 0; opacity: 0; }
+            50% { width: 100%; height: 100%; opacity: 0.3; }
+        }
+        
+        /* HERO 7: Split Asymétrique */
+        .hero-7 {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            background: #fff;
+        }
+        
+        .split-left {
+            background: #111;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .split-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.03) 10px,
+                rgba(255,255,255,0.03) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+        
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .split-left h2 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .split-right {
+            background: #f0f0f0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 2rem;
+            padding: 4rem;
+        }
+        
+        .grid-item {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #111;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .grid-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .grid-item:nth-child(1) { background: #FFE5E5; }
+        .grid-item:nth-child(2) { background: #E5F3FF; }
+        .grid-item:nth-child(3) { background: #E5FFE5; }
+        .grid-item:nth-child(4) { background: #FFF9E5; }
+        
+        /* HERO 8: Typo Géante avec Masque */
+        .hero-8 {
+            background: #000;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .masked-hero {
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 0.9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientMove 5s ease infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .hero-8 .caption {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+            letter-spacing: 0.5em;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .brutalist-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .css-3d-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card-3d {
+                width: 250px;
+                height: 350px;
+            }
+            
+            .hero-7 {
+                grid-template-columns: 1fr;
+                grid-template-rows: 40% 60%;
+            }
+            
+            .split-right {
+                padding: 2rem;
+                gap: 1rem;
+            }
+            
+            .glass-card {
+                margin: 2rem;
+                padding: 2rem;
+            }
+        }
+        
+        /* Scrollbar cachée */
+        .hero-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .hero-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" data-index="0"></div>
+        <div class="nav-dot" data-index="1"></div>
+        <div class="nav-dot" data-index="2"></div>
+        <div class="nav-dot" data-index="3"></div>
+        <div class="nav-dot" data-index="4"></div>
+        <div class="nav-dot" data-index="5"></div>
+        <div class="nav-dot" data-index="6"></div>
+        <div class="nav-dot" data-index="7"></div>
+    </div>
+
+    <div class="hero-container">
+        
+        <!-- HERO 1: Typographie Cinétique -->
+        <section class="hero-section hero-1">
+            <div class="kinetic-text">
+                <span>CRÉER</span>
+                <span>L'INVISIBLE</span>
+                <span>Visible</span>
+            </div>
+            <div class="subtitle">Design Numérique</div>
+        </section>
+
+        <!-- HERO 2: Three.js 3D -->
+        <section class="hero-section hero-2">
+            <div id="canvas-container"></div>
+            <div class="hero-2-content">
+                <h1>Univers Particulaire</h1>
+                <p style="color: rgba(255,255,255,0.7); margin-top: 1rem;">Déplacez votre souris pour interagir</p>
+            </div>
+        </section>
+
+        <!-- HERO 3: Glassmorphism -->
+        <section class="hero-section hero-3">
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+            <div class="glass-card">
+                <h2>Interface du Futur</h2>
+                <p>Le glassmorphism redéfinit la profondeur d'interface avec des surfaces translucides et des effets de flou qui créent une hiérarchie visuelle naturelle.</p>
+            </div>
+        </section>
+
+        <!-- HERO 4: Brutalist -->
+        <section class="hero-section hero-4">
+            <div class="brutalist-content">
+                <div class="brutalist-text">
+                    <h1>NO<br>FILTER</h1>
+                </div>
+                <div class="brutalist-box">
+                    > DESIGN_SYSTEM.exe lancé<br>
+                    > Chargement des modules...<br>
+                    > Brutalisme activé<br>
+                    > Couleurs: MAXIMUM<br>
+                    > Grid: RUPTURE<br>
+                    > Status: OPÉRATIONNEL
+                </div>
+            </div>
+        </section>
+
+        <!-- HERO 5: 3D CSS -->
+        <section class="hero-section hero-5">
+            <div class="css-3d-container">
+                <div class="card-3d">
+                    <h3>Profondeur</h3>
+                    <p>CSS Transform 3D natif sans WebGL</p>
+                </div>
+                <div class="card-3d">
+                    <h3>Perspective</h3>
+                    <p>Preserve-3d pour scènes complexes</p>
+                </div>
+                <div class="card-3d">
+                    <h3>Interaction</h3>
+                    <p>Hover states avec translation Z</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HERO 6: Gradient Animé -->
+        <section class="hero-section hero-6">
+            <div class="minimal-content">
+                <div class="circle-reveal"></div>
+                <h1>Fluidité</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9;">Animations CSS GPU-accelerated</p>
+            </div>
+        </section>
+
+        <!-- HERO 7: Split Asymétrique -->
+        <section class="hero-section hero-7">
+            <div class="split-left">
+                <h2>Structure<br>Asymétrique</h2>
+                <p style="color: #666; margin-top: 1rem;">Grids complexes et cassures de flux</p>
+            </div>
+            <div class="split-right">
+                <div class="grid-item">01</div>
+                <div class="grid-item">02</div>
+                <div class="grid-item">03</div>
+                <div class="grid-item">04</div>
+            </div>
+        </section>
+
+        <!-- HERO 8: Masque de Texte -->
+        <section class="hero-section hero-8">
+            <div>
+                <div class="masked-hero">
+                    GRADIENT<br>
+                    MASK
+                </div>
+                <div class="caption">Typographie Vivante</div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Navigation
+        const container = document.querySelector('.hero-container');
+        const dots = document.querySelectorAll('.nav-dot');
+        const sections = document.querySelectorAll('.hero-section');
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const index = parseInt(dot.dataset.index);
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Observer pour les dots actifs
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(sections).indexOf(entry.target);
+                    dots.forEach(d => d.classList.remove('active'));
+                    dots[index].classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        sections.forEach(section => observer.observe(section));
+        
+        // THREE.JS pour Hero 2
+        function initThree() {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+            
+            // Particules
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1500;
+            const posArray = new Float32Array(particlesCount * 3);
+            
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 5;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x4facfe,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Sphère filaire
+            const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const sphereMaterial = new THREE.MeshBasicMaterial({
+                color: 0x667eea,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            scene.add(sphere);
+            
+            camera.position.z = 2;
+            
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation
+            let isActive = true;
+            const hero2 = document.querySelector('.hero-2');
+            
+            const visibilityObserver = new IntersectionObserver((entries) => {
+                isActive = entries[0].isIntersecting;
+            }, { threshold: 0.1 });
+            
+            visibilityObserver.observe(hero2);
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                if (!isActive) return;
+                
+                particlesMesh.rotation.y += 0.001;
+                particlesMesh.rotation.x += 0.0005;
+                
+                sphere.rotation.y += 0.002;
+                sphere.rotation.x += 0.001;
+                
+                // Interaction souris
+                particlesMesh.rotation.x += mouseY * 0.005;
+                particlesMesh.rotation.y += mouseX * 0.005;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        initThree();
+        
+        // Animation GSAP pour Hero 5 au scroll
+        gsap.registerPlugin();
+        
+        const hero5Cards = document.querySelectorAll('.card-3d');
+        const hero5Observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                gsap.from(hero5Cards, {
+                    duration: 1,
+                    y: 100,
+                    opacity: 0,
+                    stagger: 0.2,
+                    ease: "power3.out"
+                });
+            }
+        }, { threshold: 0.3 });
+        
+        hero5Observer.observe(document.querySelector('.hero-5'));
+    </script>
+</body>
+</html>

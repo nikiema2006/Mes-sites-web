@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Gallery — 20 Templates</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@100;400;700;900&family=Audiowide&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Anton&family=Josefin+Sans:wght@100;300;600&family=Exo+2:wght@300;400;700&family=Orbitron:wght@400;700;900&family=Poiret+One&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Syncopate:wght@400;700&family=Archivo+Black&family=Rajdhani:wght@300;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{overflow-x:hidden;background:#000}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2)}
+
+.hero{min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;scroll-snap-align:start}
+.section-num{position:absolute;bottom:24px;left:28px;font-size:.55rem;letter-spacing:.4em;opacity:.3;z-index:10}
+
+.hero .content,.hero .glass-card{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.hero.in-view .content,.hero.in-view .glass-card{opacity:1;transform:translateY(0)}
+
+.nav-dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.4)}
+.nav-dot:hover,.nav-dot.active{background:#fff;transform:scale(1.5)}
+
+/* =====  01 TERMINAL  ===== */
+.h1{background:#000;font-family:'Share Tech Mono',monospace;color:#00ff41}
+.h1 canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.12}
+.h1 .scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)}
+.h1 .badge{position:absolute;top:22px;left:28px;font-size:.6rem;letter-spacing:.35em;color:rgba(0,255,65,.35)}
+.h1 .content{position:relative;z-index:2;text-align:center}
+.h1 .lbl{font-size:.7rem;letter-spacing:.4em;color:rgba(0,255,65,.6);margin-bottom:1.2rem}
+.h1 h1{font-size:clamp(3.5rem,11vw,9rem);font-weight:400;line-height:1;color:#00ff41;text-shadow:0 0 15px #00ff41,0 0 40px rgba(0,255,65,.4);position:relative;animation:glitch-base 4s infinite}
+.h1 h1::before,.h1 h1::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}
+.h1 h1::before{color:#ff0040;animation:glitch-a 4s infinite;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%)}
+.h1 h1::after{color:#00aaff;animation:glitch-b 4s infinite;clip-path:polygon(0 62%,100% 62%,100% 85%,0 85%)}
+.h1 .sub{font-size:.85rem;letter-spacing:.25em;color:rgba(0,255,65,.7);margin-top:1.2rem}
+.h1 .cursor{display:inline-block;width:10px;height:1.1em;background:#00ff41;vertical-align:text-bottom;margin-left:3px;animation:blink 1s step-end infinite}
+.h1 .cta{margin-top:2.2rem;display:inline-block;padding:.75rem 2.2rem;border:1px solid #00ff41;color:#00ff41;background:transparent;font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:.2em;cursor:pointer;text-decoration:none;transition:all .3s}
+.h1 .cta:hover{background:#00ff41;color:#000;box-shadow:0 0 25px rgba(0,255,65,.5)}
+@keyframes glitch-base{0%,88%,100%{transform:none}89%{transform:skew(-1.5deg)}90%{transform:skew(1.5deg) translateX(-4px)}91%{transform:none}92%{transform:translateX(5px)}93%{transform:none}}
+@keyframes glitch-a{0%,88%,100%{transform:none;opacity:0}89%{transform:translateX(-5px) skew(-.5deg);opacity:.9}91%{opacity:0}}
+@keyframes glitch-b{0%,91%,100%{transform:none;opacity:0}92%{transform:translateX(5px) skew(.5deg);opacity:.9}94%{opacity:0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* =====  02 SWISS  ===== */
+.h2{background:#fff;font-family:'Barlow Condensed',sans-serif;color:#111}
+.h2 .gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);background-size:64px 64px}
+.h2 .vl{position:absolute;right:5vw;top:50%;transform:translateY(-50%) rotate(90deg);font-size:.55rem;letter-spacing:.5em;color:rgba(0,0,0,.18)}
+.h2 .content{position:relative;z-index:2;padding:0 6vw;width:100%}
+.h2 .ey{font-size:.65rem;letter-spacing:.5em;font-weight:400;color:#e82011;margin-bottom:.4rem}
+.h2 h1{font-size:clamp(5rem,17vw,16rem);font-weight:900;line-height:.83;letter-spacing:-.025em;text-transform:uppercase;color:#111}
+.h2 .div{width:100%;height:4px;background:#e82011;margin:1.4rem 0}
+.h2 .bot{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem}
+.h2 .sub{font-size:1.15rem;font-weight:100;letter-spacing:.12em;color:#444;max-width:380px}
+.h2 .cta{display:inline-block;padding:.9rem 2.8rem;background:#e82011;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.3em;text-decoration:none;text-transform:uppercase;cursor:pointer;border:none;transition:background .2s;white-space:nowrap}
+.h2 .cta:hover{background:#111}
+
+/* =====  03 WIREFRAME  ===== */
+.h3{background:#08061a;font-family:'Rajdhani',sans-serif}
+.h3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.h3 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h3 .ey{font-size:.65rem;letter-spacing:.55em;color:rgba(136,85,255,.8);font-weight:300;margin-bottom:1.5rem;text-transform:uppercase}
+.h3 h1{font-size:clamp(3.5rem,9vw,8rem);font-weight:700;line-height:.9;letter-spacing:.06em;background:linear-gradient(135deg,#fff 0%,#9966ff 45%,#5522ee 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h3 .sub{font-size:.9rem;font-weight:300;letter-spacing:.3em;color:rgba(255,255,255,.35);margin-top:1.5rem;text-transform:uppercase}
+.h3 .cta{margin-top:2rem;display:inline-block;padding:.8rem 2.2rem;border:1px solid rgba(136,85,255,.45);color:rgba(255,255,255,.85);font-family:'Rajdhani',sans-serif;font-size:.8rem;letter-spacing:.3em;text-decoration:none;cursor:pointer;background:rgba(136,85,255,.08);transition:all .3s;text-transform:uppercase;font-weight:600}
+.h3 .cta:hover{background:rgba(136,85,255,.25);border-color:#9966ff;box-shadow:0 0 25px rgba(136,85,255,.3)}
+
+/* =====  04 SYNTHWAVE  ===== */
+.h4{background:#06000e;font-family:'Audiowide',cursive}
+.h4 .sky{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 65%,#ff5ec7 0%,#b019ff 28%,#1a0033 55%,#06000e 80%)}
+.h4 .stars-c{position:absolute;inset:0;width:100%;height:100%}
+.h4 .mtn{position:absolute;bottom:41%;left:0;width:100%;height:110px}
+.h4 .mtn svg{width:100%;height:100%}
+.h4 .sun{position:absolute;bottom:39%;left:50%;transform:translateX(-50%);width:200px;height:100px;border-radius:200px 200px 0 0;background:linear-gradient(180deg,#ffee44 0%,#ff6600 40%,#cc0077 100%);overflow:hidden}
+.h4 .sun-s{position:absolute;bottom:0;left:0;right:0}
+.h4 .ss{background:#06000e;margin-bottom:5px}
+.h4 .ss:nth-child(1){height:5px;margin-top:18px}
+.h4 .ss:nth-child(2){height:6px}
+.h4 .ss:nth-child(3){height:8px}
+.h4 .ss:nth-child(4){height:10px}
+.h4 .gw{position:absolute;bottom:0;left:0;width:100%;height:44%;perspective:280px}
+.h4 .gp{width:100%;height:200%;transform:rotateX(62deg);transform-origin:top;background-image:linear-gradient(rgba(255,0,255,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,255,.55) 1px,transparent 1px);background-size:80px 80px;animation:gscroll 3s linear infinite}
+@keyframes gscroll{from{background-position:0 0}to{background-position:0 80px}}
+.h4 .content{position:relative;z-index:10;text-align:center;margin-top:-18vh}
+.h4 h1{font-size:clamp(2.8rem,9vw,8rem);line-height:1;color:transparent;-webkit-text-stroke:2px #ff60c8;text-shadow:0 0 15px rgba(255,96,200,.6),0 0 50px rgba(255,0,180,.3);letter-spacing:.08em}
+.h4 .sub{font-size:.65rem;letter-spacing:.45em;color:rgba(255,96,200,.7);margin-top:.5rem}
+.h4 .cta{margin-top:1.5rem;display:inline-block;padding:.75rem 2rem;background:linear-gradient(135deg,#ff00b3,#9900ff);color:#fff;font-family:'Audiowide',cursive;font-size:.65rem;letter-spacing:.2em;text-decoration:none;cursor:pointer;border:none;box-shadow:0 0 20px rgba(255,0,180,.5);transition:all .3s}
+.h4 .cta:hover{transform:translateY(-3px);box-shadow:0 5px 30px rgba(255,0,180,.6)}
+
+/* =====  05 BOTANICAL  ===== */
+.h5{background:#f6efdf;font-family:'Cormorant Garamond',serif}
+.h5 .leaf{position:absolute}
+.h5 .l1{top:-60px;left:-80px;width:380px;animation:sway 7s ease-in-out infinite;transform-origin:bottom right}
+.h5 .l2{bottom:-70px;right:-60px;width:320px;animation:sway 9s ease-in-out infinite reverse;transform-origin:top left}
+.h5 .l3{top:15%;right:4%;width:190px;animation:sway 6s ease-in-out infinite 1.5s}
+.h5 .l4{bottom:25%;left:2%;width:150px;animation:sway 8s ease-in-out infinite .8s}
+@keyframes sway{0%,100%{transform:rotate(0)}35%{transform:rotate(4deg)}70%{transform:rotate(-3deg)}}
+.h5 .content{position:relative;z-index:2;text-align:center;padding:0 5vw}
+.h5 .lbl{font-size:.65rem;letter-spacing:.55em;color:#6b9060;text-transform:uppercase;margin-bottom:1rem}
+.h5 h1{font-size:clamp(3rem,8vw,7rem);font-weight:300;font-style:italic;color:#3a5438;line-height:1.05}
+.h5 .orn{width:50px;height:1px;background:#b07030;margin:1.5rem auto}
+.h5 .sub{font-size:1.05rem;font-weight:300;color:#7a6f5a;max-width:360px;margin:0 auto;line-height:1.7}
+.h5 .cta{margin-top:2rem;display:inline-block;padding:.85rem 2.5rem;border:1px solid rgba(107,144,96,.6);color:#3a5438;font-family:'Cormorant Garamond',serif;font-size:.9rem;letter-spacing:.3em;text-decoration:none;cursor:pointer;background:transparent;transition:all .35s}
+.h5 .cta:hover{background:#3a5438;color:#f6efdf}
+
+/* =====  06 LUXURY  ===== */
+.h6{background:#080808;font-family:'Playfair Display',serif}
+.h6 .vl{position:absolute;top:0;width:1px;height:100%;background:linear-gradient(180deg,transparent,rgba(201,162,39,.35),rgba(201,162,39,.6),rgba(201,162,39,.35),transparent)}
+.h6 .vl-l{left:9%}.h6 .vl-r{right:9%}
+.h6 .content{position:relative;z-index:2;text-align:center}
+.h6 .crown{font-size:.65rem;letter-spacing:.7em;color:rgba(201,162,39,.65);font-style:italic;margin-bottom:2.2rem}
+.h6 h1{font-size:clamp(2.8rem,7vw,6.5rem);font-weight:400;font-style:italic;line-height:1.15;background:linear-gradient(135deg,#c9a227,#f2d060,#c9a227,#8b6210,#f2d060);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+.h6 .rule{display:flex;align-items:center;justify-content:center;gap:1rem;margin:1.8rem 0}
+.h6 .rule::before,.h6 .rule::after{content:'';flex:1;max-width:80px;height:1px}
+.h6 .rule::before{background:linear-gradient(90deg,transparent,#c9a227)}
+.h6 .rule::after{background:linear-gradient(90deg,#c9a227,transparent)}
+.h6 .dia{width:7px;height:7px;background:#c9a227;transform:rotate(45deg)}
+.h6 .sub{font-size:.7rem;letter-spacing:.6em;color:rgba(201,162,39,.5)}
+.h6 .cta{margin-top:2.8rem;display:inline-block;padding:.9rem 3.2rem;border:1px solid rgba(201,162,39,.4);color:#c9a227;font-family:'Playfair Display',serif;font-size:.75rem;font-style:italic;letter-spacing:.35em;text-decoration:none;cursor:pointer;background:transparent;transition:all .4s}
+.h6 .cta:hover{background:rgba(201,162,39,.08);border-color:#c9a227;box-shadow:0 0 30px rgba(201,162,39,.12)}
+
+/* =====  07 BRUTALISM  ===== */
+.h7{background:#f2f0eb;font-family:'Anton',sans-serif}
+.h7 .rb{position:absolute;right:4vw;bottom:8%;width:130px;height:130px;background:#ff2200}
+.h7 .content{position:relative;z-index:2;padding:0 5vw;width:100%}
+.h7 .tag{display:inline-block;background:#f5e500;color:#000;font-family:'Anton',sans-serif;font-size:.75rem;letter-spacing:.2em;padding:.25rem .85rem;margin-bottom:.8rem}
+.h7 h1{font-size:clamp(4.5rem,15vw,14rem);font-weight:400;text-transform:uppercase;line-height:.82;color:#000;letter-spacing:-.02em}
+.h7 .ol{-webkit-text-stroke:3px #000;color:transparent}
+.h7 .stripe{height:22px;margin:1rem 0;background:repeating-linear-gradient(45deg,#000,#000 10px,#f5e500 10px,#f5e500 20px)}
+.h7 .row{display:flex;align-items:center;gap:2rem;margin-top:.8rem}
+.h7 .cta{display:inline-block;padding:1rem 2.5rem;background:#000;color:#f5e500;font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.1em;text-decoration:none;cursor:pointer;border:none;text-transform:uppercase;transition:all .15s}
+.h7 .cta:hover{background:#f5e500;color:#000;transform:translate(-4px,-4px);box-shadow:4px 4px 0 #000}
+.h7 .yr{font-size:5rem;color:rgba(0,0,0,.06);line-height:1}
+
+/* =====  08 AURORA  ===== */
+.h8{background:#020c1c;font-family:'Josefin Sans',sans-serif}
+.h8 .a1{position:absolute;inset:0;background:radial-gradient(ellipse 90% 50% at 15% 30%,rgba(0,255,140,.14),transparent);animation:amove 9s ease-in-out infinite}
+.h8 .a2{position:absolute;inset:0;background:radial-gradient(ellipse 75% 45% at 75% 40%,rgba(80,0,255,.14),transparent);animation:amove 11s ease-in-out infinite reverse}
+.h8 .a3{position:absolute;inset:0;background:radial-gradient(ellipse 65% 35% at 50% 22%,rgba(0,200,255,.1),transparent);animation:amove 13s ease-in-out infinite 2s}
+@keyframes amove{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4%,3%) scale(1.08)}66%{transform:translate(-4%,-2%) scale(.92)}}
+.h8 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h8 .lbl{font-size:.6rem;letter-spacing:.65em;color:rgba(0,255,140,.65);font-weight:100;margin-bottom:2rem}
+.h8 h1{font-size:clamp(3rem,8vw,7.5rem);font-weight:100;letter-spacing:.22em;color:#fff;text-shadow:0 0 60px rgba(0,255,140,.35)}
+.h8 h1 strong{font-weight:600;color:#00ff8c}
+.h8 .sub{font-size:.78rem;letter-spacing:.35em;font-weight:100;color:rgba(255,255,255,.4);margin-top:1.5rem}
+.h8 .cta{margin-top:2.5rem;display:inline-block;padding:.8rem 2.2rem;border:1px solid rgba(0,255,140,.35);color:rgba(0,255,140,.85);font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.45em;text-decoration:none;cursor:pointer;background:transparent;transition:all .4s}
+.h8 .cta:hover{background:rgba(0,255,140,.08);border-color:rgba(0,255,140,.7);box-shadow:0 0 20px rgba(0,255,140,.15)}
+
+/* =====  09 CSS 3D  ===== */
+.h9{background:#f0f0f0;font-family:'Exo 2',sans-serif}
+.h9 .sw{position:absolute;right:10vw;top:50%;transform:translateY(-50%);width:280px;height:280px;perspective:900px}
+.h9 .cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:cspin 14s linear infinite}
+.h9 .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:700;border:2px solid rgba(0,0,0,.08)}
+.h9 .front{transform:translateZ(140px);background:rgba(255,100,50,.72)}
+.h9 .back{transform:rotateY(180deg) translateZ(140px);background:rgba(50,100,255,.72)}
+.h9 .right{transform:rotateY(90deg) translateZ(140px);background:rgba(255,200,0,.72)}
+.h9 .left{transform:rotateY(-90deg) translateZ(140px);background:rgba(0,190,100,.72)}
+.h9 .top{transform:rotateX(90deg) translateZ(140px);background:rgba(190,0,190,.72)}
+.h9 .bottom{transform:rotateX(-90deg) translateZ(140px);background:rgba(0,190,190,.72)}
+@keyframes cspin{from{transform:rotateX(15deg) rotateY(0)}to{transform:rotateX(15deg) rotateY(360deg)}}
+.h9 .content{position:relative;z-index:2;padding-left:7vw;max-width:52%}
+.h9 .badge{display:inline-block;background:#ff6432;color:#fff;font-size:.6rem;letter-spacing:.3em;padding:.3rem .8rem;margin-bottom:1.5rem;font-weight:700}
+.h9 h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;color:#111;line-height:1.1}
+.h9 .sub{font-size:.95rem;font-weight:300;color:#666;margin-top:1rem;line-height:1.65}
+.h9 .cta{margin-top:2rem;display:inline-block;padding:.9rem 2.2rem;background:#111;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.2em;text-decoration:none;cursor:pointer;border:none;text-transform:uppercase;transition:background .2s}
+.h9 .cta:hover{background:#ff6432}
+
+/* =====  10 GLASS  ===== */
+.h10{background:linear-gradient(135deg,#56aef5 0%,#0972d3 40%,#9b8fe8 75%,#f27daf 100%);font-family:'Exo 2',sans-serif}
+.h10 .o1{position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.18);filter:blur(45px);top:-110px;left:-80px;animation:orbf 7s ease-in-out infinite}
+.h10 .o2{position:absolute;width:320px;height:320px;border-radius:50%;background:rgba(240,120,170,.25);filter:blur(45px);bottom:-50px;right:5%;animation:orbf 10s ease-in-out infinite reverse}
+@keyframes orbf{0%,100%{transform:translate(0,0)}50%{transform:translate(22px,-22px)}}
+.h10 .glass-card{position:relative;z-index:2;background:rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.3);border-radius:28px;padding:4rem 3.5rem;text-align:center;max-width:580px;box-shadow:0 8px 40px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.45)}
+.h10 .ey{font-size:.65rem;letter-spacing:.45em;color:rgba(255,255,255,.8);margin-bottom:.9rem;font-weight:600;text-transform:uppercase}
+.h10 h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;color:#fff;line-height:1.1;text-shadow:0 2px 8px rgba(0,0,0,.1)}
+.h10 .sub{font-size:.95rem;color:rgba(255,255,255,.85);margin-top:1rem;line-height:1.65}
+.h10 .cta{margin-top:2rem;display:inline-block;padding:.9rem 2.5rem;background:#fff;color:#0972d3;font-family:'Exo 2',sans-serif;font-weight:800;font-size:.82rem;letter-spacing:.08em;text-decoration:none;cursor:pointer;border:none;border-radius:60px;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:all .3s}
+.h10 .cta:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.15)}
+
+/* =====  11 ART DECO  ===== */
+.h11{background:#f3e4c4;font-family:'Poiret One',cursive}
+.h11 .frm{position:absolute;inset:28px;border:1px solid rgba(180,140,20,.28);pointer-events:none}
+.h11 .frm::before{content:'';position:absolute;inset:10px;border:1px solid rgba(180,140,20,.16)}
+.h11 .c{position:absolute;width:38px;height:38px}
+.h11 .c.tl{top:16px;left:16px;border-top:3px solid #b48c14;border-left:3px solid #b48c14}
+.h11 .c.tr{top:16px;right:16px;border-top:3px solid #b48c14;border-right:3px solid #b48c14}
+.h11 .c.bl{bottom:16px;left:16px;border-bottom:3px solid #b48c14;border-left:3px solid #b48c14}
+.h11 .c.br{bottom:16px;right:16px;border-bottom:3px solid #b48c14;border-right:3px solid #b48c14}
+.h11 .geo{position:absolute;inset:0;opacity:.055}
+.h11 .content{position:relative;z-index:2;text-align:center}
+.h11 .orn{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.8rem;color:#b48c14}
+.h11 .orn::before,.h11 .orn::after{content:'';width:55px;height:1px}
+.h11 .orn::before{background:linear-gradient(90deg,transparent,#b48c14)}
+.h11 .orn::after{background:linear-gradient(90deg,#b48c14,transparent)}
+.h11 .dia{width:7px;height:7px;background:#b48c14;transform:rotate(45deg)}
+.h11 h1{font-size:clamp(3rem,8vw,7.5rem);font-weight:400;color:#251400;letter-spacing:.32em;text-transform:uppercase;line-height:1.08}
+.h11 .sub{font-size:.75rem;letter-spacing:.55em;color:#b48c14;text-transform:uppercase;margin-top:.9rem}
+.h11 .cta{margin-top:2rem;display:inline-block;padding:.9rem 3rem;background:#251400;color:#f3e4c4;font-family:'Poiret One',cursive;font-size:.8rem;letter-spacing:.45em;text-decoration:none;cursor:pointer;border:none;text-transform:uppercase;transition:all .3s}
+.h11 .cta:hover{background:#b48c14}
+
+/* =====  12 Y2K  ===== */
+.h12{background:#b5ff00;font-family:'Exo 2',sans-serif}
+.h12 .bl1{position:absolute;width:480px;height:480px;background:#ff0066;border-radius:60% 40% 30% 70%/60% 30% 70% 40%;top:-160px;right:-120px;animation:morph 5s ease-in-out infinite}
+.h12 .bl2{position:absolute;width:360px;height:360px;background:#6600ff;border-radius:40% 60% 70% 30%/40% 70% 30% 60%;bottom:-100px;left:-100px;animation:morph 7s ease-in-out infinite reverse 1s}
+@keyframes morph{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}25%{border-radius:30% 70% 60% 40%/50% 60% 40% 50%}50%{border-radius:40% 60% 70% 30%/40% 70% 30% 60%}75%{border-radius:70% 30% 40% 60%/70% 40% 60% 30%}}
+.h12 .content{position:relative;z-index:2;text-align:center}
+.h12 .tag{display:inline-block;background:#000;color:#b5ff00;font-size:.75rem;letter-spacing:.2em;padding:.25rem 1rem;margin-bottom:.7rem;font-weight:700}
+.h12 h1{font-size:clamp(4rem,13vw,11rem);font-weight:700;color:#000;line-height:.88;animation:wave 2.5s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:skewX(0)}25%{transform:skewX(2.5deg)}75%{transform:skewX(-2.5deg)}}
+.h12 .sub{font-size:.95rem;font-weight:700;color:#000;letter-spacing:.1em;margin-top:.6rem}
+.h12 .stars{margin-top:.4rem}
+.h12 .star{display:inline-block;font-size:1.8rem;animation:spin360 3s linear infinite}
+.h12 .star:nth-child(2){animation-delay:-1s;animation-duration:2.2s}
+.h12 .star:nth-child(3){animation-delay:-.5s;animation-duration:4s}
+@keyframes spin360{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.h12 .cta{margin-top:1.5rem;display:inline-block;padding:.9rem 2.5rem;background:#000;color:#b5ff00;font-family:'Exo 2',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.08em;text-decoration:none;cursor:pointer;border:none;border-radius:100px;transition:all .2s}
+.h12 .cta:hover{background:#ff0066;color:#fff;transform:scale(1.06)}
+
+/* =====  13 PARTICLES  ===== */
+.h13{background:#000510;font-family:'Exo 2',sans-serif}
+.h13 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.h13 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h13 .lbl{font-size:.6rem;letter-spacing:.65em;color:rgba(0,255,180,.55);font-weight:300;margin-bottom:2rem;text-transform:uppercase}
+.h13 h1{font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1;letter-spacing:.04em}
+.h13 h1 span{color:#00ffc0}
+.h13 .metrics{display:flex;gap:3rem;justify-content:center;margin-top:2rem}
+.h13 .mv{font-size:2rem;font-weight:700;color:#00ffc0}
+.h13 .ml{font-size:.55rem;letter-spacing:.35em;color:rgba(255,255,255,.3);margin-top:.2rem;text-transform:uppercase}
+.h13 .cta{margin-top:2rem;display:inline-block;padding:.8rem 2.2rem;border:1px solid rgba(0,255,192,.45);color:rgba(0,255,192,.9);font-family:'Exo 2',sans-serif;font-size:.72rem;letter-spacing:.35em;text-decoration:none;cursor:pointer;background:transparent;transition:all .3s;text-transform:uppercase}
+.h13 .cta:hover{background:rgba(0,255,192,.08);box-shadow:0 0 22px rgba(0,255,192,.25)}
+
+/* =====  14 OCEAN  ===== */
+.h14{background:#00080f;font-family:'Josefin Sans',sans-serif}
+.h14 .og{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 25% 50%,rgba(0,90,170,.28),transparent),radial-gradient(ellipse 60% 40% at 75% 35%,rgba(0,40,90,.35),transparent)}
+.h14 .bubble{position:absolute;border-radius:50%;background:rgba(0,200,255,.07);border:1px solid rgba(0,200,255,.15);animation:brise linear infinite}
+@keyframes brise{0%{transform:translateY(110vh);opacity:.7}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
+.h14 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h14 .depth{font-size:.6rem;letter-spacing:.65em;color:rgba(0,200,255,.5);font-weight:100;margin-bottom:2rem}
+.h14 h1{font-size:clamp(4rem,12vw,11rem);font-weight:100;letter-spacing:.28em;color:#fff;text-shadow:0 0 40px rgba(0,160,255,.45),0 0 80px rgba(0,100,200,.25)}
+.h14 .gl{width:200px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.75),transparent);margin:1.5rem auto}
+.h14 .sub{font-size:.75rem;letter-spacing:.45em;font-weight:100;color:rgba(255,255,255,.35)}
+.h14 .cta{margin-top:2rem;display:inline-block;padding:.8rem 2.2rem;background:rgba(0,120,200,.12);border:1px solid rgba(0,200,255,.28);color:rgba(0,200,255,.85);font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.45em;text-decoration:none;cursor:pointer;transition:all .4s}
+.h14 .cta:hover{background:rgba(0,120,200,.22);box-shadow:0 0 22px rgba(0,200,255,.18)}
+
+/* =====  15 SPACE  ===== */
+.h15{background:#000004;font-family:'Orbitron',monospace}
+.h15 canvas{position:absolute;inset:0;width:100%;height:100%}
+.h15 .neb{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 35% at 18% 28%,rgba(130,0,255,.1),transparent),radial-gradient(ellipse 45% 35% at 82% 72%,rgba(0,90,255,.09),transparent),radial-gradient(ellipse 35% 25% at 60% 18%,rgba(255,60,0,.07),transparent)}
+.h15 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h15 .miss{font-size:.55rem;letter-spacing:.65em;color:rgba(255,255,255,.3);margin-bottom:2rem}
+.h15 h1{font-size:clamp(2rem,6vw,5.5rem);font-weight:900;letter-spacing:.12em;line-height:1.18;text-shadow:0 0 40px rgba(120,100,255,.4)}
+.h15 h1 em{font-style:normal;color:#7c62ff}
+.h15 .coords{font-size:.55rem;letter-spacing:.3em;color:rgba(255,255,255,.25);margin-top:1.5rem}
+.h15 .cta{margin-top:2rem;display:inline-block;padding:.9rem 2.5rem;background:rgba(123,97,255,.15);border:1px solid rgba(123,97,255,.45);color:#7c62ff;font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:.3em;text-decoration:none;cursor:pointer;transition:all .3s;text-transform:uppercase}
+.h15 .cta:hover{background:rgba(123,97,255,.28);box-shadow:0 0 22px rgba(123,97,255,.3)}
+
+/* =====  16 INK  ===== */
+.h16{background:#f0eae0;font-family:'Philosopher',serif}
+.h16 .kanji{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(8rem,25vw,22rem);color:rgba(0,0,0,.04);line-height:1;pointer-events:none;user-select:none}
+.h16 .sp{position:absolute}
+.h16 .sp1{top:-80px;right:-80px;width:450px;opacity:.055}
+.h16 .sp2{bottom:-40px;left:-40px;width:280px;opacity:.06}
+.h16 .content{position:relative;z-index:2;text-align:center}
+.h16 .vt{width:1px;height:75px;background:rgba(0,0,0,.22);margin:0 auto 1.5rem}
+.h16 h1{font-size:clamp(2.5rem,6vw,5.5rem);font-weight:400;color:#150800;line-height:1.3}
+.h16 h1 em{font-style:italic;color:#7a2000}
+.h16 .sub{font-size:.8rem;color:rgba(0,0,0,.35);letter-spacing:.35em;margin-top:1.5rem;font-style:italic}
+.h16 .vb{width:1px;height:75px;background:rgba(0,0,0,.22);margin:1.5rem auto 0}
+.h16 .cta{margin-top:2rem;display:inline-block;padding:.8rem 2.5rem;border:1px solid rgba(0,0,0,.28);color:#150800;font-family:'Philosopher',serif;font-style:italic;font-size:.85rem;letter-spacing:.3em;text-decoration:none;cursor:pointer;background:transparent;transition:all .3s}
+.h16 .cta:hover{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.55)}
+
+/* =====  17 EDITORIAL  ===== */
+.h17{background:#eeebe4;font-family:'Bebas Neue',sans-serif}
+.h17 .sl{position:absolute;width:3px;height:200%;background:#1a1a1a;top:-50%;left:54%;transform:rotate(9deg)}
+.h17 .sl2{position:absolute;width:2px;height:200%;background:rgba(0,0,0,.08);top:-50%;left:56.5%;transform:rotate(9deg)}
+.h17 .content{position:relative;z-index:2;padding:0 5vw;width:100%}
+.h17 .vol{font-size:.6rem;letter-spacing:.4em;color:rgba(0,0,0,.28);font-family:'Barlow Condensed',sans-serif;margin-bottom:.4rem}
+.h17 h1{font-size:clamp(4.5rem,15vw,15rem);font-weight:400;line-height:.82;color:#1a1a1a;text-transform:uppercase;letter-spacing:.01em}
+.h17 .ot{font-size:clamp(2.5rem,7vw,7rem);font-weight:400;color:transparent;-webkit-text-stroke:2px #1a1a1a;text-transform:uppercase;line-height:.82;margin-top:-.15em}
+.h17 .bar{display:flex;justify-content:space-between;align-items:flex-end;margin-top:1.8rem;border-top:3px solid #1a1a1a;padding-top:.9rem}
+.h17 .bl{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:.3em;color:rgba(0,0,0,.4)}
+.h17 .cta{display:inline-block;padding:.7rem 2.2rem;background:#1a1a1a;color:#eeebe4;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;text-decoration:none;cursor:pointer;border:none;transition:background .2s}
+.h17 .cta:hover{background:#cc0000}
+
+/* =====  18 HOLO  ===== */
+.h18{background:#030303;font-family:'Syncopate',sans-serif}
+.h18 .hbg{position:absolute;inset:0;background:radial-gradient(circle at 28% 50%,rgba(255,0,120,.06),transparent 50%),radial-gradient(circle at 72% 50%,rgba(0,120,255,.06),transparent 50%);animation:hshift 7s ease-in-out infinite}
+@keyframes hshift{0%,100%{opacity:1}50%{opacity:.4}}
+.h18 .flt{position:absolute;inset:0;pointer-events:none}
+.h18 .fl{position:absolute;border:1px solid rgba(255,255,255,.04);animation:felm linear infinite}
+@keyframes felm{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(18px,-18px) rotate(90deg)}50%{transform:translate(0,-36px) rotate(180deg)}75%{transform:translate(-18px,-18px) rotate(270deg)}100%{transform:translate(0,0) rotate(360deg)}}
+.h18 .content{position:relative;z-index:2;text-align:center}
+.h18 h1{font-size:clamp(2.5rem,8vw,7.5rem);font-weight:700;letter-spacing:.12em;line-height:1.05;background:linear-gradient(90deg,#ff0080,#ff8800,#ffe600,#00ff80,#00ccff,#8800ff,#ff0080);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:hroll 3s linear infinite}
+@keyframes hroll{from{background-position:0 0}to{background-position:200% 0}}
+.h18 .dr{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;margin:1.8rem auto;max-width:580px}
+.h18 .dl{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18))}
+.h18 .dr2{height:1px;background:linear-gradient(90deg,rgba(255,255,255,.18),transparent)}
+.h18 .dt{font-size:.52rem;letter-spacing:.5em;color:rgba(255,255,255,.28);white-space:nowrap}
+.h18 .sub{font-size:.55rem;letter-spacing:.55em;color:rgba(255,255,255,.22);margin-top:.5rem}
+.h18 .cta{margin-top:2rem;display:inline-block;padding:.9rem 2.5rem;color:rgba(255,255,255,.85);font-family:'Syncopate',sans-serif;font-size:.52rem;letter-spacing:.4em;text-decoration:none;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);text-transform:uppercase;transition:all .3s}
+.h18 .cta:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)}
+
+/* =====  19 TORUS  ===== */
+.h19{background:#07070c;font-family:'Philosopher',serif}
+.h19 canvas{position:absolute;inset:0;width:100%;height:100%}
+.h19 .content{position:relative;z-index:2;text-align:center;color:#fff}
+.h19 .pre{font-size:.6rem;letter-spacing:.75em;color:rgba(255,200,80,.45);font-style:italic;margin-bottom:1.5rem}
+.h19 h1{font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1.1}
+.h19 h1 em{font-style:italic;background:linear-gradient(135deg,#ffd700,#ff8c00,#ffd700);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3.5s ease-in-out infinite}
+.h19 .sub{font-size:1rem;font-style:italic;color:rgba(255,255,255,.35);margin-top:1.5rem;letter-spacing:.1em}
+.h19 .cta{margin-top:2.2rem;display:inline-block;padding:.9rem 3rem;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,0,.08));border:1px solid rgba(255,215,0,.28);color:#ffd700;font-family:'Philosopher',serif;font-style:italic;font-size:.9rem;letter-spacing:.22em;text-decoration:none;cursor:pointer;transition:all .35s}
+.h19 .cta:hover{background:linear-gradient(135deg,rgba(255,215,0,.22),rgba(255,140,0,.15));box-shadow:0 0 28px rgba(255,215,0,.14)}
+
+/* =====  20 INDUSTRIAL  ===== */
+.h20{background:#282828;font-family:'Archivo Black',sans-serif}
+.h20 .conc{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");background-size:300px;opacity:.45}
+.h20 .tape{position:absolute;height:48px;width:200%;left:-25%;background:repeating-linear-gradient(90deg,#f5c500 0px,#f5c500 40px,#1a1a1a 40px,#1a1a1a 80px);transform:rotate(-2.5deg)}
+.h20 .tt{top:55px}.h20 .tb{bottom:55px}
+.h20 .content{position:relative;z-index:2;padding:0 5vw}
+.h20 .warn{font-size:.62rem;letter-spacing:.5em;color:#f5c500;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.h20 h1{font-size:clamp(4rem,13vw,13rem);font-weight:400;color:#f0f0f0;text-transform:uppercase;line-height:.82;letter-spacing:-.025em}
+.h20 h1 .ac{color:#f5c500}
+.h20 .info{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.5rem;margin-top:1.5rem;max-width:380px}
+.h20 .ik{font-size:.55rem;letter-spacing:.3em;color:rgba(255,255,255,.28)}
+.h20 .iv{font-size:.55rem;letter-spacing:.1em;color:rgba(255,255,255,.65)}
+.h20 .cta{margin-top:2rem;display:inline-block;padding:1rem 2.5rem;background:#f5c500;color:#1a1a1a;font-family:'Archivo Black',sans-serif;font-size:.82rem;letter-spacing:.1em;text-decoration:none;cursor:pointer;border:none;text-transform:uppercase;transition:all .2s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.h20 .cta:hover{background:#fff}
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="nd"></nav>
+
+<!-- 01 TERMINAL -->
+<section class="hero h1" id="h1">
+  <canvas id="mc"></canvas>
+  <div class="scanlines"></div>
+  <div class="badge">SYS://INITIALIZING</div>
+  <div class="content">
+    <div class="lbl">// TERMINAL · SESSION 01</div>
+    <h1 data-text="EXECUTE">EXECUTE</h1>
+    <div class="sub">SYSTEM OVERRIDE ENABLED <span class="cursor"></span></div>
+    <a href="#" class="cta">[ BOOT SEQUENCE ]</a>
+  </div>
+  <span class="section-num" style="color:#00ff41">01 / TERMINAL</span>
+</section>
+
+<!-- 02 SWISS -->
+<section class="hero h2" id="h2">
+  <div class="gridbg"></div>
+  <div class="vl">HELVETICA · GRID SYSTEM · 2025</div>
+  <div class="content">
+    <div class="ey">— SWISS INTERNATIONAL TYPOGRAPHIC STYLE —</div>
+    <h1>DESIGN<br>MATTERS</h1>
+    <div class="div"></div>
+    <div class="bot">
+      <div class="sub">Functional beauty. Grid structure.<br>Clarity above all else.</div>
+      <a href="#" class="cta">Discover Now</a>
+    </div>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.25)">02 / SWISS</span>
+</section>
+
+<!-- 03 WIREFRAME 3D -->
+<section class="hero h3" id="h3">
+  <canvas id="c3"></canvas>
+  <div class="content">
+    <div class="ey">// three.js · wireframe geometry</div>
+    <h1>VOID<br>SPACE</h1>
+    <div class="sub">ENTER THE WIREFRAME DIMENSION</div>
+    <a href="#" class="cta">Enter The Void</a>
+  </div>
+  <span class="section-num" style="color:rgba(150,100,255,.35)">03 / 3D WIREFRAME</span>
+</section>
+
+<!-- 04 SYNTHWAVE -->
+<section class="hero h4" id="h4">
+  <div class="sky"></div>
+  <canvas class="stars-c" id="sc"></canvas>
+  <div class="mtn"><svg viewBox="0 0 1440 110" preserveAspectRatio="none"><polygon points="0,110 180,22 320,65 500,12 680,52 880,18 1060,48 1260,20 1440,42 1440,110" fill="#06000e"/></svg></div>
+  <div class="sun"><div class="sun-s"><div class="ss"></div><div class="ss"></div><div class="ss"></div><div class="ss"></div></div></div>
+  <div class="gw"><div class="gp"></div></div>
+  <div class="content">
+    <h1>RETRO<br>WAVE</h1>
+    <div class="sub">◆ OUTRUN THE NEON NIGHT ◆</div>
+    <a href="#" class="cta">Drive Into Sunset</a>
+  </div>
+  <span class="section-num" style="color:rgba(255,96,200,.4)">04 / SYNTHWAVE</span>
+</section>
+
+<!-- 05 BOTANICAL -->
+<section class="hero h5" id="h5">
+  <svg class="leaf l1" viewBox="0 0 380 380"><path d="M190,380 C85,270 45,120 190,0 C335,120 295,270 190,380Z" fill="#7a9e6b" opacity="0.42"/><path d="M190,330 C120,240 85,130 190,20 L190,330Z" stroke="#3d5a3e" stroke-width="1" fill="none"/></svg>
+  <svg class="leaf l2" viewBox="0 0 320 320"><path d="M160,320 C72,230 38,95 160,0 C282,95 248,230 160,320Z" fill="#b07030" opacity="0.3"/></svg>
+  <svg class="leaf l3" viewBox="0 0 200 200"><path d="M100,200 C42,138 22,62 100,0 C178,62 158,138 100,200Z" fill="#7a9e6b" opacity="0.48"/></svg>
+  <svg class="leaf l4" viewBox="0 0 160 160"><path d="M80,160 C32,108 16,50 80,0 C144,50 128,108 80,160Z" fill="#b07030" opacity="0.38"/></svg>
+  <div class="content">
+    <div class="lbl">— Botanical Collection —</div>
+    <h1>The Art<br>of Nature</h1>
+    <div class="orn"></div>
+    <div class="sub">Where botanical elegance meets modern living.<br>A curated collection of natural beauty.</div>
+    <a href="#" class="cta">Explore Collection</a>
+  </div>
+  <span class="section-num" style="color:#3d5a3e">05 / BOTANICAL</span>
+</section>
+
+<!-- 06 LUXURY -->
+<section class="hero h6" id="h6">
+  <div class="vl vl-l"></div><div class="vl vl-r"></div>
+  <div class="content">
+    <div class="crown">✦ MAISON DE LUXE ✦</div>
+    <h1>Eternal<br>Radiance</h1>
+    <div class="rule"><div class="dia"></div></div>
+    <div class="sub">THE PINNACLE OF REFINEMENT</div>
+    <a href="#" class="cta">Enter Atelier</a>
+  </div>
+  <span class="section-num" style="color:rgba(201,162,39,.3)">06 / LUXURY</span>
+</section>
+
+<!-- 07 BRUTALISM -->
+<section class="hero h7" id="h7">
+  <div class="rb"></div>
+  <div class="content">
+    <div class="tag">★ ANTI-DESIGN ★</div>
+    <h1>MAKE<br><span class="ol">NOISE</span></h1>
+    <div class="stripe"></div>
+    <div class="row"><a href="#" class="cta">DISRUPT NOW</a><div class="yr">2025</div></div>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.2)">07 / BRUTALISM</span>
+</section>
+
+<!-- 08 AURORA -->
+<section class="hero h8" id="h8">
+  <div class="a1"></div><div class="a2"></div><div class="a3"></div>
+  <div class="content">
+    <div class="lbl">60°N — LATITUDE NORD</div>
+    <h1>NORTHERN<br><strong>LIGHTS</strong></h1>
+    <div class="sub">WHERE THE SKY DANCES</div>
+    <a href="#" class="cta">Explore North</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,255,140,.3)">08 / AURORA</span>
+</section>
+
+<!-- 09 CSS 3D CUBE -->
+<section class="hero h9" id="h9">
+  <div class="sw">
+    <div class="cube">
+      <div class="face front">◈</div><div class="face back">◉</div>
+      <div class="face right">◧</div><div class="face left">◨</div>
+      <div class="face top">◫</div><div class="face bottom">◪</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge">CSS ONLY — NO WEBGL</div>
+    <h1>THINK IN<br>THREE<br>DIMENSIONS</h1>
+    <div class="sub">Pure CSS 3D transforms. Perspective and imagination — nothing else required.</div>
+    <a href="#" class="cta">Explore Space</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.2)">09 / CSS 3D</span>
+</section>
+
+<!-- 10 GLASS -->
+<section class="hero h10" id="h10">
+  <div class="o1"></div><div class="o2"></div>
+  <div class="glass-card">
+    <div class="ey">✦ Cloud Collection ✦</div>
+    <h1>Float Above<br>the Clouds</h1>
+    <div class="sub">Frosted glass aesthetics for the modern digital experience. Blur the boundary between reality and design.</div>
+    <a href="#" class="cta">Explore Now</a>
+  </div>
+  <span class="section-num" style="color:rgba(255,255,255,.35)">10 / GLASSMORPHISM</span>
+</section>
+
+<!-- 11 ART DECO -->
+<section class="hero h11" id="h11">
+  <div class="frm"></div>
+  <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+  <svg class="geo" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+    <polygon points="400,0 800,300 400,600 0,300" stroke="#b48c14" stroke-width="2" fill="none"/>
+    <polygon points="400,60 740,300 400,540 60,300" stroke="#b48c14" stroke-width="1" fill="none"/>
+    <circle cx="400" cy="300" r="110" stroke="#b48c14" stroke-width="1" fill="none"/>
+    <circle cx="400" cy="300" r="210" stroke="#b48c14" stroke-width=".5" fill="none"/>
+    <circle cx="400" cy="300" r="310" stroke="#b48c14" stroke-width=".3" fill="none"/>
+    <polygon points="400,190 490,300 400,410 310,300" stroke="#b48c14" stroke-width="1.5" fill="none"/>
+    <line x1="0" y1="300" x2="800" y2="300" stroke="#b48c14" stroke-width=".5"/>
+    <line x1="400" y1="0" x2="400" y2="600" stroke="#b48c14" stroke-width=".5"/>
+  </svg>
+  <div class="content">
+    <div class="orn"><div class="dia"></div></div>
+    <h1>THE GRAND<br>GATSBY</h1>
+    <div class="sub">PARIS · MMXXV · HAUTE COUTURE</div>
+    <a href="#" class="cta">Discover</a>
+  </div>
+  <span class="section-num" style="color:rgba(180,140,20,.35)">11 / ART DECO</span>
+</section>
+
+<!-- 12 ACID Y2K -->
+<section class="hero h12" id="h12">
+  <div class="bl1"></div><div class="bl2"></div>
+  <div class="content">
+    <div class="tag">Y2K REVIVAL ✨</div>
+    <h1>TOTALLY<br>RADICAL</h1>
+    <div class="sub">⭐ Maximum chaos. Pure energy. ⭐</div>
+    <div class="stars"><span class="star">✦</span> <span class="star">★</span> <span class="star">✦</span></div>
+    <a href="#" class="cta">LET'S PARTY →</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.2)">12 / Y2K</span>
+</section>
+
+<!-- 13 PARTICLES -->
+<section class="hero h13" id="h13">
+  <canvas id="c13"></canvas>
+  <div class="content">
+    <div class="lbl">Neural Network Visualization</div>
+    <h1>CONNECT<br><span>THE</span> DOTS</h1>
+    <div class="metrics">
+      <div><div class="mv">12K</div><div class="ml">Nodes</div></div>
+      <div><div class="mv">99%</div><div class="ml">Accuracy</div></div>
+      <div><div class="mv">0.3ms</div><div class="ml">Latency</div></div>
+    </div>
+    <a href="#" class="cta">Explore Network</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,255,192,.3)">13 / PARTICLES</span>
+</section>
+
+<!-- 14 OCEAN -->
+<section class="hero h14" id="h14">
+  <div class="og"></div>
+  <div class="content">
+    <div class="depth">— DEPTH: 4,000m —</div>
+    <h1>ABYSS</h1>
+    <div class="gl"></div>
+    <div class="sub">WHERE LIGHT NEVER REACHES</div>
+    <a href="#" class="cta">Dive Deeper</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,200,255,.3)">14 / OCEAN</span>
+</section>
+
+<!-- 15 SPACE 3D -->
+<section class="hero h15" id="h15">
+  <canvas id="c15"></canvas>
+  <div class="neb"></div>
+  <div class="content">
+    <div class="miss">MISSION: DEEP SPACE EXPLORATION</div>
+    <h1>BEYOND THE<br><em>HORIZON</em></h1>
+    <div class="coords">RA 17h 45m 40.04s · DEC −29° 00′ 28.1″</div>
+    <a href="#" class="cta">LAUNCH</a>
+  </div>
+  <span class="section-num" style="color:rgba(123,97,255,.35)">15 / SPACE 3D</span>
+</section>
+
+<!-- 16 INK -->
+<section class="hero h16" id="h16">
+  <div class="kanji">墨</div>
+  <svg class="sp sp1" viewBox="0 0 450 450"><ellipse cx="225" cy="225" rx="190" ry="170" fill="#180800" transform="rotate(-20 225 225)"/><ellipse cx="320" cy="140" rx="95" ry="75" fill="#180800" transform="rotate(12 320 140)"/><circle cx="130" cy="330" r="55" fill="#180800"/></svg>
+  <svg class="sp sp2" viewBox="0 0 280 280"><ellipse cx="140" cy="140" rx="115" ry="95" fill="#180800" transform="rotate(28 140 140)"/></svg>
+  <div class="content">
+    <div class="vt"></div>
+    <h1>The Way<br>of the <em>Brush</em></h1>
+    <div class="sub">— ink on rice paper, circa 2025 —</div>
+    <div class="vb"></div>
+    <a href="#" class="cta">Enter the Studio</a>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.2)">16 / INK</span>
+</section>
+
+<!-- 17 EDITORIAL -->
+<section class="hero h17" id="h17">
+  <div class="sl"></div><div class="sl2"></div>
+  <div class="content">
+    <div class="vol">VOL. 01 — MARCH 2025 — ISSUE #47</div>
+    <h1>THE<br>FUTURE</h1>
+    <div class="ot">IS NOW</div>
+    <div class="bar">
+      <div class="bl">PHOTOGRAPHY · CULTURE · DESIGN</div>
+      <a href="#" class="cta">READ ISSUE</a>
+    </div>
+  </div>
+  <span class="section-num" style="color:rgba(0,0,0,.2)">17 / EDITORIAL</span>
+</section>
+
+<!-- 18 HOLO -->
+<section class="hero h18" id="h18">
+  <div class="hbg"></div>
+  <div class="flt" id="flt"></div>
+  <div class="content">
+    <h1>IRIDESCENT</h1>
+    <div class="dr"><div class="dl"></div><div class="dt">SPECTRUM EDITION</div><div class="dr2"></div></div>
+    <div class="sub">BEYOND THE VISIBLE SPECTRUM</div>
+    <a href="#" class="cta">Refract Reality</a>
+  </div>
+  <span class="section-num" style="color:rgba(255,255,255,.15)">18 / HOLOGRAPHIC</span>
+</section>
+
+<!-- 19 TORUS 3D -->
+<section class="hero h19" id="h19">
+  <canvas id="c19"></canvas>
+  <div class="content">
+    <div class="pre">— three.js sculpture —</div>
+    <h1>INFINITE<br><em>Loop</em></h1>
+    <div class="sub">Geometry in perpetual motion</div>
+    <a href="#" class="cta">Contemplate</a>
+  </div>
+  <span class="section-num" style="color:rgba(255,215,0,.3)">19 / TORUS 3D</span>
+</section>
+
+<!-- 20 INDUSTRIAL -->
+<section class="hero h20" id="h20">
+  <div class="conc"></div>
+  <div class="tape tt"></div>
+  <div class="tape tb"></div>
+  <div class="content">
+    <div class="warn"><span>⚠</span> INDUSTRIAL GRADE DESIGN</div>
+    <h1>HEAVY<br><span class="ac">DUTY</span></h1>
+    <div class="info">
+      <div class="ik">SECTOR</div><div class="iv">ZONE-7 ALPHA</div>
+      <div class="ik">STATUS</div><div class="iv">OPERATIONAL</div>
+      <div class="ik">LOAD</div><div class="iv">MAX CAPACITY</div>
+    </div>
+    <a href="#" class="cta">Deploy System</a>
+  </div>
+  <span class="section-num" style="color:rgba(245,197,0,.4)">20 / INDUSTRIAL</span>
+</section>
+
+<script>
+// ── NAV DOTS ──
+const nd = document.getElementById('nd');
+for(let i=1;i<=20;i++){
+  const d=document.createElement('div');
+  d.className='nav-dot';d.dataset.n=i;
+  d.addEventListener('click',()=>document.getElementById('h'+i).scrollIntoView({behavior:'smooth'}));
+  nd.appendChild(d);
+}
+const allH=document.querySelectorAll('.hero');
+const allD=document.querySelectorAll('.nav-dot');
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in-view');
+      const n=e.target.id.replace('h','');
+      allD.forEach(d=>d.classList.remove('active'));
+      const ad=document.querySelector('.nav-dot[data-n="'+n+'"]');
+      if(ad)ad.classList.add('active');
+    }
+  });
+},{threshold:.35}).observe && allH.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in-view');
+      const n=e.target.id.replace('h','');
+      allD.forEach(d=>d.classList.remove('active'));
+      const ad=document.querySelector('.nav-dot[data-n="'+n+'"]');
+      if(ad)ad.classList.add('active');
+    }
+  });
+},{threshold:.3}).observe(s));
+
+// ── 01 MATRIX ──
+(function(){
+  const c=document.getElementById('mc'),ctx=c.getContext('2d');
+  const resize=()=>{c.width=c.offsetWidth;c.height=c.offsetHeight};
+  resize();window.addEventListener('resize',resize);
+  const cols=Math.floor(c.width/14);
+  const drops=Array(cols).fill(1);
+  const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノABCDEFG0123456789';
+  setInterval(()=>{
+    ctx.fillStyle='rgba(0,0,0,.05)';ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ff41';ctx.font='12px monospace';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*14,y*14);
+      if(y*14>c.height&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    });
+  },50);
+})();
+
+// ── 04 STARS ──
+(function(){
+  const c=document.getElementById('sc'),ctx=c.getContext('2d');
+  const resize=()=>{c.width=c.offsetWidth;c.height=c.offsetHeight};
+  resize();window.addEventListener('resize',resize);
+  const stars=Array.from({length:220},()=>({x:Math.random(),y:Math.random()*0.55,s:Math.random()*1.8+.3,o:Math.random()}));
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{ctx.fillStyle=`rgba(255,255,255,${s.o})`;ctx.beginPath();ctx.arc(s.x*c.width,s.y*c.height,s.s,0,Math.PI*2);ctx.fill()});
+    requestAnimationFrame(draw);
+  }draw();
+})();
+
+// ── 03 WIREFRAME THREE.JS ──
+(function(){
+  const el=document.getElementById('h3');
+  const canvas=document.getElementById('c3');
+  let renderer,camera,scene,meshes=[];
+  function init(){
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+    renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(65,canvas.offsetWidth/canvas.offsetHeight,.1,200);
+    camera.position.set(0,0,10);
+    const mat=new THREE.MeshBasicMaterial({color:0x9966ff,wireframe:true});
+    [
+      [new THREE.IcosahedronGeometry(3,1),0,0,0],
+      [new THREE.OctahedronGeometry(1.4),4.5,1.5,-2],
+      [new THREE.TetrahedronGeometry(1.2),- 4,1,-3],
+      [new THREE.TorusGeometry(1,.35,8,20),3,-2,-4],
+    ].forEach(([g,x,y,z])=>{
+      const m=new THREE.Mesh(g,mat);m.position.set(x,y,z);scene.add(m);meshes.push(m);
+    });
+    window.addEventListener('resize',()=>{
+      renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
+      camera.aspect=canvas.offsetWidth/canvas.offsetHeight;camera.updateProjectionMatrix();
+    });
+  }
+  function animate(){requestAnimationFrame(animate);meshes.forEach((m,i)=>{m.rotation.x+=.003+i*.001;m.rotation.y+=.005+i*.0008});renderer.render(scene,camera);}
+  init();animate();
+})();
+
+// ── 13 PARTICLES ──
+(function(){
+  const canvas=document.getElementById('c13');
+  const ctx=canvas.getContext('2d');
+  const resize=()=>{canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight};
+  resize();window.addEventListener('resize',resize);
+  const N=90;
+  const pts=Array.from({length:N},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:Math.random()*2+1}));
+  function draw(){
+    canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width)p.vx*=-1;
+      if(p.y<0||p.y>canvas.height)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,255,192,.8)';ctx.fill();
+    });
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,255,192,${.35*(1-d/120)})`;ctx.lineWidth=.6;ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }draw();
+})();
+
+// ── 14 BUBBLES ──
+(function(){
+  const sec=document.getElementById('h14');
+  for(let i=0;i<18;i++){
+    const b=document.createElement('div');
+    b.className='bubble';
+    const sz=Math.random()*40+10;
+    b.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*12}s`;
+    sec.appendChild(b);
+  }
+})();
+
+// ── 15 SPACE THREE.JS ──
+(function(){
+  const canvas=document.getElementById('c15');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(70,canvas.offsetWidth/canvas.offsetHeight,.1,1000);
+  camera.position.z=5;
+  // Star field
+  const starGeo=new THREE.BufferGeometry();
+  const starPos=new Float32Array(6000);
+  for(let i=0;i<6000;i++)starPos[i]=(Math.random()-.5)*500;
+  starGeo.setAttribute('position',new THREE.BufferAttribute(starPos,3));
+  scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,size:.4,transparent:true,opacity:.75})));
+  // Planet
+  const planet=new THREE.Mesh(new THREE.SphereGeometry(1.6,32,32),new THREE.MeshStandardMaterial({color:0x1a0066,wireframe:false,roughness:.8,metalness:.2}));
+  planet.position.set(3.5,-1,-3);scene.add(planet);
+  // Ring
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(2.5,.05,8,100),new THREE.MeshBasicMaterial({color:0x4433ff,opacity:.3,transparent:true}));
+  ring.rotation.x=Math.PI/2.5;ring.position.set(3.5,-1,-3);scene.add(ring);
+  scene.add(new THREE.AmbientLight(0x222244,2));
+  const dl=new THREE.DirectionalLight(0x8866ff,3);dl.position.set(-5,5,5);scene.add(dl);
+  window.addEventListener('resize',()=>{renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);camera.aspect=canvas.offsetWidth/canvas.offsetHeight;camera.updateProjectionMatrix()});
+  function animate(){requestAnimationFrame(animate);planet.rotation.y+=.004;ring.rotation.z+=.002;scene.rotation.y+=.0003;renderer.render(scene,camera);}animate();
+})();
+
+// ── 18 FLOATERS ──
+(function(){
+  const c=document.getElementById('flt');
+  for(let i=0;i<12;i++){
+    const f=document.createElement('div');f.className='fl';
+    const sz=Math.random()*120+40;
+    f.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*90}%;top:${Math.random()*90}%;border-radius:${Math.random()>.5?'50%':'0'};animation-duration:${Math.random()*20+15}s;animation-delay:-${Math.random()*20}s`;
+    c.appendChild(f);
+  }
+})();
+
+// ── 19 TORUS KNOT THREE.JS ──
+(function(){
+  const canvas=document.getElementById('c19');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,canvas.offsetWidth/canvas.offsetHeight,.1,100);
+  camera.position.z=6;
+  // Torus knot
+  const geo=new THREE.TorusKnotGeometry(1.8,.5,160,24,2,3);
+  const mat=new THREE.MeshStandardMaterial({color:0xcc8800,metalness:.85,roughness:.15,emissive:0x221100});
+  const knot=new THREE.Mesh(geo,mat);scene.add(knot);
+  // Wire overlay
+  const wire=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffd700,wireframe:true,opacity:.08,transparent:true}));
+  scene.add(wire);
+  scene.add(new THREE.AmbientLight(0x221100,2));
+  const l1=new THREE.PointLight(0xffd700,8,20);l1.position.set(5,5,5);scene.add(l1);
+  const l2=new THREE.PointLight(0xff4400,5,20);l2.position.set(-5,-3,3);scene.add(l2);
+  window.addEventListener('resize',()=>{renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);camera.aspect=canvas.offsetWidth/canvas.offsetHeight;camera.updateProjectionMatrix()});
+  function animate(){requestAnimationFrame(animate);knot.rotation.x+=.006;knot.rotation.y+=.009;wire.rotation.x=knot.rotation.x;wire.rotation.y=knot.rotation.y;renderer.render(scene,camera);}animate();
+})();
+<\/script>
+</body>
+</html>
