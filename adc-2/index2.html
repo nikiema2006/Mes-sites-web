@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADC Import Export – Expéditions Chine · Dubaï · Turquie → Burkina Faso</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B6E;
+    --navy-dark: #07104A;
+    --navy-mid: #1a2a8f;
+    --orange: #F97316;
+    --orange-bright: #FB923C;
+    --orange-deep: #EA580C;
+    --white: #FFFFFF;
+    --off-white: #F8F9FF;
+    --grey-light: #EEF0FB;
+    --grey: #94A3B8;
+    --text-dark: #0F172A;
+    --text-mid: #334155;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 72px;
+    background: rgba(7, 16, 74, 0.92);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(249,115,22,0.2);
+    transition: all .3s ease;
+  }
+  nav.scrolled { height: 60px; background: rgba(7,16,74,0.98); }
+
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 44px; filter: brightness(1.1); }
+  .nav-logo span {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--white); letter-spacing: -0.02em;
+  }
+  .nav-logo span em { color: var(--orange); font-style: normal; }
+
+  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: .9rem; font-weight: 600;
+    transition: color .2s;
+    letter-spacing: .03em;
+  }
+  .nav-links a:hover { color: var(--orange); }
+
+  .nav-cta {
+    background: var(--orange);
+    color: white !important;
+    padding: .5rem 1.2rem;
+    border-radius: 6px;
+    transition: background .2s, transform .1s !important;
+  }
+  .nav-cta:hover { background: var(--orange-deep) !important; transform: translateY(-1px); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: white; border-radius: 2px; transition: all .3s; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    background: var(--navy-dark);
+    position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+    padding-top: 72px;
+  }
+
+  #hero-canvas {
+    position: absolute; inset: 0; pointer-events: none;
+    opacity: .55;
+  }
+
+  .hero-grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(249,115,22,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(249,115,22,.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5%;
+    max-width: 1280px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(249,115,22,.15);
+    border: 1px solid rgba(249,115,22,.35);
+    color: var(--orange-bright);
+    padding: .35rem .9rem; border-radius: 100px;
+    font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--orange); animation: pulse 1.5s infinite;
+  }
+
+  .hero-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800; font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    line-height: 1.1; color: var(--white);
+    margin-bottom: 1.5rem;
+    animation: fadeUp .7s .1s ease both;
+  }
+  .hero-title .highlight {
+    color: var(--orange);
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-desc {
+    color: rgba(255,255,255,.7);
+    font-size: 1.05rem; line-height: 1.8;
+    max-width: 500px; margin-bottom: 2rem;
+    animation: fadeUp .7s .2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp .7s .3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: white; padding: .85rem 2rem;
+    border-radius: 8px; font-weight: 700;
+    font-size: .95rem; text-decoration: none;
+    border: none; cursor: pointer;
+    transition: all .2s; display: inline-flex; align-items: center; gap: .5rem;
+    box-shadow: 0 8px 24px rgba(249,115,22,.35);
+  }
+  .btn-primary:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(249,115,22,.45); }
+
+  .btn-outline {
+    background: transparent;
+    color: white; padding: .85rem 2rem;
+    border-radius: 8px; font-weight: 700;
+    font-size: .95rem; text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,.3); cursor: pointer;
+    transition: all .2s; display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-outline:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+  /* Hero right side - visual cards */
+  .hero-visual {
+    animation: fadeUp .8s .4s ease both;
+    position: relative;
+  }
+
+  .hero-route-card {
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 16px; padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: transform .3s, border-color .3s;
+    cursor: default;
+  }
+  .hero-route-card:hover { transform: translateX(6px); border-color: rgba(249,115,22,.4); }
+
+  .route-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; }
+  .route-flag { font-size: 1.8rem; }
+  .route-tag {
+    background: var(--orange); color: white;
+    font-size: .7rem; font-weight: 700;
+    padding: .25rem .6rem; border-radius: 4px; letter-spacing: .06em;
+  }
+  .route-name { font-family: 'Sora', sans-serif; color: white; font-weight: 700; font-size: 1.05rem; }
+  .route-sub { color: rgba(255,255,255,.5); font-size: .82rem; margin-top: .2rem; }
+
+  .route-stats { display: flex; gap: 1.5rem; margin-top: .8rem; }
+  .route-stat { color: rgba(255,255,255,.7); font-size: .8rem; }
+  .route-stat strong { color: var(--orange-bright); display: block; font-size: .95rem; }
+
+  .hero-next-departure {
+    background: linear-gradient(135deg, rgba(249,115,22,.2), rgba(249,115,22,.05));
+    border: 1px solid rgba(249,115,22,.3);
+    border-radius: 12px; padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .departure-icon { font-size: 2rem; }
+  .departure-label { color: rgba(255,255,255,.6); font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; font-weight: 700; }
+  .departure-date { color: white; font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; margin-top: .2rem; }
+
+  /* ─── STATS BAND ─── */
+  .stats-band {
+    background: var(--orange);
+    padding: 1.5rem 5%;
+    display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; color: white; }
+  .stat-item strong { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; display: block; }
+  .stat-item span { font-size: .82rem; font-weight: 600; opacity: .85; letter-spacing: .05em; text-transform: uppercase; }
+
+  /* ─── SECTIONS COMMON ─── */
+  section { padding: 6rem 5%; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+
+  .section-tag {
+    display: inline-block;
+    color: var(--orange);
+    font-size: .78rem; font-weight: 800; letter-spacing: .12em;
+    text-transform: uppercase; margin-bottom: .8rem;
+    padding: .3rem .8rem;
+    background: rgba(249,115,22,.1);
+    border-radius: 4px; border-left: 3px solid var(--orange);
+  }
+
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy-dark); margin-bottom: 1rem;
+  }
+  .section-title span { color: var(--orange); }
+
+  .section-sub {
+    color: var(--text-mid); font-size: 1.05rem; line-height: 1.8;
+    max-width: 600px;
+  }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--off-white); }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+  .about-img-frame {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    border-radius: 20px; padding: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .about-img-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F97316' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .about-img-content { position: relative; z-index: 1; }
+  .about-img-content h3 { font-family: 'Sora', sans-serif; color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: .5rem; }
+  .about-img-content p { color: rgba(255,255,255,.7); font-size: .9rem; line-height: 1.7; }
+  .about-missions { margin-top: 1.5rem; display: flex; flex-direction: column; gap: .8rem; }
+  .about-mission-item {
+    display: flex; align-items: flex-start; gap: .8rem;
+    background: rgba(255,255,255,.07); border-radius: 10px; padding: .8rem 1rem;
+  }
+  .about-mission-item .icon { font-size: 1.3rem; flex-shrink: 0; }
+  .about-mission-item p { color: rgba(255,255,255,.8); font-size: .85rem; line-height: 1.5; }
+
+  .about-badge {
+    position: absolute; bottom: -1rem; right: -1rem;
+    background: var(--orange); color: white;
+    border-radius: 12px; padding: 1rem 1.3rem;
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: 1.4rem; text-align: center;
+    box-shadow: 0 8px 24px rgba(249,115,22,.4);
+  }
+  .about-badge small { display: block; font-size: .7rem; font-weight: 600; opacity: .85; }
+
+  .about-text { }
+  .about-text .section-title { margin-top: 1rem; }
+  .about-text .section-sub { margin-bottom: 2rem; }
+
+  .value-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .value-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: .9rem 1.2rem;
+    background: white; border-radius: 10px;
+    border-left: 4px solid var(--orange);
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .value-item:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+  .value-item .vi-icon { font-size: 1.3rem; }
+  .value-item .vi-text strong { display: block; font-weight: 700; font-size: .92rem; color: var(--navy); }
+  .value-item .vi-text span { font-size: .82rem; color: var(--text-mid); }
+
+  /* ─── SERVICES ─── */
+  #services { background: white; }
+
+  .services-header { text-align: center; margin-bottom: 3.5rem; }
+  .services-header .section-sub { margin: 0 auto; }
+
+  .origins-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem;
+  }
+
+  .origin-card {
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.1);
+    transition: transform .3s, box-shadow .3s;
+    position: relative; cursor: default;
+  }
+  .origin-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+
+  .origin-header {
+    padding: 2rem;
+    background: linear-gradient(160deg, var(--navy), var(--navy-mid));
+    position: relative; overflow: hidden;
+  }
+  .origin-header::after {
+    content: attr(data-flag);
+    position: absolute; right: -10px; top: -10px;
+    font-size: 6rem; opacity: .15; line-height: 1;
+  }
+  .origin-flag { font-size: 2.5rem; margin-bottom: .5rem; }
+  .origin-name { font-family: 'Sora', sans-serif; color: white; font-size: 1.3rem; font-weight: 800; }
+  .origin-tagline { color: rgba(255,255,255,.6); font-size: .82rem; margin-top: .3rem; }
+
+  .origin-body { padding: 1.5rem; background: white; }
+  .origin-items { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+  .origin-items li {
+    display: flex; align-items: center; gap: .6rem;
+    font-size: .88rem; color: var(--text-mid);
+  }
+  .origin-items li::before { content: '✓'; color: var(--orange); font-weight: 700; }
+
+  .origin-footer {
+    padding: 1rem 1.5rem;
+    background: var(--grey-light);
+    border-top: 1px solid rgba(0,0,0,.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .origin-mode { font-size: .78rem; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .06em; }
+  .origin-transit { font-size: .78rem; color: var(--orange); font-weight: 600; }
+
+  /* Service modes */
+  .modes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .mode-card {
+    border-radius: 16px; padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: transform .3s;
+  }
+  .mode-card:hover { transform: translateY(-4px); }
+  .mode-card.air {
+    background: linear-gradient(135deg, #0D1B6E 0%, #1a2a8f 100%);
+    border: 1px solid rgba(249,115,22,.2);
+  }
+  .mode-card.sea {
+    background: linear-gradient(135deg, #0c2461, #1e3799);
+    border: 1px solid rgba(100,160,255,.2);
+  }
+  .mode-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .mode-title { font-family: 'Sora', sans-serif; color: white; font-weight: 800; font-size: 1.2rem; margin-bottom: .5rem; }
+  .mode-badge {
+    display: inline-block; padding: .25rem .7rem; border-radius: 4px;
+    font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .mode-card.air .mode-badge { background: rgba(249,115,22,.2); color: var(--orange-bright); }
+  .mode-card.sea .mode-badge { background: rgba(100,160,255,.2); color: #93C5FD; }
+  .mode-rate {
+    font-family: 'Space Mono', monospace;
+    color: white; font-size: 1.4rem; font-weight: 700;
+    margin-bottom: .3rem;
+  }
+  .mode-unit { color: rgba(255,255,255,.5); font-size: .8rem; }
+  .mode-desc { color: rgba(255,255,255,.7); font-size: .85rem; line-height: 1.7; margin-top: .8rem; }
+
+  /* ─── CALCULATOR ─── */
+  #calculateur { background: var(--navy-dark); position: relative; overflow: hidden; }
+  #calculateur::before {
+    content: '';
+    position: absolute; top: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(249,115,22,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #calculateur::after {
+    content: '';
+    position: absolute; bottom: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(13,27,110,.5) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .calc-inner { position: relative; z-index: 1; }
+  .calc-header { text-align: center; margin-bottom: 3rem; }
+  .calc-header .section-tag { color: var(--orange-bright); }
+  .calc-header .section-title { color: white; }
+  .calc-header .section-sub { color: rgba(255,255,255,.6); margin: 0 auto; }
+
+  .calc-container {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 24px; padding: 2.5rem;
+    max-width: 900px; margin: 0 auto;
+    backdrop-filter: blur(10px);
+  }
+
+  .calc-tabs {
+    display: flex; gap: .5rem; margin-bottom: 2rem;
+    background: rgba(255,255,255,.06); border-radius: 12px; padding: .4rem;
+  }
+  .calc-tab {
+    flex: 1; padding: .8rem 1rem;
+    border-radius: 8px; border: none;
+    font-family: 'Nunito', sans-serif; font-size: .9rem; font-weight: 700;
+    cursor: pointer; transition: all .2s;
+    color: rgba(255,255,255,.5); background: transparent;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+  }
+  .calc-tab.active {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 4px 16px rgba(249,115,22,.35);
+  }
+
+  .calc-panel { display: none; }
+  .calc-panel.active { display: block; }
+
+  .calc-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+  }
+
+  .calc-field { display: flex; flex-direction: column; gap: .5rem; }
+  .calc-field label {
+    color: rgba(255,255,255,.7); font-size: .83rem; font-weight: 700;
+    letter-spacing: .05em; text-transform: uppercase;
+  }
+  .calc-field input, .calc-field select {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    color: white; padding: .85rem 1rem;
+    border-radius: 10px; font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    transition: border-color .2s, background .2s;
+    outline: none; appearance: none;
+  }
+  .calc-field input:focus, .calc-field select:focus {
+    border-color: var(--orange); background: rgba(249,115,22,.08);
+  }
+  .calc-field select option { background: var(--navy); }
+
+  .calc-hint {
+    display: flex; align-items: flex-start; gap: .6rem;
+    background: rgba(249,115,22,.1); border: 1px solid rgba(249,115,22,.2);
+    border-radius: 10px; padding: .9rem 1.1rem; margin-bottom: 1.5rem;
+  }
+  .calc-hint .hint-icon { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
+  .calc-hint p { color: rgba(255,255,255,.7); font-size: .8rem; line-height: 1.6; }
+  .calc-hint strong { color: var(--orange-bright); }
+
+  .calc-result {
+    background: linear-gradient(135deg, rgba(249,115,22,.2), rgba(249,115,22,.08));
+    border: 1px solid rgba(249,115,22,.35);
+    border-radius: 16px; padding: 2rem;
+    text-align: center; margin-top: 1rem;
+    display: none;
+  }
+  .calc-result.visible { display: block; }
+  .result-label { color: rgba(255,255,255,.6); font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .5rem; }
+  .result-amount {
+    font-family: 'Sora', sans-serif; color: var(--orange);
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+    margin-bottom: .5rem;
+  }
+  .result-breakdown {
+    color: rgba(255,255,255,.5); font-size: .82rem; margin-bottom: 1.2rem;
+  }
+  .result-note {
+    font-size: .78rem; color: rgba(255,255,255,.4); font-style: italic;
+  }
+
+  .calc-btn {
+    width: 100%; padding: 1rem;
+    background: var(--orange); color: white;
+    border: none; border-radius: 10px; font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 800; cursor: pointer;
+    transition: all .2s; letter-spacing: .03em;
+    box-shadow: 0 4px 20px rgba(249,115,22,.3);
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+  }
+  .calc-btn:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,.45); }
+
+  /* ─── DEPARTURES ─── */
+  #departs { background: var(--off-white); }
+  .departs-header { margin-bottom: 3rem; }
+
+  .departs-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 3rem; align-items: start; }
+
+  .departs-info-card {
+    background: linear-gradient(160deg, var(--navy), var(--navy-mid));
+    border-radius: 20px; padding: 2rem;
+    position: sticky; top: 90px;
+  }
+  .departs-info-card h3 { font-family: 'Sora', sans-serif; color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: .5rem; }
+  .departs-info-card p { color: rgba(255,255,255,.65); font-size: .88rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .dep-contact { display: flex; flex-direction: column; gap: .8rem; }
+  .dep-contact a {
+    display: flex; align-items: center; gap: .8rem;
+    background: rgba(255,255,255,.08); border-radius: 10px;
+    padding: .8rem 1rem; text-decoration: none;
+    color: white; font-weight: 600; font-size: .9rem;
+    transition: background .2s;
+  }
+  .dep-contact a:hover { background: rgba(249,115,22,.25); }
+  .dep-contact a .icon { font-size: 1.1rem; }
+
+  .dep-guarantee {
+    margin-top: 1.5rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .dep-guarantee p { color: rgba(255,255,255,.5); font-size: .78rem; margin-bottom: .5rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .guarantee-badges { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .g-badge {
+    background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.25);
+    color: var(--orange-bright); border-radius: 6px;
+    padding: .3rem .7rem; font-size: .75rem; font-weight: 700;
+  }
+
+  /* Calendar */
+  .departs-calendar { }
+  .calendar-month { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; display: flex; align-items: center; gap: .8rem; }
+  .calendar-month span { background: var(--navy); color: white; padding: .3rem .8rem; border-radius: 6px; font-size: .8rem; }
+
+  .departure-list { display: flex; flex-direction: column; gap: 1rem; }
+  .dep-item {
+    background: white; border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    display: flex; align-items: center; gap: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    border-left: 4px solid var(--orange);
+    transition: transform .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+  }
+  .dep-item:hover { transform: translateX(4px); box-shadow: 0 4px 24px rgba(0,0,0,.12); }
+  .dep-item.next { border-left-color: #22c55e; }
+  .dep-item.next::before {
+    content: 'PROCHAIN';
+    position: absolute; top: 8px; right: 12px;
+    background: #22c55e; color: white;
+    font-size: .65rem; font-weight: 800; letter-spacing: .08em;
+    padding: .2rem .5rem; border-radius: 4px;
+  }
+
+  .dep-date-box {
+    background: var(--navy); color: white;
+    border-radius: 10px; padding: .6rem .9rem; text-align: center;
+    min-width: 60px; flex-shrink: 0;
+  }
+  .dep-date-box .day { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1; }
+  .dep-date-box .month { font-size: .68rem; font-weight: 700; opacity: .6; text-transform: uppercase; letter-spacing: .06em; margin-top: .2rem; }
+
+  .dep-meta { flex: 1; }
+  .dep-route { font-weight: 700; color: var(--navy); font-size: .95rem; }
+  .dep-details { color: var(--text-mid); font-size: .82rem; margin-top: .2rem; }
+  .dep-modes { display: flex; gap: .4rem; margin-top: .5rem; }
+  .dep-mode { font-size: .7rem; font-weight: 700; padding: .2rem .5rem; border-radius: 4px; }
+  .dep-mode.air { background: rgba(13,27,110,.1); color: var(--navy); }
+  .dep-mode.sea { background: rgba(30,55,153,.1); color: #1a2a8f; }
+
+  .dep-cta {
+    background: var(--orange); color: white;
+    border-radius: 8px; padding: .6rem 1rem;
+    font-size: .8rem; font-weight: 700; text-decoration: none;
+    white-space: nowrap; transition: background .2s;
+  }
+  .dep-cta:hover { background: var(--orange-deep); }
+
+  /* ─── WHY US ─── */
+  #pourquoi { background: white; }
+  .pourquoi-header { text-align: center; margin-bottom: 3.5rem; }
+  .pourquoi-header .section-sub { margin: 0 auto; }
+
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .feature-card {
+    padding: 2rem; border-radius: 16px;
+    background: var(--off-white);
+    border: 1px solid rgba(0,0,0,.06);
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--orange); transform: scaleX(0); transform-origin: left;
+    transition: transform .3s;
+  }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.1); border-color: transparent; }
+  .feature-card:hover::before { transform: scaleX(1); }
+
+  .feature-icon {
+    width: 52px; height: 52px;
+    background: rgba(249,115,22,.12); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.2rem;
+  }
+  .feature-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--navy); margin-bottom: .5rem; }
+  .feature-desc { font-size: .88rem; color: var(--text-mid); line-height: 1.7; }
+
+  /* ─── PROCESS ─── */
+  #processus { background: var(--navy-dark); }
+  .processus-header { text-align: center; margin-bottom: 3.5rem; }
+  .processus-header .section-title { color: white; }
+  .processus-header .section-sub { color: rgba(255,255,255,.6); margin: 0 auto; }
+
+  .process-timeline {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1rem; position: relative;
+  }
+  .process-timeline::before {
+    content: '';
+    position: absolute; top: 28px; left: 10%; right: 10%;
+    height: 2px; background: rgba(249,115,22,.3); z-index: 0;
+  }
+  .process-step { text-align: center; position: relative; z-index: 1; }
+  .step-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,.06); border: 2px solid rgba(249,115,22,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin: 0 auto 1rem;
+    transition: all .3s;
+  }
+  .process-step:hover .step-circle { background: var(--orange); border-color: var(--orange); }
+  .step-num {
+    position: absolute; top: -6px; right: calc(50% - 28px - 4px);
+    background: var(--orange); color: white; width: 20px; height: 20px;
+    border-radius: 50%; font-size: .68rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-title { color: white; font-weight: 700; font-size: .88rem; margin-bottom: .3rem; }
+  .step-desc { color: rgba(255,255,255,.5); font-size: .78rem; line-height: 1.6; }
+
+  /* ─── TESTIMONIALS ─── */
+  #temoignages { background: var(--off-white); }
+  .temoignages-header { text-align: center; margin-bottom: 3rem; }
+  .temoignages-header .section-sub { margin: 0 auto; }
+
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .testimonial-card {
+    background: white; border-radius: 16px; padding: 1.8rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.07);
+    position: relative; transition: transform .3s, box-shadow .3s;
+  }
+  .testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.12); }
+  .t-quote { font-size: 2.5rem; color: var(--orange); line-height: 1; margin-bottom: .5rem; font-family: Georgia, serif; }
+  .t-text { color: var(--text-mid); font-size: .9rem; line-height: 1.75; margin-bottom: 1.2rem; font-style: italic; }
+  .t-author { display: flex; align-items: center; gap: .8rem; padding-top: 1rem; border-top: 1px solid var(--grey-light); }
+  .t-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--navy); display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1rem; font-weight: 700; flex-shrink: 0;
+  }
+  .t-name { font-weight: 700; color: var(--navy); font-size: .88rem; }
+  .t-role { color: var(--grey); font-size: .78rem; margin-top: .1rem; }
+  .t-stars { color: var(--orange); font-size: .9rem; margin-bottom: .6rem; }
+
+  /* ─── FAQ ─── */
+  #faq { background: white; }
+  .faq-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+
+  .faq-sidebar { position: sticky; top: 90px; }
+  .faq-sidebar h3 { font-family: 'Sora', sans-serif; color: var(--navy); font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+  .faq-sidebar p { color: var(--text-mid); line-height: 1.7; font-size: .9rem; margin-bottom: 1.5rem; }
+
+  .faq-contact-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    border-radius: 14px; padding: 1.5rem;
+  }
+  .faq-contact-card p { color: rgba(255,255,255,.7); font-size: .85rem; margin-bottom: 1rem; }
+  .faq-contact-card a {
+    display: block; color: white; font-weight: 700;
+    margin-bottom: .5rem; text-decoration: none; font-size: .95rem;
+  }
+  .faq-contact-card a:hover { color: var(--orange); }
+
+  .faq-list { display: flex; flex-direction: column; gap: .8rem; }
+  .faq-item {
+    border: 1px solid rgba(0,0,0,.08); border-radius: 12px;
+    overflow: hidden; transition: border-color .2s;
+  }
+  .faq-item.open { border-color: rgba(249,115,22,.4); }
+
+  .faq-question {
+    padding: 1.1rem 1.4rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    cursor: pointer; background: white;
+    font-weight: 700; color: var(--navy); font-size: .92rem;
+    user-select: none; transition: background .2s;
+  }
+  .faq-question:hover { background: var(--off-white); }
+  .faq-item.open .faq-question { background: rgba(249,115,22,.06); }
+  .faq-arrow {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--grey-light); display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; color: var(--navy); transition: transform .3s, background .2s;
+  }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); background: var(--orange); color: white; }
+  .faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease;
+    padding: 0 1.4rem; color: var(--text-mid); font-size: .88rem; line-height: 1.8;
+  }
+  .faq-item.open .faq-answer { max-height: 300px; padding: .2rem 1.4rem 1.2rem; }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--navy-dark); position: relative; overflow: hidden; }
+  #contact::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(249,115,22,.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .contact-inner { position: relative; z-index: 1; }
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+
+  .contact-info .section-title { color: white; }
+  .contact-info .section-sub { color: rgba(255,255,255,.6); margin-bottom: 2rem; }
+
+  .contact-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-card {
+    display: flex; align-items: center; gap: 1.2rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px; padding: 1.1rem 1.4rem;
+    text-decoration: none; color: white;
+    transition: border-color .2s, background .2s, transform .2s;
+  }
+  .contact-card:hover { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.08); transform: translateX(4px); }
+  .contact-card .cc-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(249,115,22,.15); display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .contact-card .cc-label { font-size: .75rem; color: rgba(255,255,255,.5); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+  .contact-card .cc-value { font-weight: 700; font-size: .95rem; margin-top: .15rem; }
+
+  .contact-social { margin-top: 2rem; }
+  .contact-social p { color: rgba(255,255,255,.5); font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .8rem; }
+  .social-links { display: flex; gap: .8rem; }
+  .social-link {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1rem; text-decoration: none;
+    transition: all .2s;
+  }
+  .social-link:hover { background: var(--orange); border-color: var(--orange); transform: translateY(-2px); }
+
+  /* Contact form */
+  .contact-form {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px);
+  }
+  .contact-form h3 { font-family: 'Sora', sans-serif; color: white; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+  .form-field:last-of-type { margin-bottom: 0; }
+  .form-field label { color: rgba(255,255,255,.6); font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+  .form-field input, .form-field select, .form-field textarea {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
+    color: white; padding: .8rem 1rem; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: .92rem;
+    outline: none; transition: border-color .2s, background .2s;
+    resize: vertical;
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+    border-color: var(--orange); background: rgba(249,115,22,.07);
+  }
+  .form-field select option { background: var(--navy); }
+  .form-field textarea { min-height: 100px; }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,.3); }
+
+  .form-submit {
+    width: 100%; margin-top: 1.2rem;
+    background: var(--orange); color: white; border: none;
+    padding: 1rem; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; transition: all .2s;
+    box-shadow: 0 4px 20px rgba(249,115,22,.3);
+  }
+  .form-submit:hover { background: var(--orange-deep); transform: translateY(-2px); }
+
+  .form-success {
+    display: none; text-align: center; padding: 2rem;
+    color: white;
+  }
+  .form-success.visible { display: block; }
+  .form-success .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .form-success h4 { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: .5rem; }
+  .form-success p { color: rgba(255,255,255,.6); font-size: .9rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #050D3A; padding: 3rem 5% 1.5rem;
+    border-top: 1px solid rgba(249,115,22,.2);
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  .footer-brand p { color: rgba(255,255,255,.5); font-size: .85rem; line-height: 1.8; margin: 1rem 0; max-width: 300px; }
+  .footer-logo { display: flex; align-items: center; gap: .8rem; }
+  .footer-logo img { height: 40px; }
+  .footer-logo span { font-family: 'Sora', sans-serif; color: white; font-weight: 800; font-size: 1rem; }
+  .footer-logo span em { color: var(--orange); font-style: normal; }
+
+  .footer-col h4 { font-family: 'Sora', sans-serif; color: white; font-weight: 700; font-size: .9rem; margin-bottom: 1.2rem; letter-spacing: .04em; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+  .footer-links a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--orange); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom p { color: rgba(255,255,255,.35); font-size: .8rem; }
+  .footer-badges { display: flex; gap: .5rem; }
+  .f-badge {
+    background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.2);
+    color: rgba(255,255,255,.5); border-radius: 4px;
+    padding: .25rem .6rem; font-size: .7rem; font-weight: 600;
+  }
+
+  /* ─── WHATSAPP FLOAT ─── */
+  .whatsapp-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; text-decoration: none; color: white;
+    box-shadow: 0 6px 24px rgba(37,211,102,.4);
+    transition: transform .3s, box-shadow .3s;
+    animation: bounce 3s ease infinite 2s;
+  }
+  .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(37,211,102,.5); animation: none; }
+  .whatsapp-tooltip {
+    position: absolute; right: 68px;
+    background: var(--navy-dark); color: white;
+    padding: .5rem .9rem; border-radius: 8px; font-size: .78rem; font-weight: 600;
+    white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .whatsapp-float:hover .whatsapp-tooltip { opacity: 1; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: .6; }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes planefly {
+    0% { transform: translateX(-120%) translateY(20px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(200%) translateY(-40px); opacity: 0; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-visual { display: none; }
+    .origins-grid { grid-template-columns: 1fr 1fr; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .process-timeline { grid-template-columns: repeat(3, 1fr); }
+    .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .departs-layout { grid-template-columns: 1fr; }
+    .departs-info-card { position: static; }
+    .faq-layout { grid-template-columns: 1fr; }
+    .faq-sidebar { position: static; }
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 4rem 5%; }
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--navy-dark); padding: 1.5rem; gap: 1rem; border-bottom: 1px solid rgba(249,115,22,.2); }
+    .hamburger { display: flex; }
+    .origins-grid { grid-template-columns: 1fr; }
+    .modes-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .process-timeline { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .stats-band { gap: 2rem; }
+    .calc-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg width="44" height="44" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="80" cy="80" r="72" fill="#0D1B6E" stroke="#F97316" stroke-width="4"/>
+      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#F97316" font-family="Sora,sans-serif" font-weight="800" font-size="60">ADC</text>
+      <path d="M30 105 Q80 120 130 105" stroke="#F97316" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span>ADC <em>Cargo</em></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#calculateur">Calculateur</a></li>
+    <li><a href="#departs">Départs</a></li>
+    <li><a href="#pourquoi">Pourquoi nous</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Nous contacter</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Service garanti 100%
+      </div>
+      <h1 class="hero-title">
+        Expédiez depuis la<br>
+        <span class="highlight">Chine, Dubaï</span><br>
+        & Turquie vers le<br>
+        Burkina Faso
+      </h1>
+      <p class="hero-desc">
+        ADC Cargo, votre partenaire de confiance pour l'import-export en Afrique de l'Ouest. Service rapide, sécurisé, suivi en temps réel.
+      </p>
+      <div class="hero-actions">
+        <a href="#calculateur" class="btn-primary">
+          📦 Calculer mon expédition
+        </a>
+        <a href="#departs" class="btn-outline">
+          ✈️ Voir les départs
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-route-card">
+        <div class="route-header">
+          <span class="route-flag">🇨🇳</span>
+          <span class="route-tag">ACTIF</span>
+        </div>
+        <div class="route-name">Chine → Burkina Faso</div>
+        <div class="route-sub">Canton · Shanghai · Yiwu</div>
+        <div class="route-stats">
+          <div class="route-stat"><strong>15–25j</strong>Maritime</div>
+          <div class="route-stat"><strong>7–12j</strong>Aérien</div>
+          <div class="route-stat"><strong>100%</strong>Garanti</div>
+        </div>
+      </div>
+      <div class="hero-route-card">
+        <div class="route-header">
+          <span class="route-flag">🇦🇪</span>
+          <span class="route-tag">ACTIF</span>
+        </div>
+        <div class="route-name">Dubaï → Burkina Faso</div>
+        <div class="route-sub">Jebel Ali · Dubai Airport</div>
+        <div class="route-stats">
+          <div class="route-stat"><strong>10–18j</strong>Maritime</div>
+          <div class="route-stat"><strong>5–8j</strong>Aérien</div>
+          <div class="route-stat"><strong>100%</strong>Garanti</div>
+        </div>
+      </div>
+      <div class="hero-next-departure">
+        <span class="departure-icon">✈️</span>
+        <div>
+          <div class="departure-label">Prochain départ</div>
+          <div class="departure-date">27 Décembre 2025 — Tous corridors</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-item"><strong>3</strong><span>Pays sources</span></div>
+  <div class="stat-item"><strong>2</strong><span>Modes de transport</span></div>
+  <div class="stat-item"><strong>100%</strong><span>Garanti & Sécurisé</span></div>
+  <div class="stat-item"><strong>5</strong><span>Départs/mois</span></div>
+  <div class="stat-item"><strong>24/7</strong><span>Service client</span></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-img-frame">
+          <div class="about-img-content">
+            <h3>Notre Mission</h3>
+            <p>Rendre l'import-export accessible, fiable et transparent pour tous les entrepreneurs d'Afrique de l'Ouest.</p>
+            <div class="about-missions">
+              <div class="about-mission-item">
+                <span class="icon">🛡️</span>
+                <p><strong>Sécurité totale</strong> — Chaque colis est suivi et confirmé à réception</p>
+              </div>
+              <div class="about-mission-item">
+                <span class="icon">⚡</span>
+                <p><strong>Rapidité d'exécution</strong> — Délais optimisés selon la voie choisie</p>
+              </div>
+              <div class="about-mission-item">
+                <span class="icon">🤝</span>
+                <p><strong>Accompagnement humain</strong> — Un conseiller dédié pour chaque client</p>
+              </div>
+              <div class="about-mission-item">
+                <span class="icon">💰</span>
+                <p><strong>Tarifs transparents</strong> — Pas de frais cachés, pas de mauvaise surprise</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-badge">
+          +500<small>Clients satisfaits</small>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <div class="section-tag">Qui sommes-nous</div>
+        <h2 class="section-title">ADC Cargo, votre pont entre<br><span>l'Asie, le Moyen-Orient</span><br>et le Burkina Faso</h2>
+        <p class="section-sub">Spécialisés dans le fret international depuis et vers le Burkina Faso, nous offrons des solutions d'expédition complètes — par voie aérienne et maritime — depuis la Chine, Dubaï et la Turquie.</p>
+        <div class="value-list">
+          <div class="value-item">
+            <span class="vi-icon">📦</span>
+            <div class="vi-text">
+              <strong>Fret Aérien & Maritime</strong>
+              <span>Solutions adaptées à chaque type de marchandise et budget</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="vi-icon">📱</span>
+            <div class="vi-text">
+              <strong>Suivi WhatsApp en temps réel</strong>
+              <span>Confirmation de réception et mises à jour instantanées</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="vi-icon">🧾</span>
+            <div class="vi-text">
+              <strong>Gestion documentaire complète</strong>
+              <span>Dédouanement, documents d'expédition, certificats</span>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="vi-icon">🚚</span>
+            <div class="vi-text">
+              <strong>Livraison à domicile disponible</strong>
+              <span>Ouagadougou et principales villes du Burkina Faso</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="services-header reveal">
+      <div class="section-tag">Nos services</div>
+      <h2 class="section-title">Trois corridors, <span>deux modes de transport</span></h2>
+      <p class="section-sub">Que vous importiez depuis la Chine, Dubaï ou la Turquie, nous avons la solution d'expédition qui vous convient.</p>
+    </div>
+    <div class="origins-grid reveal">
+      <div class="origin-card">
+        <div class="origin-header" data-flag="🇨🇳">
+          <div class="origin-flag">🇨🇳</div>
+          <div class="origin-name">Chine</div>
+          <div class="origin-tagline">Canton · Shanghai · Yiwu · Guangzhou</div>
+        </div>
+        <div class="origin-body">
+          <ul class="origin-items">
+            <li>Électronique & téléphonie</li>
+            <li>Textile & confection</li>
+            <li>Matériaux de construction</li>
+            <li>Équipements industriels</li>
+            <li>Articles ménagers & décoration</li>
+            <li>Produits cosmétiques</li>
+          </ul>
+        </div>
+        <div class="origin-footer">
+          <span class="origin-mode">✈️ Aérien &nbsp; 🚢 Maritime</span>
+          <span class="origin-transit">Délai : 7–25 jours</span>
+        </div>
+      </div>
+      <div class="origin-card">
+        <div class="origin-header" data-flag="🇦🇪">
+          <div class="origin-flag">🇦🇪</div>
+          <div class="origin-name">Dubaï</div>
+          <div class="origin-tagline">Jebel Ali · DAFZA · Dubai Airport</div>
+        </div>
+        <div class="origin-body">
+          <ul class="origin-items">
+            <li>Électronique & high-tech</li>
+            <li>Or & bijouterie</li>
+            <li>Parfums & cosmétiques</li>
+            <li>Vêtements de marque</li>
+            <li>Alimentaire & épices</li>
+            <li>Pièces automobiles</li>
+          </ul>
+        </div>
+        <div class="origin-footer">
+          <span class="origin-mode">✈️ Aérien &nbsp; 🚢 Maritime</span>
+          <span class="origin-transit">Délai : 5–18 jours</span>
+        </div>
+      </div>
+      <div class="origin-card">
+        <div class="origin-header" data-flag="🇹🇷">
+          <div class="origin-flag">🇹🇷</div>
+          <div class="origin-name">Turquie</div>
+          <div class="origin-tagline">Istanbul · Izmir · Mersin</div>
+        </div>
+        <div class="origin-body">
+          <ul class="origin-items">
+            <li>Textile & mode</li>
+            <li>Cuir & maroquinerie</li>
+            <li>Produits alimentaires</li>
+            <li>Meubles & ameublement</li>
+            <li>Matériaux de construction</li>
+            <li>Équipements médicaux</li>
+          </ul>
+        </div>
+        <div class="origin-footer">
+          <span class="origin-mode">✈️ Aérien &nbsp; 🚢 Maritime</span>
+          <span class="origin-transit">Délai : 8–20 jours</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modes de transport -->
+    <div class="modes-grid reveal">
+      <div class="mode-card air">
+        <div class="mode-icon">✈️</div>
+        <div class="mode-badge">Voie Aérienne</div>
+        <div class="mode-title">Fret Aérien — Prix au kg</div>
+        <div class="mode-rate">6 000 FCFA</div>
+        <div class="mode-unit">par kilogramme (kg)</div>
+        <div class="mode-desc">
+          Idéal pour les marchandises légères, urgentes ou à haute valeur ajoutée. Le tarif est calculé au <strong style="color:#FB923C">kilogramme</strong> — unité de mesure standard pour la voie aérienne. Délais courts, traçabilité maximale, confirmation de livraison garantie.
+        </div>
+      </div>
+      <div class="mode-card sea">
+        <div class="mode-icon">🚢</div>
+        <div class="mode-badge">Voie Maritime</div>
+        <div class="mode-title">Fret Maritime — Prix au CBM</div>
+        <div class="mode-rate">230 000 FCFA</div>
+        <div class="mode-unit">par mètre cube (CBM)</div>
+        <div class="mode-desc">
+          Optimal pour les grandes quantités et marchandises volumineuses. Le tarif est calculé au <strong style="color:#93C5FD">CBM (Cubic Meter / mètre cube)</strong> — unité de volume utilisée en fret maritime : 1 CBM = 1m × 1m × 1m. Tarif économique pour les gros volumes.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculateur">
+  <div class="section-inner calc-inner">
+    <div class="calc-header reveal">
+      <div class="section-tag">Outil de devis</div>
+      <h2 class="section-title" style="color:white">Calculateur d'<span>estimation</span> de fret</h2>
+      <p class="section-sub">Obtenez une estimation instantanée du coût de votre expédition en fonction du poids ou du volume.</p>
+    </div>
+
+    <div class="calc-container reveal">
+      <div class="calc-tabs">
+        <button class="calc-tab active" onclick="switchTab('air')">
+          ✈️ Voie Aérienne (kg)
+        </button>
+        <button class="calc-tab" onclick="switchTab('sea')">
+          🚢 Voie Maritime (CBM)
+        </button>
+      </div>
+
+      <!-- AIR PANEL -->
+      <div class="calc-panel active" id="panel-air">
+        <div class="calc-hint">
+          <span class="hint-icon">ℹ️</span>
+          <p><strong>Voie aérienne — tarif au kilogramme :</strong> Le fret aérien est facturé en fonction du poids réel ou du poids volumétrique de votre colis (le plus élevé des deux est retenu). Tarif : <strong>6 000 FCFA / kg</strong>. Idéal pour les expéditions urgentes, les petits volumes ou les marchandises de valeur.</p>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Poids total (kg)</label>
+            <input type="number" id="air-poids" placeholder="Ex : 50" min="0.1" step="0.1">
+          </div>
+          <div class="calc-field">
+            <label>Origine</label>
+            <select id="air-origine">
+              <option value="chine">🇨🇳 Chine</option>
+              <option value="dubai">🇦🇪 Dubaï</option>
+              <option value="turquie">🇹🇷 Turquie</option>
+            </select>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calculateAir()">
+          🧮 Calculer l'estimation
+        </button>
+        <div class="calc-result" id="result-air">
+          <div class="result-label">Estimation du coût de fret aérien</div>
+          <div class="result-amount" id="air-total"></div>
+          <div class="result-breakdown" id="air-breakdown"></div>
+          <div class="result-note">* Cette estimation est indicative. Contactez-nous pour un devis précis incluant le dédouanement et les frais annexes.</div>
+        </div>
+      </div>
+
+      <!-- SEA PANEL -->
+      <div class="calc-panel" id="panel-sea">
+        <div class="calc-hint">
+          <span class="hint-icon">ℹ️</span>
+          <p><strong>Voie maritime — tarif au CBM (mètre cube) :</strong> Le CBM (Cubic Meter) est l'unité de volume utilisée dans le fret maritime. 1 CBM = 1 mètre × 1 mètre × 1 mètre. Pour calculer votre CBM : <strong>Longueur (m) × Largeur (m) × Hauteur (m)</strong>. Tarif : <strong>230 000 FCFA / CBM</strong>. Optimal pour les gros volumes et marchandises lourdes.</p>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Longueur (mètres)</label>
+            <input type="number" id="sea-l" placeholder="Ex : 1.2" min="0.01" step="0.01">
+          </div>
+          <div class="calc-field">
+            <label>Largeur (mètres)</label>
+            <input type="number" id="sea-w" placeholder="Ex : 0.8" min="0.01" step="0.01">
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Hauteur (mètres)</label>
+            <input type="number" id="sea-h" placeholder="Ex : 0.6" min="0.01" step="0.01">
+          </div>
+          <div class="calc-field">
+            <label>Origine</label>
+            <select id="sea-origine">
+              <option value="chine">🇨🇳 Chine</option>
+              <option value="dubai">🇦🇪 Dubaï</option>
+              <option value="turquie">🇹🇷 Turquie</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.5rem">
+          <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em">— OU entrez directement votre volume —</p>
+          <div class="calc-field">
+            <label>Volume direct (CBM)</label>
+            <input type="number" id="sea-cbm-direct" placeholder="Ex : 2.5" min="0.01" step="0.01">
+          </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculateSea()">
+          🧮 Calculer l'estimation
+        </button>
+        <div class="calc-result" id="result-sea">
+          <div class="result-label">Estimation du coût de fret maritime</div>
+          <div class="result-amount" id="sea-total"></div>
+          <div class="result-breakdown" id="sea-breakdown"></div>
+          <div class="result-note">* Cette estimation est indicative. Contactez-nous pour un devis précis incluant le dédouanement et les frais annexes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPARTURES -->
+<section id="departs">
+  <div class="section-inner">
+    <div class="departs-header reveal">
+      <div class="section-tag">Planning</div>
+      <h2 class="section-title">Prochains <span>départs</span></h2>
+      <p class="section-sub">Planifiez votre expédition à l'avance. Réservez votre place avant les dates limites.</p>
+    </div>
+    <div class="departs-layout">
+      <div class="departs-info-card reveal">
+        <h3>Réservez votre place</h3>
+        <p>Ne manquez pas les prochaines dates d'expédition. Contactez-nous dès maintenant pour confirmer votre envoi et bénéficier d'une place garantie.</p>
+        <div class="dep-contact">
+          <a href="tel:+22651483838">
+            <span class="icon">📞</span>
+            +226 51 48 38 38
+          </a>
+          <a href="tel:+22656162001">
+            <span class="icon">📞</span>
+            +226 56 16 20 01
+          </a>
+          <a href="https://wa.me/22651483838" target="_blank">
+            <span class="icon">💬</span>
+            WhatsApp — Réponse rapide
+          </a>
+        </div>
+        <div class="dep-guarantee">
+          <p>Nos garanties</p>
+          <div class="guarantee-badges">
+            <span class="g-badge">Suivi en temps réel</span>
+            <span class="g-badge">Confirmation réception</span>
+            <span class="g-badge">100% Sécurisé</span>
+          </div>
+        </div>
+      </div>
+      <div class="departs-calendar reveal">
+        <div class="calendar-month">📅 Décembre 2025 <span>5 départs</span></div>
+        <div class="departure-list">
+          <div class="dep-item">
+            <div class="dep-date-box" style="background:var(--orange)"><div class="day">01</div><div class="month">Déc</div></div>
+            <div class="dep-meta">
+              <div class="dep-route">🌍 Tous corridors → Burkina Faso</div>
+              <div class="dep-details">Chine · Dubaï · Turquie — Départ confirmé</div>
+              <div class="dep-modes"><span class="dep-mode air">✈️ Aérien</span><span class="dep-mode sea">🚢 Maritime</span></div>
+            </div>
+            <a href="tel:+22651483838" class="dep-cta">Réserver</a>
+          </div>
+          <div class="dep-item">
+            <div class="dep-date-box"><div class="day">07</div><div class="month">Déc</div></div>
+            <div class="dep-meta">
+              <div class="dep-route">🌍 Tous corridors → Burkina Faso</div>
+              <div class="dep-details">Chine · Dubaï · Turquie — Départ confirmé</div>
+              <div class="dep-modes"><span class="dep-mode air">✈️ Aérien</span><span class="dep-mode sea">🚢 Maritime</span></div>
+            </div>
+            <a href="tel:+22651483838" class="dep-cta">Réserver</a>
+          </div>
+          <div class="dep-item">
+            <div class="dep-date-box"><div class="day">13</div><div class="month">Déc</div></div>
+            <div class="dep-meta">
+              <div class="dep-route">🌍 Tous corridors → Burkina Faso</div>
+              <div class="dep-details">Chine · Dubaï · Turquie — Départ confirmé</div>
+              <div class="dep-modes"><span class="dep-mode air">✈️ Aérien</span><span class="dep-mode sea">🚢 Maritime</span></div>
+            </div>
+            <a href="tel:+22651483838" class="dep-cta">Réserver</a>
+          </div>
+          <div class="dep-item">
+            <div class="dep-date-box"><div class="day">20</div><div class="month">Déc</div></div>
+            <div class="dep-meta">
+              <div class="dep-route">🌍 Tous corridors → Burkina Faso</div>
+              <div class="dep-details">Chine · Dubaï · Turquie — Départ confirmé</div>
+              <div class="dep-modes"><span class="dep-mode air">✈️ Aérien</span><span class="dep-mode sea">🚢 Maritime</span></div>
+            </div>
+            <a href="tel:+22651483838" class="dep-cta">Réserver</a>
+          </div>
+          <div class="dep-item next">
+            <div class="dep-date-box" style="background: #16a34a"><div class="day">27</div><div class="month">Déc</div></div>
+            <div class="dep-meta">
+              <div class="dep-route">🌍 Tous corridors → Burkina Faso</div>
+              <div class="dep-details">Chine · Dubaï · Turquie — Places disponibles</div>
+              <div class="dep-modes"><span class="dep-mode air">✈️ Aérien</span><span class="dep-mode sea">🚢 Maritime</span></div>
+            </div>
+            <a href="tel:+22651483838" class="dep-cta">Réserver</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="pourquoi">
+  <div class="section-inner">
+    <div class="pourquoi-header reveal">
+      <div class="section-tag">Pourquoi ADC Cargo</div>
+      <h2 class="section-title">Ce qui nous <span>distingue</span></h2>
+      <p class="section-sub">Plus qu'un simple transitaire — un partenaire de confiance pour le développement de votre activité.</p>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Sécurité & Garantie 100%</div>
+        <div class="feature-desc">Chaque marchandise est assurée et suivie de bout en bout. Nous confirmons la réception de chaque colis à nos clients.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Rapidité d'Expédition</div>
+        <div class="feature-desc">Délais optimisés selon la voie choisie. Fret aérien pour l'urgence, maritime pour l'économie. Départs réguliers chaque semaine.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Service Client Réactif</div>
+        <div class="feature-desc">Notre équipe répond à vos messages à temps. Suivi WhatsApp, confirmations, mises à jour — disponibles 7j/7.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Tarifs Transparents</div>
+        <div class="feature-desc">Aucun frais caché. Nos tarifs sont clairs dès le départ : 6 000 FCFA/kg (aérien) et 230 000 FCFA/CBM (maritime).</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">Tous Types de Marchandises</div>
+        <div class="feature-desc">Électronique, textile, alimentaire, matériaux, cosmétiques, équipements... Nous gérons tous types de colis et conteneurs.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏦</div>
+        <div class="feature-title">Dédouanement Facilité</div>
+        <div class="feature-desc">Nos experts gèrent toutes les formalités douanières pour que vos marchandises arrivent sans blocage à Ouagadougou.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="processus" style="padding: 5rem 5%;">
+  <div class="section-inner">
+    <div class="processus-header reveal">
+      <div class="section-tag" style="color:var(--orange-bright)">Comment ça marche</div>
+      <h2 class="section-title">Expédier en <span>5 étapes simples</span></h2>
+      <p class="section-sub">Un processus simple et transparent, de la commande à la livraison.</p>
+    </div>
+    <div class="process-timeline reveal">
+      <div class="process-step">
+        <div class="step-circle">
+          <span class="step-num">1</span>
+          📞
+        </div>
+        <div class="step-title">Contactez-nous</div>
+        <div class="step-desc">Appelez ou WhatsApp pour discuter de votre besoin d'expédition</div>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">
+          <span class="step-num">2</span>
+          🧾
+        </div>
+        <div class="step-title">Devis personnalisé</div>
+        <div class="step-desc">Nous vous fournissons une estimation claire selon poids/volume</div>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">
+          <span class="step-num">3</span>
+          📦
+        </div>
+        <div class="step-title">Envoi de votre colis</div>
+        <div class="step-desc">Déposez votre marchandise à notre entrepôt ou faites récupérer</div>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">
+          <span class="step-num">4</span>
+          ✈️
+        </div>
+        <div class="step-title">Expédition & Suivi</div>
+        <div class="step-desc">Votre colis part à la date convenue, suivi en temps réel</div>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">
+          <span class="step-num">5</span>
+          🏠
+        </div>
+        <div class="step-title">Livraison confirmée</div>
+        <div class="step-desc">Confirmation de réception avec notification WhatsApp</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="temoignages">
+  <div class="section-inner">
+    <div class="temoignages-header reveal">
+      <div class="section-tag">Témoignages</div>
+      <h2 class="section-title">Ce que disent <span>nos clients</span></h2>
+      <p class="section-sub">Des entrepreneurs et commerçants qui nous font confiance depuis des années.</p>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-quote">"</div>
+        <div class="t-text">ADC Cargo a transformé mon business. Je commande des textiles depuis Canton et tout arrive intact en moins de 3 semaines. Le suivi WhatsApp est impeccable.</div>
+        <div class="t-author">
+          <div class="t-avatar">AM</div>
+          <div>
+            <div class="t-name">Aminata M.</div>
+            <div class="t-role">Commerçante textile — Ouagadougou</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-quote">"</div>
+        <div class="t-text">J'importe de l'électronique depuis Dubaï régulièrement. ADC Cargo me donne un tarif clair, pas de frais cachés et mon stock arrive toujours à temps pour mes promotions.</div>
+        <div class="t-author">
+          <div class="t-avatar">IK</div>
+          <div>
+            <div class="t-name">Ibrahim K.</div>
+            <div class="t-role">Revendeur électronique — Bobo-Dioulasso</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-quote">"</div>
+        <div class="t-text">Service professionnel et humain à la fois. Ils ont géré le dédouanement de mes équipements de construction depuis la Turquie sans aucun problème. Je recommande vivement.</div>
+        <div class="t-author">
+          <div class="t-avatar">SO</div>
+          <div>
+            <div class="t-name">Salif O.</div>
+            <div class="t-role">Entrepreneur BTP — Ouagadougou</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-inner">
+    <div class="faq-layout">
+      <div class="faq-sidebar reveal">
+        <div class="section-tag">FAQ</div>
+        <h3>Questions fréquentes</h3>
+        <p>Toutes les réponses aux questions les plus posées sur nos services d'import-export.</p>
+        <div class="faq-contact-card">
+          <p>Vous n'avez pas trouvé votre réponse ? Contactez-nous directement :</p>
+          <a href="tel:+22651483838">📞 +226 51 48 38 38</a>
+          <a href="tel:+22656162001">📞 +226 56 16 20 01</a>
+          <a href="https://wa.me/22651483838" target="_blank" style="color:var(--orange)">💬 WhatsApp</a>
+        </div>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item open">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Quels pays sont couverts par ADC Cargo ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Nous couvrons actuellement 3 corridors principaux : la Chine (Canton, Shanghai, Yiwu), Dubaï (Jebel Ali, Dubai Airport) et la Turquie (Istanbul, Izmir). Tous les envois sont dirigés vers le Burkina Faso avec livraison possible à Ouagadougou et dans les principales villes.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Quelle est la différence entre le fret aérien et maritime ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Le fret aérien est plus rapide (5–12 jours) et est facturé au kilogramme (6 000 FCFA/kg). Il est idéal pour les colis urgents, légers ou de haute valeur. Le fret maritime est plus économique pour les grands volumes et est facturé au CBM — mètre cube (230 000 FCFA/CBM) — avec des délais de 10–25 jours selon l'origine.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Comment calculer mon CBM ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Le CBM (Cubic Meter / mètre cube) se calcule en multipliant les trois dimensions de votre colis : Longueur (m) × Largeur (m) × Hauteur (m). Par exemple, un colis de 1,2m × 0,8m × 0,6m = 0,576 CBM, soit environ 132 480 FCFA en maritime. Utilisez notre calculateur en ligne pour une estimation instantanée.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Y a-t-il des marchandises interdites ou soumises à restrictions ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Oui. Les articles dangereux, les substances contrôlées, les contrefaçons et certains produits alimentaires peuvent être soumis à des restrictions douanières. Contactez-nous avant de passer commande pour vérifier si votre marchandise peut être expédiée sans problème.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Comment se passe le dédouanement ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            ADC Cargo gère l'intégralité des formalités douanières pour vous. Notre équipe prépare tous les documents nécessaires (bill of lading, facture commerciale, certificats d'origine) et accompagne vos marchandises jusqu'au dédouanement à Ouagadougou.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Comment suivre mon colis en temps réel ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Dès la prise en charge de votre marchandise, vous recevez un numéro de suivi. Notre service client vous envoie des mises à jour régulières via WhatsApp à chaque étape clé : départ, transit, arrivée en douane, livraison finale.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Proposez-vous la livraison à domicile ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Oui, nous proposons la livraison à domicile à Ouagadougou. Pour les autres villes du Burkina Faso, contactez-nous pour connaître les modalités et tarifs applicables.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Quelles sont les modalités de paiement ?
+            <span class="faq-arrow">▾</span>
+          </div>
+          <div class="faq-answer">
+            Nous acceptons les paiements par Mobile Money (Orange Money, Moov Money), virement bancaire et espèces dans nos bureaux à Ouagadougou. Un acompte peut être demandé à la réservation pour les envois importants.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner contact-inner">
+    <div class="contact-layout">
+      <div class="contact-info reveal">
+        <div class="section-tag" style="color:var(--orange-bright)">Contact</div>
+        <h2 class="section-title">Parlons de votre<br><span>expédition</span></h2>
+        <p class="section-sub">Notre équipe est disponible pour répondre à toutes vos questions et vous accompagner dans votre projet d'import-export.</p>
+        <div class="contact-cards">
+          <a href="tel:+22651483838" class="contact-card">
+            <div class="cc-icon">📞</div>
+            <div>
+              <div class="cc-label">Téléphone</div>
+              <div class="cc-value">+226 51 48 38 38</div>
+            </div>
+          </a>
+          <a href="tel:+22656162001" class="contact-card">
+            <div class="cc-icon">📱</div>
+            <div>
+              <div class="cc-label">Téléphone 2</div>
+              <div class="cc-value">+226 56 16 20 01</div>
+            </div>
+          </a>
+          <a href="https://wa.me/22651483838" target="_blank" class="contact-card">
+            <div class="cc-icon">💬</div>
+            <div>
+              <div class="cc-label">WhatsApp</div>
+              <div class="cc-value">Réponse rapide garantie</div>
+            </div>
+          </a>
+          <div class="contact-card" style="cursor:default">
+            <div class="cc-icon">📍</div>
+            <div>
+              <div class="cc-label">Localisation</div>
+              <div class="cc-value">Ouagadougou, Burkina Faso</div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-social">
+          <p>Suivez-nous</p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Facebook">f</a>
+            <a href="#" class="social-link" title="Instagram">📷</a>
+            <a href="https://wa.me/22651483838" target="_blank" class="social-link" title="WhatsApp">💬</a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal" id="contactFormWrap">
+        <h3>📦 Demande de devis</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Nom complet</label>
+            <input type="text" id="f-nom" placeholder="Votre nom">
+          </div>
+          <div class="form-field">
+            <label>Téléphone / WhatsApp</label>
+            <input type="tel" id="f-tel" placeholder="+226...">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Pays d'origine</label>
+            <select id="f-pays">
+              <option value="">Sélectionner...</option>
+              <option>🇨🇳 Chine</option>
+              <option>🇦🇪 Dubaï</option>
+              <option>🇹🇷 Turquie</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Mode d'expédition</label>
+            <select id="f-mode">
+              <option value="">Sélectionner...</option>
+              <option>✈️ Aérien (kg)</option>
+              <option>🚢 Maritime (CBM)</option>
+              <option>Les deux selon marchandise</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Type de marchandise</label>
+          <input type="text" id="f-merch" placeholder="Ex : Textiles, électronique, matériaux...">
+        </div>
+        <div class="form-field">
+          <label>Description / Message</label>
+          <textarea id="f-msg" placeholder="Décrivez votre besoin : poids approximatif, volume, délai souhaité..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">
+          🚀 Envoyer ma demande
+        </button>
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <h4>Demande envoyée !</h4>
+          <p>Notre équipe vous contactera très prochainement sur WhatsApp ou par téléphone pour finaliser votre devis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg width="36" height="36" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="80" r="72" fill="#0D1B6E" stroke="#F97316" stroke-width="5"/>
+          <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#F97316" font-family="Sora,sans-serif" font-weight="800" font-size="55">ADC</text>
+        </svg>
+        <span>ADC <em>Cargo</em></span>
+      </div>
+      <p>Votre partenaire de confiance pour l'import-export depuis la Chine, Dubaï et la Turquie vers le Burkina Faso. Service rapide, sécurisé et garanti.</p>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <span class="g-badge">✈️ Fret Aérien</span>
+        <span class="g-badge">🚢 Fret Maritime</span>
+        <span class="g-badge">🛡️ 100% Garanti</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul class="footer-links">
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#services">Nos services</a></li>
+        <li><a href="#calculateur">Calculateur de fret</a></li>
+        <li><a href="#departs">Prochains départs</a></li>
+        <li><a href="#pourquoi">Pourquoi nous</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Corridors</h4>
+      <ul class="footer-links">
+        <li><a href="#services">🇨🇳 Chine → Burkina</a></li>
+        <li><a href="#services">🇦🇪 Dubaï → Burkina</a></li>
+        <li><a href="#services">🇹🇷 Turquie → Burkina</a></li>
+        <li><a href="#calculateur">Calculer mon fret</a></li>
+        <li><a href="#departs">Calendrier des départs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-links">
+        <li><a href="tel:+22651483838">+226 51 48 38 38</a></li>
+        <li><a href="tel:+22656162001">+226 56 16 20 01</a></li>
+        <li><a href="https://wa.me/22651483838" target="_blank">💬 WhatsApp</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Demande de devis</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 ADC Import Export — Ouagadougou, Burkina Faso. Tous droits réservés.</p>
+    <div class="footer-badges">
+      <span class="f-badge">Import</span>
+      <span class="f-badge">Export</span>
+      <span class="f-badge">Dédouanement</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/22651483838" target="_blank" class="whatsapp-float">
+  <span class="whatsapp-tooltip">Discutez sur WhatsApp</span>
+  💬
+</a>
+
+<script>
+/* ──────── NAV SCROLL ──────── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+/* ──────── HERO CANVAS ──────── */
+const canvas = document.getElementById('hero-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.r = Math.random() * 2 + .5;
+    this.vx = (Math.random() - .5) * .4;
+    this.vy = (Math.random() - .5) * .4;
+    this.life = Math.random();
+    this.color = Math.random() > .6 ? '#F97316' : '#4A6FE8';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy; this.life -= .003;
+    if (this.life <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.life * .7;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.globalAlpha = 1;
+  for (const p of particles) { p.update(); p.draw(); }
+  // Draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+      if (d < 80) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = 'rgba(249,115,22,' + ((80 - d) / 80 * .15) + ')';
+        ctx.globalAlpha = 1;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ──────── REVEAL ON SCROLL ──────── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+reveals.forEach(r => observer.observe(r));
+
+/* ──────── CALCULATOR ──────── */
+function switchTab(type) {
+  document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('panel-' + type).classList.add('active');
+}
+
+function fmtFCFA(n) {
+  return n.toLocaleString('fr-FR') + ' FCFA';
+}
+
+function calculateAir() {
+  const poids = parseFloat(document.getElementById('air-poids').value);
+  const origine = document.getElementById('air-origine').value;
+  if (!poids || poids <= 0) { alert('Veuillez entrer un poids valide.'); return; }
+  const total = poids * 6000;
+  const el = document.getElementById('result-air');
+  document.getElementById('air-total').textContent = fmtFCFA(total);
+  document.getElementById('air-breakdown').textContent = poids + ' kg × 6 000 FCFA/kg — Origine : ' + {chine:'Chine',dubai:'Dubaï',turquie:'Turquie'}[origine];
+  el.classList.add('visible');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function calculateSea() {
+  const directCbm = parseFloat(document.getElementById('sea-cbm-direct').value);
+  const l = parseFloat(document.getElementById('sea-l').value);
+  const w = parseFloat(document.getElementById('sea-w').value);
+  const h = parseFloat(document.getElementById('sea-h').value);
+  const origine = document.getElementById('sea-origine').value;
+  let cbm = 0;
+  let details = '';
+  if (directCbm && directCbm > 0) {
+    cbm = directCbm;
+    details = directCbm + ' CBM (volume saisi directement)';
+  } else if (l > 0 && w > 0 && h > 0) {
+    cbm = l * w * h;
+    details = l + 'm × ' + w + 'm × ' + h + 'm = ' + cbm.toFixed(4) + ' CBM';
+  } else {
+    alert('Veuillez entrer les dimensions ou le volume en CBM.'); return;
+  }
+  const total = cbm * 230000;
+  const el = document.getElementById('result-sea');
+  document.getElementById('sea-total').textContent = fmtFCFA(Math.round(total));
+  document.getElementById('sea-breakdown').textContent = details + ' × 230 000 FCFA/CBM — Origine : ' + {chine:'Chine',dubai:'Dubaï',turquie:'Turquie'}[origine];
+  el.classList.add('visible');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ──────── FAQ ──────── */
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+/* ──────── FORM ──────── */
+function submitForm() {
+  const nom = document.getElementById('f-nom').value.trim();
+  const tel = document.getElementById('f-tel').value.trim();
+  if (!nom || !tel) { alert('Veuillez renseigner votre nom et téléphone.'); return; }
+  const pays = document.getElementById('f-pays').value;
+  const mode = document.getElementById('f-mode').value;
+  const merch = document.getElementById('f-merch').value;
+  const msg = document.getElementById('f-msg').value;
+  // Build WhatsApp message
+  const waMsg = encodeURIComponent(
+    '📦 *Nouvelle demande de devis ADC Cargo*\n\n' +
+    '👤 Nom : ' + nom + '\n' +
+    '📞 Tél : ' + tel + '\n' +
+    (pays ? '🌍 Origine : ' + pays + '\n' : '') +
+    (mode ? '🚛 Mode : ' + mode + '\n' : '') +
+    (merch ? '📦 Marchandise : ' + merch + '\n' : '') +
+    (msg ? '💬 Message : ' + msg : '')
+  );
+  window.open('https://wa.me/22651483838?text=' + waMsg, '_blank');
+  document.getElementById('contactFormWrap').querySelector('h3').style.display = 'none';
+  document.querySelectorAll('#contactFormWrap .form-row, #contactFormWrap .form-field, #contactFormWrap .form-submit').forEach(el => el.style.display = 'none');
+  document.getElementById('formSuccess').classList.add('visible');
+}
+
+/* ──────── SMOOTH CLOSE MOBILE MENU ──────── */
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+</script>
+</body>
+</html>
